@@ -12,7 +12,7 @@ Thanks to the open source movement, we are witnessing an increasing number of mo
 and infrastructures being built to create and serve them.
 Moreover, developers have the opportunity to contribute to datasets, models, and system infrastructures.
 
-As it stands, the majority of these models necessitate the deployment of potent servers to accommodate
+As it stands, the majority of these models necessitate the deployment of powerful servers to accommodate
 their extensive computational, memory, and hardware acceleration requirements.
 Nevertheless, the implications of the burgeoning AI era on consumer devices,
 such as laptops, phones, and game consoles, remain uncertain.
