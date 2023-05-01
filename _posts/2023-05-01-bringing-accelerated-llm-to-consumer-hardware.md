@@ -6,23 +6,41 @@ author:   MLC Community
 notitle: true
 ---
 
-We have seen remarkable progress in generative artificial intelligence and  large language models (LLMs).
-These models have remarkable capabilities and have the potential to fundamentally change many domains.
-Thanks to the open source movement, we are also seeing an increasing amount models being developed and
-infrastructures developed to be able build and serve those models. Developers also will be able to contribute to dataset, models and system infrastructures.
+Significant progress has been made in the field of generative artificial intelligence and large language models (LLMs),
+which possess remarkable capabilities and the potential to fundamentally transform many domains.
+Thanks to the open source movement, we are witnessing an increasing number of models being developed
+and infrastructures being built to create and serve them.
+Moreover, developers have the opportunity to contribute to datasets, models, and system infrastructures.
 
 At this point, many of the models are running on a servers because the big demand on compute,
 memory, and the related hardware accelerations. But what about consumer devices such as our laptops,
 phones, game consoles? What would be the future of those devices as we enter the the age of AI?
 
-It is really hard to speculate at this point, but it is intriguing to ask what can be the possible futures.
-To draw inspiration from this quote before PC age, "Originally one thought that if there were a half dozen large computers in this country,
-hidden away in research laboratories, this would take care of all requirements we had throughout the country.”
-Yet here we are today
+As it stands, the majority of these models necessitate the deployment of potent servers to accommodate
+their extensive computational, memory, and hardware acceleration requirements.
+Nevertheless, the implications of the burgeoning AI era on consumer devices,
+such as laptops, phones, and game consoles, remain uncertain.
+Will these devices possess the capacity to independently run these models,
+or will they rely on uninterrupted connectivity to cloud servers?
+The resolution of this quandary is poised to significantly the attainability and pervasiveness of AI-powered devices.
 
-Generalizing a bit from that one data point, it would be not surprising to state that there would be a non-zero (or quite high)
-probability where LLMs will come to consumer devices, and work together with servers and cloud to form the future AI ecosystem.
+While speculation at this point is undoubtedly challenging,
+it remains intriguing to ponder the various possible futures that may unfold.
+Consider, for instance, the famous quote predating the PC era,
+which asserted that a mere half dozen large computers hidden in research laboratories
+would be sufficient to satisfy all of the country's computational needs.
+Today, we know this prediction to be vastly erroneous.
+Thus, it is both prudent and exhilarating to contemplate the possibilities and unforeseen advancements that the future may hold.
 
+While speculation at this point is undoubtedly challenging,
+it is nonetheless intriguing to contemplate the various possibilities.
+Drawing inspiration from the pre-PC era,
+recall the famous prediction that a mere six large computers hidden in research laboratories
+would suffice to meet the country's computational requirements,
+which as we now know, was vastly incorrect.
+Nevertheless, we can generalize from this data point
+and postulate that the likelihood of large language models (LLMs) migrating to consumer devices is not negligible.
+It is conceivable that LLMs will collaborate with servers and the cloud to shape the future AI ecosystem.
 
 ## Possible Futures of LLMs on Consumer Devices
 
