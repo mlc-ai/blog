@@ -31,7 +31,7 @@ Nevertheless, generalize from this data point,
 we may postulate the likelihood of LLMs migrating to consumer devices,
 and potentially shape the future AI ecosystem.
 
-## Possible Futures of LLMs on Consumer Devices
+## Potential Opportunities of LLMs on Consumer Devices
 
 There is a great amount of opportunities to bring LLMs to consumer devices. Here is a possibly incomplete list of some possible futures.
 
@@ -40,31 +40,31 @@ There is a great amount of opportunities to bring LLMs to consumer devices. Here
 </p>
 
 
-**Personalization** Smart language models knows a lot of things, on the other way, they do not necessarily
+**Personalization.** Smart language models knows a lot of things, on the other way, they do not necessarily
 know our favorite songs or writing styles yet. In one possible future, some might like to have a personally AI companion.
 These models may not be the smartest, but they knows ourselves and can be used to amplify our daily workflow.
 They can also be made to work along with the more powerful models on the server to create even more amplified experience.
 They can also come in the form as adapters build on top of open-powerful models.
 To create such personalized AI however, we would need to feed personal data to the model, ideally run them on our own consumer devices.
 
-**Specialization and application integration** Language models can do a lot of things, there are domains however
+**Specialization and application integration.** Language models can do a lot of things, there are domains however
 that maybe we only need a bit more trimmed down version of it. It won’t be surprising to see future games to leverage
 some variant of those models to generate unique experience for each play. Specializing to game dialogs is one example
 on how existing applications benefit from integrating LLMs. Having specialized models that run directly on the game
 console could create quite a bit of fun opportunities.
 
-**Offline support and client server hybrid use-cases** We are not all the time connected to the internet. It would still
+**Offline support and client server hybrid use-cases.** We are not all the time connected to the internet. It would still
 be great to have some of the less powerful but still smart AI assistant to help us when we have gone offline, during a
 flight or wondering into a place where internet is not easily accessible. In another case, it would also be good to have
 different AI components to work together, offloading part of the compute locally and collaborate with the models that
 runs on the cloud. Or working with a service that seamlessly moves the compute among the two, depending on the environment we are in.
 
-**Decentralization** Finally, there is an interesting future of decentralization. While the compute of each individual
+**Decentralization.** Finally, there is an interesting future of decentralization. While the compute of each individual
 consumer devices might be less powerful than those on the datacenter, consumer devices can do a lot of powerful things when
 connected together. There are quite a few interesting movements in the decentralization AI space and would be interesting
 to see what they can enable when given the right tooling support.
 
-## Consumer Hardware Acceleration: Challenges and Opportunities
+## Challenges to Deploy LLMs to Consumer Hardware
 
 The ideas discussed are all (possible) incoming futures. Besides talking about them, it would be even more interesting
 to ask how can we enable some of the possible futures. Specifically, can we make our contribution to the open source
@@ -98,7 +98,7 @@ to support the latest innovations from the machine learning and systems communit
 
 ## Machine Learning Compilation Can Help
 
-Machine learning compilation(MLC) is an emerging approach that aims to close the gaps here. Instead of directly relying
+Machine learning compilation (MLC) is an emerging approach that aims to close the gaps here. Instead of directly relying
 on hand optimization for each platform and writing GPU shader to bring hardware accelerations from each kind, which would
 be engineering intensive. We can take our ML model as a program, and transform in multiple steps towards the desired
 form in the target platform.
@@ -187,8 +187,6 @@ In this post, we have brainstormed the possible futures of hardware accelerated 
 With the amazing power of open source community, a lot of them are turning reality. Machine learning compilation
 will be one of the methodologies that enables these exciting futures and hopefully mlc-llm and other projects can
 bring part of the contributions along with the overall ML ecosystem.
-
-
 
 Of course, all of these results are only possible thanks to the shoulders open-source ecosystems that we stand on.
 MLC-LLM is built on top of Apache TVM community’s TVM unity effort. We also benefited a lot from open source ML
