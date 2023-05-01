@@ -12,10 +12,6 @@ Thanks to the open source movement, we are witnessing an increasing number of mo
 and infrastructures being built to create and serve them.
 Moreover, developers have the opportunity to contribute to datasets, models, and system infrastructures.
 
-At this point, many of the models are running on a servers because the big demand on compute,
-memory, and the related hardware accelerations. But what about consumer devices such as our laptops,
-phones, game consoles? What would be the future of those devices as we enter the the age of AI?
-
 As it stands, the majority of these models necessitate the deployment of potent servers to accommodate
 their extensive computational, memory, and hardware acceleration requirements.
 Nevertheless, the implications of the burgeoning AI era on consumer devices,
