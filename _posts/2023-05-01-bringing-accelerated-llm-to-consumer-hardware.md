@@ -2,7 +2,7 @@
 layout: post
 title:  "Bringing Hardware Accelerated Language Models to Consumer Devices"
 date:   2023-05-01 11:00:00 -0400
-author:  MLC Community
+author:   MLC Community
 notitle: true
 ---
 
@@ -29,7 +29,7 @@ probability where LLMs will come to consumer devices, and work together with ser
 There is a great amount of opportunities to bring LLMs to consumer devices. Here is a possibly incomplete list of some possible futures.
 
 <p align="center">
-  <img src="/blog/img/why-consumer-devices.png" width="800">
+  <img src="/blog/img/why-consumer-devices.png" width="90%">
 </p>
 
 
@@ -80,7 +80,7 @@ CUDA, Rocm, Metal, OpenCL, SYCL, Direct3D, Vulkan/SPIRV, WebGPU.
 
 
 <p align="center">
-  <img src="/blog/img/diversity-consumer-devices.png" width="800">
+  <img src="/blog/img/diversity-consumer-devices.png" width="90%">
 </p>
 
 **Continuous demand of machine learning system development** The pace of open source machine learning community is amazing
@@ -97,7 +97,7 @@ be engineering intensive. We can take our ML model as a program, and transform i
 form in the target platform.
 
 <p align="center">
-  <img src="/blog/img/mlc-llm-flow.png" width="800">
+  <img src="/blog/img/mlc-llm-flow.png" width="90%">
 </p>
 
 
@@ -146,7 +146,7 @@ solution that takes the ML compilation approach and brings LLMs onto diverse set
 The same solution also is applicable to mobile and server use cases as well.
 
 <p align="center">
-  <img src="/blog/img/mlc-llm-linux.gif" width="800">
+  <img src="/blog/img/mlc-llm-linux.gif" width="90%">
 </p>
 
 
