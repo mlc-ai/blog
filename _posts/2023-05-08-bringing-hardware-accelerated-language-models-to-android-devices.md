@@ -16,7 +16,7 @@ Everything runs locally and accelerated with native GPU on the phone.
   <img src="/blog/img/android/android-recording.gif" height="700">
 </p>
 
-We have witnessed significant progress in the field of generative AI and large language models. Thanks to the open source movement, we have witnessed the blooming moment of open source foundational models. While it is helpful to run those models on the server platforms. There are also great deal of potential to enable large-language models on consumer devices
+We have witnessed significant progress in the field of generative AI and large language models. Thanks to the open source movement, we have seen the blooming moment of open source foundational models. While it is helpful to run those models on the server platforms, there are also great deal of potential to enable large-language models on consumer devices
 
 <p align="center">
   <img src="/blog/img/android/local-advantage.png" width="90%">
@@ -24,11 +24,11 @@ We have witnessed significant progress in the field of generative AI and large l
 
 Empowering LLMs on mobile devices is very important given this is what we interact with daily. In our announcement last week, we showed that we can bring LLMs to desktop and iOS devices.
 
-Android is an operating system inside 2.5 billion active devices, and it is very interesting to ask if we can do the same with android devices as well, a lot of community members made the suggestion to support android devices. We agree, this post discusses how we achieve that goal in one week.
+Android is an operating system inside 2.5 billion active devices, and it is very interesting to ask if we can do the same with android devices as well, a lot of community members made the suggestion to support android devices. We agree. This post discusses how we achieve that goal in one week.
 
 ## How
 
-Bringing hardware accelerated LLM models onto android devices is not as straightforward via traditional approaches, specifically, the two ecosystems have different sets of programming models both for host app programming and GPU programming, to name a few
+Bringing hardware accelerated LLM models onto android devices is not as straightforward via traditional approaches, specifically, the two ecosystems have different sets of programming models both for host app programming and GPU programming, to name a few:
  - We need to use different GPU programming models to provide hardware acceleration.
  - We need to optimize for different kinds of hardware backends. iOS devices are powered by Apple’s A16 chips, while many of the latest android devices are powered by chips like snapdragon gen2. We find that they need different optimization strategies.
  - We need to connect our LLM runtime to different host languages. In iOS we need to interface with object-c and swift. We will need to support java to enable the android ecosystem
@@ -38,7 +38,7 @@ Bringing hardware accelerated LLM models onto android devices is not as straight
 </p>
 
 
-Thanks to MLC-LLM’s universal deployment solution, we can overcome these challenges and productively deploy a vicuna 7b model onto a Samsung galaxy S23, powered by the latest snapdragon gen2.
+Thanks to MLC-LLM’s universal deployment solution, we can overcome these challenges and productively deploy a vicuna 7b model onto a Samsung galaxy S23, powered by the latest snapdragon 8 gen2.
 
 <p align="center">
   <img src="/blog/img/android/android-diagram.png" width="80%">
@@ -47,7 +47,7 @@ Thanks to MLC-LLM’s universal deployment solution, we can overcome these chall
 The cornerstone of our solution is machine learning compilation (MLC), which we leverage to efficiently deploy AI models.
  - We effectively reused the same ML compilation pipeline for overall model ingestion, fusion and memory planning.
  - We leveraged TensorIR, and our automatic optimization stack of TVM unity to generate and optimize specific GPU kernels for Adreno GPU on the snapdragon chip via generating OpenCL kernels.
- - Thanks to the python first development flow, we can productively iterate on model weight encoding, decoding and kernel computation to get reasonably good performance out of the LLM.
+ - Thanks to the python first development flow, we can productively iterate on model weight quantization, dequantization and kernel computation to get reasonably good performance out of the LLM.
 
 Our solution provides a good harness to further optimize more models on android hardware backends. We believe there are still a lot of opportunities but it is amazing how far we can go in one week’s effort. We would love to work with the open source community to bring further optimizations via ML compilation.
 
