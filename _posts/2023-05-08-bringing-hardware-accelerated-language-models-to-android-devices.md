@@ -42,7 +42,7 @@ If you follow our latest posts, you might know that we bought have support for L
 
 
 Thanks to MLC-LLM’s universal deployment solution, we can overcome these challenges and
-productively deploy a vicuna 7b model onto a Samsung Galaxy S23, powered by the latest Snapdragon 8 Gen 2 Mobile Platform.
+productively deploy a [vicuna 7b](https://lmsys.org/blog/2023-03-30-vicuna/) model onto a Samsung Galaxy S23, powered by the latest Snapdragon 8 Gen 2 Mobile Platform.
 
 <p align="center">
   <img src="/blog/img/android/android-diagram.png" width="80%">
@@ -61,7 +61,7 @@ Our solution provides a good harness to optimize more models on Android hardware
 
 Because Android does not have the 4GB app RAM limit, which iOS enforce, we can leverage more RAM than our iOS deployment. So we choose to enable a 4-bit quantized vicuna model, which preserves more capabilities, especially in languages other than English. We are also looking forward to supporting other storage-efficient models in the future.
 
-You can check out [the demo instruction](https://mlc.ai/mlc-llm/#android) to try it out, our [github repo](https://github.com/mlc-ai/mlc-llm) for source code. MLC LLM enables deployment to various devices, including Windows, Linux, MacOS, iPhone, and now Android. You are also welcome to check out the demo instruction page for more information on running on other devices.
+You can check out [the demo instruction](https://mlc.ai/mlc-llm/#android) to try it out, our [github repo](https://github.com/mlc-ai/mlc-llm/) for source code. MLC LLM enables deployment to various devices, including Windows, Linux, MacOS, iPhone, and now Android. You are also welcome to check out the demo instruction page for more information on running on other devices.
 
 
 ## Acknowledgement
