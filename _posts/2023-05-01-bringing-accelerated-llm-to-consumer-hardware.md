@@ -4,6 +4,9 @@ title:  "Bringing Hardware Accelerated Language Models to Consumer Devices"
 date:   2023-05-01 11:00:00 -0400
 author:   MLC Community
 notitle: true
+
+redirect_from:
+  - /blog/2023/05/01/bringing-accelerated-llm-to-consumer-hardware
 ---
 
 Significant progress has been made in the field of generative artificial intelligence and large language models (LLMs),
