@@ -23,15 +23,16 @@ We have witnessed significant progress in the field of generative AI and large l
 </p>
 
 Empowering LLMs on mobile devices is very important given this is what we interact with daily.
-Last week, we showed that we can bring LLMs to desktop and iOS devices.
-
 Android is an operating system inside 2.5 billion active devices, we would love to
-bring LLM support to Android devices as well. So we take the challenge and make it
-happen. This post shares how we achieve the goal.
+bring LLM support to Android devices. This post shares our experience on bringing
+LLMs to Android devices.
 
 ## How
 
-Bringing hardware accelerated LLM models onto android devices is not as straightforward via traditional approaches, specifically, the two ecosystems have different sets of programming models both for host app programming and GPU programming, to name a few:
+If you have been following our latest posts, you might know that we bought
+have support for LLMs on iphone. We would like to do the same thing for Android.
+However, the iOS and Android ecosystems have different sets of programming models both for host app programming and GPU programming,
+bringing challenges to our goal, to name a few:
  - We need to use different GPU programming models to provide hardware acceleration.
  - We need to optimize for different kinds of hardware backends. iOS devices are powered by Apple’s A16 chips, while many of the latest android devices are powered by chips like snapdragon gen2. We find that they need different optimization strategies.
  - We need to connect our LLM runtime to different host languages. In iOS we need to interface with object-c and swift. We will need to support java to enable the android ecosystem
