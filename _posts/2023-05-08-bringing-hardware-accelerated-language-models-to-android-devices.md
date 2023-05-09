@@ -6,9 +6,17 @@ author:   MLC Community
 notitle: true
 ---
 
-We have witnessed significant progress in the field of generative AI and large language models. Thanks to the open source movement, we have witnessed the blooming moment of open source foundational models.
+In this post, we introduce MLC LLM for Android -- a solution that allows large language models
+to be deployed natively on Android devices, plus a productive framework for everyone to
+further optimize model performance for their use cases.
+Everything runs locally and accelerated with native GPU on the phone.
 
-While it is helpful to run those models on the server platforms. There are also great deal of potential to enable large-language models on consumer devices
+
+<p align="center">
+  <img src="/blog/img/android/android-recording.gif" height="700">
+</p>
+
+We have witnessed significant progress in the field of generative AI and large language models. Thanks to the open source movement, we have witnessed the blooming moment of open source foundational models. While it is helpful to run those models on the server platforms. There are also great deal of potential to enable large-language models on consumer devices
 
 <p align="center">
   <img src="/blog/img/android/local-advantage.png" width="90%">
@@ -42,10 +50,6 @@ The cornerstone of our solution is machine learning compilation (MLC), which we 
  - Thanks to the python first development flow, we can productively iterate on model weight encoding, decoding and kernel computation to get reasonably good performance out of the LLM.
 
 Our solution provides a good harness to further optimize more models on android hardware backends. We believe there are still a lot of opportunities but it is amazing how far we can go in one week’s effort. We would love to work with the open source community to bring further optimizations via ML compilation.
-
-<p align="center">
-  <img src="/blog/img/android/android-recording.gif" height="700">
-</p>
 
 Because android does not have the 4GB app RAM limit which is enforced by iOS, we can leverage more RAM than our iOS deployment. So we choose to enable a 4 bit quantized vicuna model. This gives the model more capabilities, especially in other languages than English. We are also looking forward to supporting other storage efficient models in the future.
 
