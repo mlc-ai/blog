@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Bringing Hardware Accelerated Language Models to Android Devices
-date:   2023-05-08 23:00:00 -0400
+date:   2023-05-08 22:00:00 -0400
 author:   MLC Community
 notitle: true
 ---
