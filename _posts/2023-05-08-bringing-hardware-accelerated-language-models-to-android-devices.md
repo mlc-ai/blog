@@ -24,7 +24,7 @@ We have witnessed significant progress in the field of generative AI and large l
 
 Empowering LLMs on mobile devices is very important given this is what we interact with daily. In our announcement last week, we showed that we can bring LLMs to desktop and iOS devices.
 
-Android is an operating system inside 2.5 billion active devices, and it is very interesting to ask if we can do the same with android devices as well, a lot of community members made the suggestion to support android devices. We agree. This post discusses how we achieve that goal in one week.
+Android is an operating system inside 2.5 billion active devices, and it is very interesting to ask if we can do the same with android devices as well. A lot of community members made the suggestion to support android devices, and we agree. This post discusses how we achieve that goal in one week.
 
 ## How
 
