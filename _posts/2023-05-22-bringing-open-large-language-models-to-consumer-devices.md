@@ -51,7 +51,7 @@ Machine Learning Compilation (MLC) from TVM Unity plays a critical role in enabl
 - Python-first development: MLC LLM compilation is developed in pure Python, thanks to the Python interface provided by TVM Unity, empowering developers to swiftly develop optimization techniques, compilation passes, and compose LLM building blocks. This approach facilitates rapid development and experimentation that allows us to quickly bring new model and backend support.
 - Built-in optimizations: TVM Unity incorporates a suite of built-in optimizations, such as operator fusion and loop tiling, which are keystones of high-quality code generation across multiple hardware platforms. These optimizations are used in MLC LLM, which can be used by ML engineers to amplify their daily workflow.
 - First-class support for vendor libraries and handcrafted kernels: TVM Unity treats handcrafted kernels, such as NVIDIA's CUTLASS and cuBLAS libraries, as first-class citizens. This ensures seamless integration of the best-performing code, allowing developers to leverage specialized and optimized implementations when necessary.
-- Finally, the universal runtime bring deployment to the programming language and platform of the developers' choice.
+- Finally, a universal runtime that brings deployment to the programming language and platform of the developers' choice.
 
 <p align="center">
   <img src="/blog/img/redpajama/compilation-workflow.svg" width="80%">
