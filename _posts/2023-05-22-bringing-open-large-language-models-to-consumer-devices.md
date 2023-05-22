@@ -78,7 +78,7 @@ MLC LLM's chat applications (CLI, iOS, Web, Android) are specifically designed t
 
 The iOS app allows users to download personalized weights of the same model on-demand via a link to model artifacts without re-compilation or redeployment. This streamlined approach makes it convenient for sharing model weight variants. The same model artifact can be consumed by other runtimes, such as WebApp, CLI and Android(incoming).
 
-Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcomed to join the [Discord Channel](https://discord.gg/9Xpy2HGBuD)
+Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcomed to join the [Discord Channel](https://discord.gg/9Xpy2HGBuD) for further discussion.
 
 ## Ongoing Effort
 
