@@ -78,9 +78,8 @@ Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide
 
 ## Ongoing Effort
  
-MLC LLM is a fairly young project and there are a lot of things to be done. As we start to streamline the overall project architecture and modularize the overall flow, we would love to focus on empowering developer communities. Our first priority is to bring better documentation for our developers so they can build on top of our effort. We are actively working on documenting compilation of models with customized weights. Additionally, we are modularizing the overall libraries so it can be reused in other applications, including web, windows, macOS, linux, iOS and Android platforms. We are also expanding the prebuilt MLC pip development package on windows, linux and macOS, to simplify the experience for developers.
-
-At the same time, we are continuously expanding our territory to include more model architectures. We will also bring more optimizations to continuously improve the memory and performance of the overall system.
+ 
+MLC LLM is a fairly young project and there are a lot of things to be done. As we start to streamline the overall project architecture and modularize the overall flow, we would love to focus on empowering developer communities. Our first priority is to bring documentation for our developers so they can build on top of our effort. We are actively working on documenting compilation of models with customized weights. Additionally, we are modularizing the overall libraries so it can be reused in other applications, including web, windows, macOS, linux, iOS and Android platforms. We are also expanding the prebuilt MLC pip development package on windows, linux and macOS, to simplify the experience for developers. At the same time, we are continuously working with the community to bring more model architectures. We will also bring more optimizations to continuously improve the memory and performance of the overall system.
 
 
 ## Acknowledgement
