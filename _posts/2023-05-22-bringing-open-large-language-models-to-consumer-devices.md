@@ -12,13 +12,16 @@ As the landscape of LLMs gets increasingly diverse, there have been different mo
 
 Having closely observed the recent advancements, we are thrilled by not only the remarkable capabilities exhibited of these parameter-efficient models ranging from 3 billion to 7 billion in size, but also the exciting opportunity for end users to explore and leverage the power of personalized Open LLMs with fine-tuning at reasonable cost, making generative AI **accessible to everyone* for a wide range of applications.
 
-MLC LLM aims to help making Open LLMs accessible by making them possible and convenient to deploy on **browsers**, **mobile devices**, **consumer-class GPUs** and other platforms. Over the past few weeks, we have been demonstrating its capability of [universal deployment](https://github.com/mlc-ai/mlc-llm/issues/15) on AMD, NVIDIA, and Intel GPUs, Apple Silicon, iPhones, and Android phones. 
+MLC LLM aims to help making Open LLMs accessible by making them possible and convenient to deploy on **browsers**, **mobile devices**, **consumer-class GPUs** and other platforms.
+It brings [universal deployment](https://github.com/mlc-ai/mlc-llm/issues/15) of LLMs on AMD, NVIDIA, and Intel GPUs, Apple Silicon, iPhones, and Android phones.
 
-This post describes our effort on streamlining the deployment of Open LLMs through a **versatile compiler infrastructure**. We bring RedPajama, a significant permissive model, that is now publicly accessible on WebGPU, iOS, GPUs, and various other platforms. Furthermore, the workflow we have established can be easily adapted to support a wide range of models with **fine-tuned (personalized) weights**, promoting flexibility and customization in LLM deployment.
+This post describes our effort on streamlining the deployment of Open LLMs through a **versatile machine learning compilation infrastructure**. We bring RedPajama, a permissive open language model to WebGPU, iOS, GPUs, and various other platforms. Furthermore, the workflow we have established can be easily adapted to support a wide range of models with **fine-tuned (personalized) weights**, promoting flexibility and customization in LLM deployment.
 
 ## Universal Deployment of RedPajama
 
-[RedPajama models](https://www.together.xyz/blog/redpajama-models-v1) exemplify a compelling showcase of how the open-source community can rapidly construct high-performing LLMs. This project highlights the ability for downstream users to fine-tune these models according to their specific needs, both aiming to empower individuals of diversified background to run Open LLMs with easy personalization. This shared goal emphasizes the importance of accessibility and personalization in leveraging the potential of LLM technology within the broader community. We share the same vision, and would love to bring broader support to the open source community, as a result, we incorporated support for RedPajama upon its initial release.
+[RedPajama models](https://www.together.xyz/blog/redpajama-models-v1) exemplify how the open-source community can rapidly construct high-performing LLMs.
+RedPajama-3B is a small yet powerful model brings the abilities for downstream users to fine-tune these models according to their specific needs, both aiming to empower individuals of diversified background to run Open LLMs with easy personalization. We love to suppor this same vision of bringing accessibility and personalization to fully realize potential of LLM technology within the broader community.
+As a result, we bring RedPajama support to a wide range of consumer devices with hardware acceleration.
 
 RedPajama on **Apple Silicon** is achieved by compiling the LLM using Metal for M1/M2 GPUs ([try out](https://mlc.ai/mlc-llm/#windows-linux-mac)). Furthermore, MLC LLM provides a C API wrapper `libmlc_llm.dylib` that enables interaction with the generated Metal library. As an illustrative example, the command line tool `mlc_chat_cli` showcases the usage of `libmlc_llm.dylib`, which meanwhile also provides users with an interface to engage with RedPajama.
 
@@ -32,7 +35,7 @@ Similarly, RedPajama on **consumer-class AMD/NVIDIA GPUs** ([try out](https://ml
   <img src="/blog/img/redpajama/web.gif" height="700">
 </p>
 
-Leveraging **WASM** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://mlc.ai/web-llm/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference, eliminating the need of any interaction with servers.
+Leveraging **WebAssembly** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://mlc.ai/web-llm/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference, eliminating the need of any interaction with servers.
 
 <p align="center">
   <img src="/blog/img/redpajama/ios.gif" height="700">
@@ -77,8 +80,7 @@ The iOS app allows users to download personalized weights of the same model on-d
 Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/tree/main/android). You are also more than welcomed to join the [Discord Channel](https://discord.gg/9Xpy2HGBuD)
 
 ## Ongoing Effort
- 
- 
+
 MLC LLM is a fairly young project and there are a lot of things to be done. As we start to streamline the overall project architecture and modularize the overall flow, we would love to focus on empowering developer communities. Our first priority is to bring documentation for our developers so they can build on top of our effort. We are actively working on documenting compilation of models with customized weights. Additionally, we are modularizing the overall libraries so it can be reused in other applications, including web, windows, macOS, linux, iOS and Android platforms. We are also expanding the prebuilt MLC pip development package on windows, linux and macOS, to simplify the experience for developers. At the same time, we are continuously working with the community to bring more model architectures. We will also bring more optimizations to continuously improve the memory and performance of the overall system.
 
 
