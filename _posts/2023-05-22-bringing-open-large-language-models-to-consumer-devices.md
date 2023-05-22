@@ -20,7 +20,7 @@ This post describes our effort on streamlining the deployment of Open LLMs throu
 ## Universal Deployment of RedPajama
 
 [RedPajama models](https://www.together.xyz/blog/redpajama-models-v1) exemplify how the open-source community can rapidly construct high-performing LLMs.
-RedPajama-3B is a small yet powerful model brings the abilities for downstream users to fine-tune these models according to their specific needs, both aiming to empower individuals of diversified background to run Open LLMs with easy personalization. We love to suppor this same vision of bringing accessibility and personalization to fully realize potential of LLM technology within the broader community.
+RedPajama-3B is a small yet powerful model that brings the abilities for downstream users to fine-tune these models according to their specific needs, both aiming to empower individuals of diversified background to run Open LLMs with easy personalization. We love to support this same vision of bringing accessibility and personalization to fully realize potential of LLM technology within the broader community.
 As a result, we bring RedPajama support to a wide range of consumer devices with hardware acceleration.
 
 RedPajama on **Apple Silicon** is achieved by compiling the LLM using Metal for M1/M2 GPUs ([try out](https://mlc.ai/mlc-llm/#windows-linux-mac)). Furthermore, MLC LLM provides a C API wrapper `libmlc_llm.dylib` that enables interaction with the generated Metal library. As an illustrative example, the command line tool `mlc_chat_cli` showcases the usage of `libmlc_llm.dylib`, which meanwhile also provides users with an interface to engage with RedPajama.
@@ -87,7 +87,7 @@ MLC LLM is a fairly young project and there are a lot of things to be done. As w
 
 ## Acknowledgement
 
-MLC LLM support for RedPajama-3b is done in collaboration with ETH Zürich, Together, OctoML, CMU Catalyst and the MLC community.
+MLC LLM support for RedPajama-3b is done in collaboration with [ETH Zürich](https://ds3lab.inf.ethz.ch/), [Together](https://www.together.xyz/),
+[OctoML](https://octoml.ai/), [CMU Catalyst](https://catalyst.cs.cmu.edu/) and the MLC community.
 
 The overall MLC projects are only possible thanks to the shoulders open-source ecosystems that we stand on. We would love to continue developing and supporting the open-source ML community. We want to thank the Apache TVM community and developers of the TVM Unity compiler. The open-source ML community members made these models publicly available. PyTorch and Hugging Face communities that make these models accessible. We would like to thank the teams behind RedPajama, Dolly, Vicuna, SentencePiece, LLaMA, and Alpaca. We also would like to thank OpenCL, Vulkan, C++, Python, Rust communities that enable this project.
-
