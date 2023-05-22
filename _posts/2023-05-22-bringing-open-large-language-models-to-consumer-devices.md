@@ -35,7 +35,7 @@ Similarly, RedPajama on **consumer-class AMD/NVIDIA GPUs** ([try out](https://ml
   <img src="/blog/img/redpajama/web.gif" height="700">
 </p>
 
-Leveraging **WebAssembly** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://mlc.ai/web-llm/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference, eliminating the need of any interaction with servers.
+Leveraging **WebAssembly** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://mlc.ai/web-llm/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference without a sever support.
 
 <p align="center">
   <img src="/blog/img/redpajama/ios.gif" height="700">
@@ -46,11 +46,12 @@ RedPajama on **iOS** follows a similar approach to Apple Silicon, utilizing Meta
 
 ## How
 
-Machine Learning Compilation (MLC) from TVM Unity compiler plays a pivotal role in enabling efficient deployment and democratization of Open LLMs. With TVM Unity, several **key features** contribute to its effectiveness and accessibility:
+Machine Learning Compilation (MLC) from TVM Unity plays a critical role in enabling efficient deployment and democratization of Open LLMs. With TVM Unity, several **key features** contribute to its effectiveness and accessibility:
 - Comprehensive code generation: TVM Unity supports code generation for a wide range of common CPU and GPU backends, including CUDA, ROCm, Vulkan, Metal, OpenCL, WebGPU, x86, ARM, etc. This expansive coverage allows for LLM deployment across diverse consumer environments, ensuring compatibility and performance.
-- Python-first development: MLC LLM compilation is developed in pure Python, thanks to the Python interface provided by TVM Unity, empowering developers to swiftly develop optimization techniques, compiler passes, and compose LLM building blocks. This approach eliminates the need for extensive debugging down into the compiler, facilitating rapid development and experimentation.
-- Built-in optimizations: TVM Unity incorporates a suite of built-in optimizations, such as operator fusion and loop tiling, which are keystones of high-quality code generation across multiple hardware platforms. These optimizations are used in MLC LLM, eliminating the need for manual kernel crafting in C++ or assembly.
+- Python-first development: MLC LLM compilation is developed in pure Python, thanks to the Python interface provided by TVM Unity, empowering developers to swiftly develop optimization techniques, compilation passes, and compose LLM building blocks. This approach facilitates rapid development and experimentation that allows us to quickly bring new model and backend support.
+- Built-in optimizations: TVM Unity incorporates a suite of built-in optimizations, such as operator fusion and loop tiling, which are keystones of high-quality code generation across multiple hardware platforms. These optimizations are used in MLC LLM, which can be used by ML engineers to amplify their daily workflow.
 - First-class support for vendor libraries and handcrafted kernels: TVM Unity treats handcrafted kernels, such as NVIDIA's CUTLASS and cuBLAS libraries, as first-class citizens. This ensures seamless integration of the best-performing code, allowing developers to leverage specialized and optimized implementations when necessary.
+- Finally, the universal runtime bring deployment to the programming language and platform of the developers' choice.
 
 <p align="center">
   <img src="/blog/img/redpajama/compilation-workflow.svg" width="80%">
