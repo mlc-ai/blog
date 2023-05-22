@@ -1,0 +1,92 @@
+---
+layout: post
+title:  "Bringing Open Large Language Models to Consumer Devices"
+date:   2023-05-21 09:00:00 -0800
+author:   MLC Community
+notitle: true
+---
+
+The rapid proliferation of open-source Large Language Models (LLMs) has sparked a strong desire among diverse user groups to independently utilize their own models within local environments. This desire stems from the constant introduction of new LLM innovations, offering improved performance and a range of customizable options. Researchers, developers, companies and enthusiasts all seek the flexibility to deploy and fine-tune LLMs according to their specific needs. By running models locally, they can tap into the diverse capabilities of LLM architectures and effectively address various language processing tasks.
+
+As the landscape of LLMs gets increasingly diverse, there have been different models under different license constraints. Driven by a desire to expand the range of available options and promote greater usecases of LLMs, latest movement has been focusing on introducing more permissive truly **Open LLMs** to cater both research and commercial interests, and several noteworthy examples include [RedPajama](https://www.together.xyz/blog/redpajama-models-v1), [FastChat-T5](https://lmsys.org/), and [Dolly](https://www.databricks.com/blog/2023/04/12/dolly-first-open-commercially-viable-instruction-tuned-llm).
+
+Having closely observed the recent advancements, we are thrilled by not only the remarkable capabilities exhibited of these parameter-efficient models ranging from 3 billion to 7 billion in size, but also the exciting opportunity for end users to explore and leverage the power of personalized Open LLMs with fine-tuning at reasonable cost, making generative AI **more accessible and democratizing its usage** for a wide range of applications.
+
+MLC LLM aims to help the democratization of accessible Open LLMs by making them possible and convenient to deploy on **browsers**, **mobile devices**, **consumer-class GPUs** and other setttings. Over the past few weeks, we have been demonstrating its capability of [universal deployment](https://github.com/mlc-ai/mlc-llm/issues/15) on AMD, NVIDIA, and Intel GPUs, Apple Silicon, iPhones, and Android phones. This progress has provided glimpses of the immense potential that MLC LLMs hold on empowering end users.
+
+This post showcases our ongoing efforts to streamline the deployment of Open LLMs through a **versatile compiler infrastructure**. We are pleased to announce the offical support for RedPajama, a significant permissive model, are now publicly accessible on WebGPU, iOS, GPUs, and various other platforms. Furthermore, the workflow we have established can be easily adapted to support a wide range of models with **personalized weights**, promoting flexibility and customization in LLM deployment.
+
+## Universal Deployment of RedPajama
+
+[RedPajama models](https://www.together.xyz/blog/redpajama-models-v1) exemplify a compelling showcase of how the open-source community can rapidly construct high-performing LLMs. This project highlights the ability for downstream users to fine-tune these models according to their specific needs, and therefore, its vision is aligned with MLC LLM, both aiming to empower individuals of diversified background to run Open LLMs with easy personalization. This shared goal emphasizes the importance of accessibility and personalization in leveraging the potential of LLM technology within the broader community. We swiftly incorporated support for RedPajama upon its initial release, and to showcase the versatility of RedPajama.
+
+RedPajama on **Apple Silicon** is achieved by compiling the LLM using Metal for M1/M2 GPUs ([try out](https://mlc.ai/mlc-llm/#windows-linux-mac)). Furthermore, MLC LLM provides a C API wrapper `libmlc_llm.dylib` that enables interaction with the generated Metal library. As an illustrative example, the command line tool `mlc_chat_cli` showcases the usage of `libmlc_llm.dylib`, which meanwhile also provides users with an interface to engage with RedPajama.
+
+<p align="center">
+  <img src="/blog/img/redpajama/cli.gif" width="80%">
+</p>
+
+Similarly, RedPajama on **consumer-class AMD/NVIDIA GPUs** ([try out](https://mlc.ai/mlc-llm/#windows-linux-mac)) leverages TVM Unity's Vulkan backend. The compilation process produces a corresponding wrapper library, `libmlc_llm.so` that encapsulates the generated SPIR-V/Vulkan code, and users may use `mlc_chat_cli` to chat with RedPajama. TVM Unity has CUDA, ROCm backends as well, and users have the choice to build alternative CUDA solution themselves following the same workflow.
+
+<p align="center">
+  <img src="/blog/img/redpajama/web.gif" height="700">
+</p>
+
+Leveraging **WASM** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://mlc.ai/web-llm/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference, eliminating the need of any interaction with servers.
+
+<p align="center">
+  <img src="/blog/img/redpajama/ios.gif" height="700">
+</p>
+
+RedPajama on **iOS** follows a similar approach to Apple Silicon, utilizing Metal as the code generation backend ([try out](https://mlc.ai/mlc-llm/#iphone)). However, due to iOS restrictions, static libraries (e.g. `libmlc_llm.a`) are produced instead. To demonstrate the interaction with `libmlc_llm.a`, we provide an Objective-C++ file, `LLMChat.mm`, as a practical example, as well as a simple SwiftUI that runs the LLM end-to-end.
+
+
+## How
+
+Machine Learning Compilation (MLC) from TVM Unity compiler plays a pivotal role in enabling efficient deployment and democratization of Open LLMs. With TVM Unity, several **key features** contribute to its effectiveness and accessibility:
+- Comprehensive code generation: TVM Unity supports code generation for a wide range of common CPU and GPU backends, including CUDA, ROCm, Vulkan, Metal, OpenCL, WebGPU, x86, ARM, etc. This expansive coverage allows for LLM deployment across diverse consumer environments, ensuring compatibility and performance.
+- Python-first development: MLC LLM compilation is developed in pure Python, thanks to the Python interface provided by TVM Unity, empowering developers to swiftly develop optimization techniques, compiler passes, and compose LLM building blocks. This approach eliminates the need for extensive debugging down into the compiler, facilitating rapid development and experimentation.
+- Built-in optimizations: TVM Unity incorporates a suite of built-in optimizations, such as operator fusion and loop tiling, which are keystones of high-quality code generation across multiple hardware platforms. These optimizations are used in MLC LLM, eliminating the need for manual kernel crafting in C++ or assembly.
+- First-class support for vendor libraries and handcrafted kernels: TVM Unity treats handcrafted kernels, such as NVIDIA's CUTLASS and cuBLAS libraries, as first-class citizens. This ensures seamless integration of the best-performing code, allowing developers to leverage specialized and optimized implementations when necessary.
+
+<p align="center">
+  <img src="/blog/img/redpajama/compilation-workflow.svg" width="80%">
+</p>
+
+MLC LLM follows a streamlined **compilation process**:
+- LLM architecture definition: Users can choose from several built-in models, such as RedPajama, Vicuna, Llama, Dolly, or define their own models using a PyTorch-like syntax provided by TVM Unity.
+- ML compilation: MLC LLM uses TVM Unity's quantization and optimization passes to compile high-level operators into GPU-friendly kernels that are natively compiled to consumer hardware.
+- Universal deployment: along with the compiled artifacts from the previous step, MLC LLM provides a convenient pack of the tokenizer and a lightweight runtime for easy deployment on all major platforms, including browsers, iOS, Android, Windows, macOS, and Linux.
+
+## Empowering Personalized Fine-Tuned Models
+
+Demand is strong to personalize LLMs, particularly, RedPajama, Vicuna/Llama, and therefore, empowering personalized models is a key feature as fine-tuned LLMs have been dominating the open-source community. MLC LLM allows convenient weight customization that user only needs to provide a directory in Huggingface format, it will produce proper model artifacts through exactly the same process.
+
+<p align="center">
+  <img src="/blog/img/redpajama/customization.svg" width="80%">
+</p>
+
+MLC LLM's chat applications (CLI, iOS, Web, Android) are specifically designed to seamlessly integrate personalized models. Developers can easily share a link to the model artifacts they have generated, enabling the chat apps to incorporate the personalized model weights.
+
+<p align="center">
+  <img src="/blog/img/redpajama/ios-model-selector.jpeg" height="500">
+</p>
+
+For instance, as shown above, the iOS app allows users to download personalized weights on-demand via a link to HuggingFace without re-compilation or re-deployment. This streamlined approach makes it convenient for sharing and redistributing.
+
+Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/tree/main/android). We invite you to join our [Discord](https://discord.gg/9Xpy2HGBuD) channel for further discussion.
+
+## Ongoing Effort
+
+As a newly established project, MLC LLM currently lacks sufficient **documentation** for various aspects. We are dedicated to providing clear and timely instructions. Our efforts are focused on the following areas:
+- Personalization: We are actively working on documenting compilation of models with customized weights in Huggingface format;
+- Re-deploying compilation artifacts: We understand the importance of seamless reuse of the compiled artifacts in other apps. To assist users, we are working diligently to provide detailed guidance on how to make use of the shared or static libraries that MLC LLM compiles to in other applications, including web, Windows, macOS, Linux, iOS and Android;
+- Prebuilt PyPI package of the TVM Unity compiler: To ensure easy accessibility and usage of TVM Unity, we are committed to providing Python packages across Windows, Linux and macOS, simplifying the installation process.
+
+At the same time, we are continuously expanding our territory to include **more model architectures**, including internationalized models like MOSS, recurrent models like RWKV, as well as multi-modal LLMs like miniGPT-4. Also, as the codebase consistently evolves, we will address memory and performance issues with our **quantization** algorithm, and allow easier integration with more flexible quantization techniques.
+
+## Acknowledgement
+
+MLC LLM support for RedPajama-3b is done in collaboration with ETH Zürich, Together, OctoML, CMU Catalyst and the MLC community.
+
+The overall MLC projects are only possible thanks to the shoulders open-source ecosystems that we stand on. We would love to continue developing and supporting the open-source ML community. We want to thank the Apache TVM community and developers of the TVM Unity compiler. The open-source ML community members made these models publicly available. PyTorch and Hugging Face communities that make these models accessible. We would like to thank the teams behind RedPajama, Dolly, Vicuna, SentencePiece, LLaMA, and Alpaca. We also would like to thank OpenCL, Vulkan, C++, Python, Rust communities that enable this project.
