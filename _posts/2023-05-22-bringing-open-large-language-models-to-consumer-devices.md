@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Bringing Open Large Language Models to Consumer Devices"
-date:   2023-05-22 09:00:00 -0800
+date:   2023-05-22 09:30:00 -0400
 author:   MLC Community
 notitle: true
 ---
