@@ -173,9 +173,9 @@ You can checkout the [instruction here](https://mlc.ai/mlc-llm/) to try out the 
 </p>
 
 Finally, thanks to WebGPU, we can offload those language models directly onto web browsers.
-[WebLLM](https://mlc.ai/web-llm/) is a companion project that leverages the ML compilation to bring these models
+[WebLLM](https://webllm.mlc.ai/) is a companion project that leverages the ML compilation to bring these models
 onto browsers. You can also try it out with the given link. The advances of AI also contains other exciting models,
-and ML compilation can help as well. [Web Stable Diffusion](https://mlc.ai/web-stable-diffusion/) is an example of running
+and ML compilation can help as well. [Web Stable Diffusion](https://websd.mlc.ai/) is an example of running
 diffusion models on the consumer environments through a browser.
 
 As part of the open source community, one thing we realize is that the biggest strength lies in the community.

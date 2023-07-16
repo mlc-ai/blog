@@ -35,7 +35,7 @@ Similarly, RedPajama on **consumer-class AMD/NVIDIA GPUs** ([try out](https://ml
   <img src="/blog/img/redpajama/web.gif" height="700">
 </p>
 
-Leveraging **WebAssembly** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://mlc.ai/web-llm/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference without a sever support.
+Leveraging **WebAssembly** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://webllm.mlc.ai/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference without a sever support.
 
 <p align="center">
   <img src="/blog/img/redpajama/ios.gif" height="700">
