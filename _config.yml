@@ -36,4 +36,4 @@ course_title:
 # Navigation bar links.
 navigation:
   - title: Home
-    link: https://mlc.ai/
+    link: /
