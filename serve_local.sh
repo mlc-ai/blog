@@ -1,2 +1,2 @@
 #!/bin/bash
-jekyll serve --watch --baseurl /blog --port 8888 --host localhost --future
+jekyll serve --watch --port 8888 --host localhost --future

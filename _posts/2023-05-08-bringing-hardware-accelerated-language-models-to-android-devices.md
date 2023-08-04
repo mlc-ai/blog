@@ -13,13 +13,13 @@ Everything runs locally and accelerated with native GPU on the phone.
 
 
 <p align="center">
-  <img src="/blog/img/android/android-recording.gif" height="700">
+  <img src="/img/android/android-recording.gif" height="700">
 </p>
 
 We have witnessed significant progress in the field of generative AI and large language models. Thanks to the open source movement, we have seen the blooming moment of open source foundational models. While it is helpful to run those models on the server platforms, there are also great deal of potential to enable large-language models on consumer devices
 
 <p align="center">
-  <img src="/blog/img/android/local-advantage.png" width="90%">
+  <img src="/img/android/local-advantage.png" width="90%">
 </p>
 
 Empowering LLMs on mobile devices is very important given this is what we interact with daily.
@@ -37,7 +37,7 @@ If you follow our latest posts, you might know that we bought have support for L
 - We need to connect our LLM runtime to different host languages. In iOS we need to interface with object-c and swift. We will need to support Java to enable the Android ecosystem.
 
 <p align="center">
-  <img src="/blog/img/android/android-vs-ios.png" width="50%">
+  <img src="/img/android/android-vs-ios.png" width="50%">
 </p>
 
 
@@ -45,7 +45,7 @@ Thanks to MLC-LLM’s universal deployment solution, we can overcome these chall
 productively deploy a [vicuna 7b](https://lmsys.org/blog/2023-03-30-vicuna/) model onto a Samsung Galaxy S23, powered by the latest Snapdragon 8 Gen 2 Mobile Platform.
 
 <p align="center">
-  <img src="/blog/img/android/android-diagram.png" width="80%">
+  <img src="/img/android/android-diagram.png" width="80%">
 </p>
 
 The cornerstone of our solution is machine learning compilation (MLC), which we leverage to deploy AI models efficiently.

@@ -26,19 +26,19 @@ As a result, we bring RedPajama support to a wide range of consumer devices with
 RedPajama on **Apple Silicon** is achieved by compiling the LLM using Metal for M1/M2 GPUs ([try out](https://mlc.ai/mlc-llm/#windows-linux-mac)). Furthermore, MLC LLM provides a C API wrapper `libmlc_llm.dylib` that enables interaction with the generated Metal library. As an illustrative example, the command line tool `mlc_chat_cli` showcases the usage of `libmlc_llm.dylib`, which meanwhile also provides users with an interface to engage with RedPajama.
 
 <p align="center">
-  <img src="/blog/img/redpajama/cli.gif" width="80%">
+  <img src="/img/redpajama/cli.gif" width="80%">
 </p>
 
 Similarly, RedPajama on **consumer-class AMD/NVIDIA GPUs** ([try out](https://mlc.ai/mlc-llm/#windows-linux-mac)) leverages TVM Unity's Vulkan backend. The compilation process produces a corresponding wrapper library, `libmlc_llm.so` that encapsulates the generated SPIR-V/Vulkan code, and users may use `mlc_chat_cli` to chat with RedPajama. TVM Unity has CUDA, ROCm backends as well, and users have the choice to build alternative CUDA solutions themselves following the same workflow.
 
 <p align="center">
-  <img src="/blog/img/redpajama/web.gif" height="700">
+  <img src="/img/redpajama/web.gif" height="700">
 </p>
 
 Leveraging **WebAssembly** and **WebGPU**, MLC LLM allows RedPajama to be extended smoothly to web browsers ([try out](https://webllm.mlc.ai/#chat-demo)). TVM Unity compiles the LLM operators to WebGPU, and along with a lightweight WebAssembly runtime, a thin JavaScript driver `llm_chat.js`, RedPajama can be deployed as a static web page, harnessing clients' own GPUs for local inference without a sever support.
 
 <p align="center">
-  <img src="/blog/img/redpajama/ios.gif" height="700">
+  <img src="/img/redpajama/ios.gif" height="700">
 </p>
 
 RedPajama on **iOS** follows a similar approach to Apple Silicon, utilizing Metal as the code generation backend ([try out](https://mlc.ai/mlc-llm/#iphone)). However, due to iOS restrictions, static libraries (e.g. `libmlc_llm.a`) are produced instead. To demonstrate the interaction with `libmlc_llm.a`, we provide an Objective-C++ file, `LLMChat.mm`, as a practical example, as well as a simple SwiftUI that runs the LLM end-to-end.
@@ -54,7 +54,7 @@ Machine Learning Compilation (MLC) from TVM Unity plays a critical role in enabl
 - Finally, a universal runtime that brings deployment to the programming language and platform of the developers' choice.
 
 <p align="center">
-  <img src="/blog/img/redpajama/compilation-workflow.svg" width="80%">
+  <img src="/img/redpajama/compilation-workflow.svg" width="80%">
 </p>
 
 MLC LLM follows a streamlined **compilation process**:
@@ -67,13 +67,13 @@ MLC LLM follows a streamlined **compilation process**:
 Demand is strong to personalize LLMs, particularly, RedPajama, Vicuna/Llama, and therefore, empowering personalized models is a key feature as fine-tuned LLMs have been dominating the open-source community. MLC LLM allows convenient weight customization that user only needs to provide a directory in Huggingface format, it will produce proper model artifacts through exactly the same process.
 
 <p align="center">
-  <img src="/blog/img/redpajama/customization.svg" width="80%">
+  <img src="/img/redpajama/customization.svg" width="80%">
 </p>
 
 MLC LLM's chat applications (CLI, iOS, Web, Android) are specifically designed to seamlessly integrate personalized models. Developers can easily share a link to the model artifacts they have generated, enabling the chat apps to incorporate the personalized model weights.
 
 <p align="center">
-  <img src="/blog/img/redpajama/ios-model-selector.jpeg" height="500">
+  <img src="/img/redpajama/ios-model-selector.jpeg" height="500">
 </p>
 
 The iOS app allows users to download personalized weights of the same model on-demand via a link to model artifacts without re-compilation or redeployment. This streamlined approach makes it convenient for sharing model weight variants. The same model artifact can be consumed by other runtimes, such as WebApp, CLI and Android(incoming).
