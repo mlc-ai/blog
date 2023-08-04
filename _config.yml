@@ -2,7 +2,7 @@
 name: "Machine Learning Compilation"
 short_name: "MLC"
 
-url: https://mlc.ai/blog
+url: https://blog.mlc.ai
 
 exclude: [README.md, Makefile, screenshot.png, serve_local.sh]
 
@@ -24,7 +24,7 @@ permalink: /:year/:month/:day/:title
 front_page_news: 8
 
 # Base pathname for links.
-base: '/blog'
+base: '/'
 
 # make pages for the _projects folder
 collections:
@@ -36,4 +36,4 @@ course_title:
 # Navigation bar links.
 navigation:
   - title: Home
-    link: /
+    link: https://mlc.ai/
