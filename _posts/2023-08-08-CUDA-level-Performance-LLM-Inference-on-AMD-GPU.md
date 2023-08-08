@@ -27,13 +27,17 @@ Most of the performant inference solutions are based on CUDA and optimized for n
 In the meantime, with the high-demand for compute availability, it is useful to bring
 support to a broader class of hardware accelerators. AMD is one potential candidate.
 
-|                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
+<p align="center">
+  <img src="/img/7900-4090.png" width="100%">
+</p>
+
+<!-- |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
 |:----------------:|:-----------------------:|:--------------------------:|
 |       Cores      |  6144 stream processors |      16384 CUDA cores      |
 |      Memory      |        24GB GDDR6       |         24GB GDDR6X        |
 | Memory Bandwidth |         960 GB/s        |          1008 GB/s         |
 |        TDP       |           320W          |            450W            |
-|       Price      |           999$          |            1599$           |
+|       Price      |           999$          |            1599$           | -->
 
 In this post, we are taking deep look at the large language model inference problem
 and see how well can AMD GPUs do. We specifically looks at single-batch 4-bit LLM 
@@ -93,10 +97,14 @@ Our rocm support flow is as follows:
 
 The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generate 512 tokens.
 
-|                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
+<p align="center">
+  <img src="/img/perf.png" width="100%">
+</p>
+
+<!-- |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
 |:----------------:|:-----------------------:|:--------------------------:|
 |        7B        |       134.3 tok/s       |         164.3 tok/s        |
-|        13B       |        75.2 tok/s       |         94.4 tok/s         |
+|        13B       |        75.2 tok/s       |         94.4 tok/s         | -->
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
