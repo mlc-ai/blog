@@ -22,9 +22,9 @@ Follow the instructions below 🔽 to try it out yourself if you have an AMD car
 
 ## Background
 
-There has been many LLM inference solutions since the bloom of open-source LLMs.
-Most of the performant inference solutions are based on CUDA and optimized for nvidia GPUs.
-In the meantime, with the high-demand for compute availability, it is useful to bring
+There have been many LLM inference solutions since the bloom of open-source LLMs.
+Most of the performant inference solutions are based on CUDA and optimized for Nvidia GPUs.
+In the meantime, with the high demand for compute availability, it is useful to bring
 support to a broader class of hardware accelerators. AMD is one potential candidate.
 
 <p align="center">
@@ -39,39 +39,39 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |        TDP       |           320W          |            450W            |
 |       Price      |           999$          |            1599$           | -->
 
-From the spec comparison, we can see that AMD 7900 XTX is a good match to Nvidia 4090.
-* Both have 24GB memory, which means they can fit models with the same size.
-* Both have similar memory bandwidth, considering LLM infernce is largely memory bound, 
+From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidia 4090.
+* Both have 24GB memory, which means they can fit models of the same size.
+* Both have similar memory bandwidth, considering LLM inference is largely memory bound, 
   we can expect similar performance.
-* Most importantly, AMD 7900 XTX is 60% cheaper than Nvidia 4090. So the performance (toks/sec) per dollar can be much better if we can get similar performance.
+* Most importantly, AMD 7900 XTX is 60% cheaper than Nvidia 4090. So the performance (toks/sec) per dollar can be much better if we can get a similar performance.
 
-In this post, we are taking deep look at the large language model inference problem
-and see how well can AMD GPUs do. We specifically looks at single-batch 4-bit LLM 
+In this post, we are taking a deep look at the large language model inference problem
+and see how well can AMD GPUs do. We specifically look at single-batch 4-bit LLM 
 inference problem as a starting point. We are also interested in asking how well 
 can AMD GPUs do compared to a performant CUDA solution on Nvidia GPUs.
 
 
 ## Machine Learning Compilation
 
-In order to peform such comparison. We will need a inference framework that universally deployed
+In order to perform such a comparison. We will need an inference framework that is universally deployed
 and more importantly, optimizes for both Nvidia and AMD GPUs.
 
-Here we leverage MLC-LLM, a inference framework that offers high-perfomance universal deployment for LLMs.
-Specifically MLC-LLM bring state of art performance for a wide variety of backends, including CUDA, Metal,
-ROCm, Vulkan, and OpenCL, spanning both server class GPUs to mobile (iPhone and Android).
+Here we leverage MLC-LLM, an inference framework that offers high-performance universal deployment for LLMs.
+Specifically, MLC-LLM brings state-of-the-art performance for a wide variety of backends, including CUDA, Metal,
+ROCm, Vulkan, and OpenCL, spanning both server-class GPUs to mobile (iPhone and Android).
 
-At a high level, the framework let user take open language models and provide Python-based API to
+At a high level, the framework let the user take open language models and provide Python-based API to
 productively transform, and optimize the tensor computations in the model inference workload, 
 and generates code for the platform of interest.
 
 MLC-LLM leverages machine learning compilation, an emerging technology that compiles and automates 
-optimization of machine learing programs. Specificially, we build solution on Apache TVM unity, a deep-learning compiler that utilizes a unified IR to represent the DL model at both graph and operator levels throughout the compilation stages. It allows *customizable model construction, composable model transformation, and transferable kernel optimization* for ML engineers to effectively customize and reuse ML compilation pipelines, reducing the effort of repeatedly implementing the same mechanism for different models or backends. TVM Unity also implements universal deployment runtime that enables developers to deploy the solution to programming language and platform of their choice.
+optimization of machine learning programs. Specifically, we build a solution on Apache TVM unity, a deep-learning compiler that utilizes a unified IR to represent the DL model at both graph and operator levels throughout the compilation stages. It allows *customizable model construction, composable model transformation, and transferable kernel optimization* for ML engineers to effectively customize and reuse ML compilation pipelines, reducing the effort of repeatedly implementing the same mechanism for different models or backends. TVM Unity also implements universal deployment runtime that enables developers to deploy the solution to the programming language and platform of their choice.
 
 What makes TVM Unity different and even more productive is the Python-first development flow, where we can
 
 * inspect and modify the computational graph in Python
 * compose IR transformations in Python
-* inspect and write self-defined operators in Python, and compile them with other pre-defined operators composably in the same computational graph
+* inspect and write self-defined operators in Python, and compile them with other pre-defined operators composable in the same computational graph
 * write the kernel optimization generically in Python and the compiler generates shader language codes for different backends accordingly, which allows us to transfer the kernel optimization techniques across backends
 
 We are leveraging the Python-first development, and universal deployment solution to quickly enable high-performance AMD GPU 
@@ -83,21 +83,21 @@ support less than one human week's effort.
   <img src="/img/amd/arch.svg" width="80%">
 </p>
 
-There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, WebGPU.
-ROCm stack is what AMD recently push for and have a lot of the corresponding 
-building blocks similar to CUDA stack. 
-Vulkan is the latest graphics standard and offers the most wide range of support
-across GPU devices. WebGPU is the latest web standard that allows the compute to run on web browsers.
+There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, and WebGPU.
+ROCm stack is what AMD recently push for and has a lot of the corresponding 
+building blocks similar to the CUDA stack. 
+Vulkan is the latest graphics standard and offers the widest range of support
+across GPU devices. WebGPU is the latest web standard that allows the computation to run on web browsers.
 
-MLC can automatically generate code for all of them so we can also do some cross comparisons. 
-We pick ROCm for most of our results in the 7900 txt and use Vulkan (mesa driver) for steamdeck.
+MLC can automatically generate code for all of them so we can also do some cross-comparisons. 
+We pick ROCm for most of our results in the 7900 XTX and use Vulkan (mesa driver) for Steamdeck.
 
 Our ROCm support flow is as follows:
 
 - Reuse the whole MLC pipeline for existing targets, including CUDA and Metal, which includes high-level optimizations
   such as static memory planning for dynamic computation and operator fusion, etc.
 - We reused a generic GPU kernel optimization space written in TensorIR and do some profiling to specialize
-  the hyper parameters for AMD cards. Importantly, this kernel transformation is purely written in Python
+  the hyperparameters for AMD cards. Importantly, this kernel transformation is purely written in Python
   allowing us to do such optimization in the order of a day.
 - We leverage ROCm LLVM backend to translate the IR of each kernel to ROCm code.
 - Finally, everything is packed into a shared library that can be invoked by Python and rest APIs.
@@ -105,7 +105,7 @@ Our ROCm support flow is as follows:
 
 ## Benchmark
 
-The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generate 512 tokens.
+The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generating 512 tokens.
 
 <p align="center">
   <img src="/img/amd/perf.png" width="60%">
@@ -127,14 +127,14 @@ NOTE: fold instructions into benchmark,  include Python
 We provide prebuilt wheels and instructions so you can also try these out on your own devices.
 
 
-## Bringing Support to Broader Range of AMD Devices
+## Bringing Support to a Broader Range of AMD Devices
 
-After having fun with 7900 XTX. Let us start to look into a broader set of AMD devices.
-Specifically, we looked into SteamDeck, which comes with a AMD APU.
+After having fun with the 7900 XTX. Let us start to look into a broader set of AMD devices.
+Specifically, we looked into SteamDeck, which comes with an AMD APU.
 One limitation of the deck is that the bios caped the GPU VRAM to 4GB, which is not
-enough for ROCm driver to support a 4-bit 7B model. Luckily, we find out that
-Mesa's Vulkan driver on steamdeck have robust support that allows buffer to go
-beyond the 4GB cap(likely reuses some unified memory on CPU). 
+enough for the ROCm driver to support a 4-bit 7B model. Luckily, we find out that
+Mesa's Vulkan driver on Steamdeck has robust support that allows the buffer to go
+beyond the 4GB cap (likely reuses some unified memory on the CPU). 
 
 <p align="center">
   <img src="/img/amd/steam-deck.png" width="60%">
@@ -163,7 +163,7 @@ prefill: 48.3 tok/s, decode: 13.2 tok/s
 ```
 
 We applied the Vulkan backend on this device, and successfully deployed Llama 2 7B 13.2 tok/s.
-This results shed some lights on how a broad spectrum of AMD devices can be supported
+These results shed some light on how a broad spectrum of AMD devices can be supported
 for different consumers.
 
 ## Discussions and Future Works
@@ -171,23 +171,23 @@ for different consumers.
 With the arrival of generative AI, we are facing a hardware availability issue. 
 The ability to bring a broad spectrum of hardware devices and make them performant is more important than ever.
 In this post, we show that with the right software support, AMD GPU can get to CUDA-level performance
-on large-language model inference for the latency sensitive use-cases. 
+on large-language model inference for the latency sensitive use cases. 
 
-Although our study focuses on consumer grade GPUs, our past experience is that as we 
-optimizes for 4090, we also observe correlated performance improvements on A10g and A100.
+Although our study focuses on consumer-grade GPUs, our experience is that as we 
+optimize for 4090, we also observe correlated performance improvements on A10g and A100.
 So we are confident that the study generalizes to server-grade GPUs and will update our study
 once we have access to those devices.
-With the set of evidences so far, we believe that with the right price and availability, 
-AMD GPUs can start be effective for LLM inference.
+With the set of evidence so far, we believe that with the right price and availability, 
+AMD GPUs can start to be effective for LLM inference.
 
-This post is part of ongoing effort on bringing high-performance universal deployment via MLC. 
+This post is part of an ongoing effort on bringing high-performance universal deployment via MLC. 
 We are also actively working on several areas that can generalize our study.
-- Enable batching and multiGPU support.
+- Enable batching and multi-GPU support.
 - Bringing connections to the PyTorch ecosystem.
 - Enabling more quantization and model architectures.
 - Enabling more automatic hardware backend optimizations.
 
-You are more than welcomed to checkout to learn more
+You are more than welcome to check out to learn more
 
 ## Acknowledgement
 
