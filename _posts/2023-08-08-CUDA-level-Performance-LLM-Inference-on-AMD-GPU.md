@@ -9,7 +9,7 @@ notitle: true
 ## TL;DR
 
 
-MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using ROCm with **CUDA-level performance**. More specifically, AMD Radeon™ RX 7900 XTX gives 80%~85% of the speed of NVIDIA® GeForce RTX™ 4090 for Llama2-7B/13B.
+MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using ROCm with **CUDA-level performance**. More specifically, AMD Radeon™ RX 7900 XTX gives **80%~85%** of the speed of NVIDIA® GeForce RTX™ 4090 for Llama2-7B/13B.
 
 <p align="center">
   <img src="/img/amd/amd.svg" width="60%">
@@ -122,7 +122,7 @@ We provide prebuilt wheels and instructions so you can also try these out on you
 
 if you are using ROCm on Linux, the installation command is
   
-```bash
+```Bash
 pip install --pre --force-reinstall mlc-ai-nightly-rocm mlc-chat-nightly-rocm -f https://mlc.ai/wheels
 
 # Verify the installation of the Python package.
@@ -131,7 +131,8 @@ python -c "from mlc_chat import ChatModule; print(ChatModule)"
 ```
 
 - Download the quanzized model parameters and compiled model library
-```bash
+
+```Bash
 # Install Git and Git-LFS if you haven't already. Then run
 git lfs install
 mkdir -p dist/prebuilt
@@ -144,6 +145,7 @@ git clone https://huggingface.co/mlc-ai/mlc-chat-Llama-2-7b-chat-hf-q4f16_1; cd 
 ```
 
 - Then test the perfomance with the following Python script, note that it should be put under the same folder with `dist` folder.
+
 ```Python
 from mlc_chat import ChatModule
 
