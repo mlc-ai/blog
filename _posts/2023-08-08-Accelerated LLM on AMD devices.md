@@ -26,7 +26,12 @@ Follow the instructions below 🔽 to try it out yourself if you have an AMD car
   <img src="/img/amd.svg" width="60%">
 </p>
 
-<p align="center">
+## Background
+
+There has been many LLM inference solutions since the bloom of open-source LLMs.
+Most of the performant inference solutions are based on CUDA and optimized for nvidia GPUs.
+In the meantime, with the high-demand for compute availability, it is useful to bring
+support to a broader class of hardware accelerators. AMD is one potential candidate.
 
 |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
 |:----------------:|:-----------------------:|:--------------------------:|
@@ -35,15 +40,6 @@ Follow the instructions below 🔽 to try it out yourself if you have an AMD car
 | Memory Bandwidth |         960 GB/s        |          1008 GB/s         |
 |        TDP       |           320W          |            450W            |
 |       Price      |           999$          |            1599$           |
-
-</p>
-
-## Background
-
-There has been many LLM inference solutions since the bloom of open-source LLMs.
-Most of the performant inference solutions are based on CUDA and optimized for nvidia GPUs.
-In the meantime, with the high-demand for compute availability, it is useful to bring
-support to a broader class of hardware accelerators. AMD is one potential candidate.
 
 In this post, we are taking deep look at the large language model inference problem
 and see how well can AMD GPUs do. We specifically looks at single-batch 4-bit LLM 
@@ -103,11 +99,14 @@ Our rocm support flow is as follows:
 
 > talk about methodology: e.g. are we measuring encode/decode, perf or only decode.
 
-We deploy Llama 2 7B and 13B on AMD Radeon™ RX 7900 XTX with MLC-LLM. 
+The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generate 512 tokens.
+
+|                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
+|:----------------:|:-----------------------:|:--------------------------:|
+|        7B        |       134.3 tok/s       |         164.3 tok/s        |
+|        13B       |        75.2 tok/s       |         94.4 tok/s         |
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
-
-Concretely, it's 134.3 toks/s for 7B and 75.2 tok/s for 13B on 7900 XTX, compared with 164.3 tok/s and 94.4 tok/s on 4090.
 
 ```python
 
@@ -127,7 +126,27 @@ enough for rocm driver to support a 4-bit 7B model. Luckily, we find out that
 Mesa's vulkan driver on steamdeck have robust support that allows buffer to go
 beyond the 4GB cap(likely reuses some unified memory on CPU). 
 
-<<stemdeck picture>>
+```
+(deck@steamdeck mlc-llm)$ ./build/mlc_chat_cli --local-id Llama-2-7b-chat-hf-q4f16_1
+Use MLC config: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/params/mlc-chat-config.json"
+Use model weights: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/params/ndarray-cache.json"
+Use model library: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/Llama-2-7b-chat-hf-q4f16_1-vulkan.so"
+You can use the following special commands:
+  /help               print the special commands
+  /exit               quit the cli
+  /stats              print out the latest stats (token/sec)
+  /reset              restart a fresh chat
+  /reload [local_id]  reload model `local_id` from disk, or reload the current model if `local_id` is not specified
+
+Loading model...
+Loading finished
+Running system prompts...
+System prompts finished
+[INST]: Hi
+[/INST]: Hello! I'm here to help you with any questions or concerns you may have. However, I must inform you that I cannot provide advice or suggestions that promote or facilitate harmful or illegal activities. It is important to always act in a safe and responsible manner, and to respect the laws and well-being of yourself and others. Is there anything else I can help you with?
+[INST]: /stats
+prefill: 48.3 tok/s, decode: 13.2 tok/s
+```
 
 We applied the vulkan backend on this device, and successfully deployed Llama 2 7B 13.2 tok/s.
 This results shed some lights on how a broad spectrum of AMD devices can be supported
