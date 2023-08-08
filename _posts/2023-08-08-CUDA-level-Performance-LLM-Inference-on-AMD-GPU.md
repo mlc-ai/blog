@@ -186,8 +186,7 @@ You are more than welcome to check out to learn more
 
 ## Links
 
-- MLC-LLM repo: [https://github.com/mlc-ai/mlc-llm](https://mlc.ai/mlc-llm/docs/get_started/try_out.html#)
-- MLC-LLM documentation: [https://mlc.ai/mlc-llm/docs/get_started/try_out.html#](https://mlc.ai/mlc-llm/docs/get_started/try_out.html#)
+Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcomed to join the [Discord Channel](https://discord.com/invite/9Xpy2HGBuD) for further discussion.
 
 ## Acknowledgement
 
