@@ -12,7 +12,7 @@ notitle: true
 MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using ROCm with **CUDA-level performance**. More specifically, AMD Radeon™ RX 7900 XTX gives 80%~85% of the speed of NVIDIA® GeForce RTX™ 4090 for Llama2-7B/13B.
 
 <p align="center">
-  <img src="/img/amd.svg" width="60%">
+  <img src="/img/amd/amd.svg" width="60%">
 </p>
 
 Our solution also generalizes to a variety of AMD GPUs and APUs. We also deployed Llama 2 7B on SteamDeck using Vulkan, 
@@ -28,7 +28,7 @@ In the meantime, with the high-demand for compute availability, it is useful to 
 support to a broader class of hardware accelerators. AMD is one potential candidate.
 
 <p align="center">
-  <img src="/img/7900-4090.png" width="100%">
+  <img src="/img/amd/7900-4090.png" width="100%">
 </p>
 
 <!-- |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
@@ -98,7 +98,7 @@ Our rocm support flow is as follows:
 The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generate 512 tokens.
 
 <p align="center">
-  <img src="/img/perf.png" width="100%">
+  <img src="/img/amd/perf.png" width="100%">
 </p>
 
 <!-- |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
