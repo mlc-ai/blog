@@ -184,6 +184,11 @@ We are also actively working on several areas that can generalize our study.
 
 You are more than welcome to check out to learn more
 
+## Links
+
+- MLC-LLM repo: https://github.com/mlc-ai/mlc-llm
+- MLC-LLM documentation: https://mlc.ai/mlc-llm/docs/get_started/try_out.html#
+
 ## Acknowledgement
 
 The overall MLC projects are only possible thanks to the shoulders of open-source ecosystems that we stand on. We would love to continue developing and supporting the open-source ML community. We want to thank the Apache TVM community and developers of the TVM Unity compiler. The open-source ML community members made these models publicly available. PyTorch and Hugging Face communities make these models accessible. We would like to thank the teams behind RedPajama, Dolly, Vicuna, SentencePiece, LLaMA, and Alpaca. We also would like to thank OpenCL, Vulkan, C++, Python, and Rust communities that enable this project.
