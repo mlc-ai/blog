@@ -23,8 +23,10 @@ which has an AMD APU. The speed is 13.2 tok/s.
 Follow the instructions below 🔽 to try it out yourself if you have an AMD card!
 
 <p align="center">
-  <img src="/img/amd.svg" width="80%">
+  <img src="/img/amd.svg" width="60%">
 </p>
+
+<center>
 
 |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
 |:----------------:|:-----------------------:|:--------------------------:|
@@ -33,6 +35,8 @@ Follow the instructions below 🔽 to try it out yourself if you have an AMD car
 | Memory Bandwidth |         960 GB/s        |          1008 GB/s         |
 |        TDP       |           320W          |            450W            |
 |       Price      |           999$          |            1599$           |
+
+</center>
 
 ## Background
 
