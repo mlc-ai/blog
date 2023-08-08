@@ -9,17 +9,13 @@ notitle: true
 ## TL;DR
 
 
-We build a solution that deploy Llama 2 7B and 13B on AMD GPUs that comes with 
-**CUDA-level inference performance**.
-
-Specifically, for single batch inference performance AMD Radeon™ RX 7900 XTX, 
-it can reach 80%~85% of the speed of NVIDIA® GeForce RTX™ 4090.
+MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using ROCm with **CUDA-level performance**. More specifically, AMD Radeon™ RX 7900 XTX gives 80%~85% of the speed of NVIDIA® GeForce RTX™ 4090 for Llama2-7B/13B.
 
 <p align="center">
   <img src="/img/amd.svg" width="60%">
 </p>
 
-Our solution also generalizes to a variety of AMD GPUs and APUs. We also deployed Llama 2 7B on SteamDeck, 
+Our solution also generalizes to a variety of AMD GPUs and APUs. We also deployed Llama 2 7B on SteamDeck using Vulkan, 
 which has an AMD APU. The speed is 13.2 tok/s.
 
 Follow the instructions below 🔽 to try it out yourself if you have an AMD card!
