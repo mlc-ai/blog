@@ -10,21 +10,19 @@ notitle: true
 
 
 We build a solution that deploy Llama 2 7B and 13B on AMD GPUs that comes with 
-CUDA-level inference performance.
+**CUDA-level inference performance**.
 
 Specifically, for single batch inference performance AMD Radeon™ RX 7900 XTX, 
 it can reach 80%~85% of the speed of NVIDIA® GeForce RTX™ 4090.
 
-Concretely, it's 134.3 toks/s for 7B and 75.2 tok/s for 13B on 7900 XTX, compared with 164.3 tok/s and 94.4 tok/s on 4090.
+<p align="center">
+  <img src="/img/amd.svg" width="60%">
+</p>
 
 Our solution also generalizes to a variety of AMD GPUs and APUs. We also deployed Llama 2 7B on SteamDeck, 
 which has an AMD APU. The speed is 13.2 tok/s.
 
 Follow the instructions below 🔽 to try it out yourself if you have an AMD card!
-
-<p align="center">
-  <img src="/img/amd.svg" width="60%">
-</p>
 
 ## Background
 
@@ -96,8 +94,6 @@ Our rocm support flow is as follows:
 
 
 ## Benchmark
-
-> talk about methodology: e.g. are we measuring encode/decode, perf or only decode.
 
 The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generate 512 tokens.
 
