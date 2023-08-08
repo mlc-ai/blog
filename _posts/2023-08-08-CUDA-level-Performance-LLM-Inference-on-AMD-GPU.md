@@ -80,7 +80,7 @@ support less than one human week's effort.
 ### Bringing ROCm support to MLC 
 
 <p align="center">
-  <img src="/img/amd/arch.svg" width="70%">
+  <img src="/img/amd/arch.svg" width="80%">
 </p>
 
 There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, WebGPU.
