@@ -39,6 +39,7 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |        TDP       |           320W          |            450W            |
 |       Price      |           999$          |            1599$           | -->
 
+### Discussions on HW spec
 From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidia 4090.
 * Both have 24GB memory, which means they can fit models of the same size.
 * Both have similar memory bandwidth, considering LLM inference is largely memory bound, 
@@ -69,10 +70,10 @@ optimization of machine learning programs. Specifically, we build a solution on 
 
 What makes TVM Unity different and even more productive is the Python-first development flow, where we can
 
-* inspect and modify the computational graph in Python
-* compose IR transformations in Python
-* inspect and write self-defined operators in Python, and compile them with other pre-defined operators composable in the same computational graph
-* write the kernel optimization generically in Python and the compiler generates shader language codes for different backends accordingly, which allows us to transfer the kernel optimization techniques across backends
+* Inspect and modify the computational graph in Python
+* Compose IR transformations in Python
+* Inspect and write self-defined operators in Python, and compile them with other pre-defined operators composable in the same computational graph
+* Write the kernel optimization generically in Python and the compiler generates shader language codes for different backends accordingly, which allows us to transfer the kernel optimization techniques across backends
 
 We are leveraging the Python-first development, and universal deployment solution to quickly enable high-performance AMD GPU 
 support less than one human week's effort.
@@ -91,6 +92,8 @@ across GPU devices. WebGPU is the latest web standard that allows the computatio
 
 MLC can automatically generate code for all of them so we can also do some cross-comparisons. 
 We pick ROCm for most of our results in the 7900 XTX and use Vulkan (mesa driver) for Steamdeck.
+
+We find that ROCm stack just works out of box, and it takes **2 human day** to bring the optimized version, thanks to the productive python development pipeline in MLC.
 
 Our ROCm support flow is as follows:
 
