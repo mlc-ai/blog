@@ -186,8 +186,8 @@ You are more than welcome to check out to learn more
 
 ## Links
 
-- MLC-LLM repo: https://github.com/mlc-ai/mlc-llm
-- MLC-LLM documentation: https://mlc.ai/mlc-llm/docs/get_started/try_out.html#
+- MLC-LLM repo: [https://github.com/mlc-ai/mlc-llm](https://mlc.ai/mlc-llm/docs/get_started/try_out.html#)
+- MLC-LLM documentation: [https://mlc.ai/mlc-llm/docs/get_started/try_out.html#](https://mlc.ai/mlc-llm/docs/get_started/try_out.html#)
 
 ## Acknowledgement
 
