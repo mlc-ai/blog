@@ -39,6 +39,12 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |        TDP       |           320W          |            450W            |
 |       Price      |           999$          |            1599$           | -->
 
+From the spec comparison, we can see that AMD 7900 XTX is a good match to Nvidia 4090.
+* Both have 24GB memory, which means they can fit models with the same size.
+* Both have similar memory bandwidth, considering LLM infernce is largely memory bound, 
+  we can expect similar performance.
+* Most importantly, AMD 7900 XTX is 60% cheaper than Nvidia 4090. So the performance (toks/sec) per dollar can be much better if we can get similar performance.
+
 In this post, we are taking deep look at the large language model inference problem
 and see how well can AMD GPUs do. We specifically looks at single-batch 4-bit LLM 
 inference problem as a starting point. We are also interested in asking how well 
@@ -52,9 +58,9 @@ and more importantly, optimizes for both Nvidia and AMD GPUs.
 
 Here we leverage MLC-LLM, a inference framework that offers high-perfomance universal deployment for LLMs.
 Specifically MLC-LLM bring state of art performance for a wide variety of backends, including CUDA, Metal,
-Rocm, Vulkan, and OpenCL, spanning both server class GPUs to mobile(iPhone and Android).
+ROCm, Vulkan, and OpenCL, spanning both server class GPUs to mobile (iPhone and Android).
 
-At a high level, the framework let user take open language models and provide python-based API to
+At a high level, the framework let user take open language models and provide Python-based API to
 productively transform, and optimize the tensor computations in the model inference workload, 
 and generates code for the platform of interest.
 
@@ -68,29 +74,29 @@ What makes TVM Unity different and even more productive is the Python-first deve
 * inspect and write self-defined operators in Python, and compile them with other pre-defined operators composably in the same computational graph
 * write the kernel optimization generically in Python and the compiler generates shader language codes for different backends accordingly, which allows us to transfer the kernel optimization techniques across backends
 
-We are leveraging the python-first development, and universal deployment solution to quickly enable high-performance AMD GPU 
+We are leveraging the Python-first development, and universal deployment solution to quickly enable high-performance AMD GPU 
 support less than one human week's effort.
 
 ### Bringing ROCm support to MLC 
 
-There are several possible ways to support AMD GPU: RoCm, OpenCL, Vulkan, WebGPU.
+There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, WebGPU.
 ROCm stack is what AMD recently push for and have a lot of the corresponding 
 building blocks similar to CUDA stack. 
 Vulkan is the latest graphics standard and offers the most wide range of support
 across GPU devices. WebGPU is the latest web standard that allows the compute to run on web browsers.
 
 MLC can automatically generate code for all of them so we can also do some cross comparisons. 
-We pick ROCm for most of our results in the 7900 txt and use vulkan(mesa driver) for steamdeck.
+We pick ROCm for most of our results in the 7900 txt and use Vulkan (mesa driver) for steamdeck.
 
-Our rocm support flow is as follows:
+Our ROCm support flow is as follows:
 
 - Reuse the whole MLC pipeline for existing targets, including CUDA and Metal, which includes high-level optimizations
   such as static memory planning for dynamic computation and operator fusion, etc.
 - We reused a generic GPU kernel optimization space written in TensorIR and do some profiling to specialize
-  the hyper parameters for AMD cards. Importantly, this kernel transformation is purely written in python
+  the hyper parameters for AMD cards. Importantly, this kernel transformation is purely written in Python
   allowing us to do such optimization in the order of a day.
 - We leverage ROCm LLVM backend to translate the IR of each kernel to ROCm code.
-- Finally, everything is packed into a shared library that can be invoked by python and rest APIs.
+- Finally, everything is packed into a shared library that can be invoked by Python and rest APIs.
 
 
 ## Benchmark
@@ -108,11 +114,11 @@ The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
-```python
+```Python
 
 ```
 
-NOTE: fold instructions into benchmark,  include python
+NOTE: fold instructions into benchmark,  include Python
 
 We provide prebuilt wheels and instructions so you can also try these out on your own devices.
 
@@ -122,8 +128,8 @@ We provide prebuilt wheels and instructions so you can also try these out on you
 After having fun with 7900 XTX. Let us start to look into a broader set of AMD devices.
 Specifically, we looked into SteamDeck, which comes with a AMD APU.
 One limitation of the deck is that the bios caped the GPU VRAM to 4GB, which is not
-enough for rocm driver to support a 4-bit 7B model. Luckily, we find out that
-Mesa's vulkan driver on steamdeck have robust support that allows buffer to go
+enough for ROCm driver to support a 4-bit 7B model. Luckily, we find out that
+Mesa's Vulkan driver on steamdeck have robust support that allows buffer to go
 beyond the 4GB cap(likely reuses some unified memory on CPU). 
 
 <p align="center">
@@ -134,7 +140,7 @@ beyond the 4GB cap(likely reuses some unified memory on CPU).
 (deck@steamdeck mlc-llm)$ ./build/mlc_chat_cli --local-id Llama-2-7b-chat-hf-q4f16_1
 Use MLC config: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/params/mlc-chat-config.json"
 Use model weights: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/params/ndarray-cache.json"
-Use model library: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/Llama-2-7b-chat-hf-q4f16_1-vulkan.so"
+Use model library: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/Llama-2-7b-chat-hf-q4f16_1-Vulkan.so"
 You can use the following special commands:
   /help               print the special commands
   /exit               quit the cli
@@ -152,7 +158,7 @@ System prompts finished
 prefill: 48.3 tok/s, decode: 13.2 tok/s
 ```
 
-We applied the vulkan backend on this device, and successfully deployed Llama 2 7B 13.2 tok/s.
+We applied the Vulkan backend on this device, and successfully deployed Llama 2 7B 13.2 tok/s.
 This results shed some lights on how a broad spectrum of AMD devices can be supported
 for different consumers.
 
