@@ -113,14 +113,61 @@ The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
-```Python
-
-```
-
-NOTE: fold instructions into benchmark,  include Python
+### Try it out yourself!
 
 We provide prebuilt wheels and instructions so you can also try these out on your own devices.
 
+- Prerequisites: AMD GPU, with ROCm 5.6 or Vulkan support.
+- Install mlc python packages: see instructions  https://mlc.ai/package/
+
+if you are using ROCm on Linux, the installation command is
+  
+```bash
+pip install --pre --force-reinstall mlc-ai-nightly-rocm mlc-chat-nightly-rocm -f https://mlc.ai/wheels
+
+# Verify the installation of the Python package.
+# You are expected to see "<class 'mlc_chat.chat_module.ChatModule'>" printed out.
+python -c "from mlc_chat import ChatModule; print(ChatModule)"
+```
+
+- Download the quanzized model parameters and compiled model library
+```bash
+# Install Git and Git-LFS if you haven't already. Then run
+git lfs install
+mkdir -p dist/prebuilt
+
+# compiled model library
+git clone https://github.com/mlc-ai/binary-mlc-llm-libs.git dist/prebuilt/lib
+cd dist/prebuilt
+# quanzized model parameters
+git clone https://huggingface.co/mlc-ai/mlc-chat-Llama-2-7b-chat-hf-q4f16_1; cd ../../
+```
+
+- Then test the perfomance with the following Python script, note that it should be put under the same folder with `dist` folder.
+```Python
+from mlc_chat import ChatModule
+
+# From the mlc-llm directory, run
+# $ python sample_mlc_chat.py
+
+# Create a ChatModule instance
+cm = ChatModule(model="Llama-2-7b-chat-hf-q4f16_1")
+# You can change to other models that you downloaded, for example,
+# cm = ChatModule(model="Llama-2-13b-chat-hf-q4f16_1")  # Llama2 13b model
+
+# Generate a response for a given prompt
+output = cm.generate(prompt="What is the meaning of life?")
+print(f"Generated text:\n{output}\n")
+
+# Print prefill and decode performance statistics
+print(f"Statistics: {cm.stats()}\n")
+
+output = cm.generate(prompt="How many points did you list out?")
+print(f"Followup generation:\n{output}\n")
+
+# Reset the chat module by
+# cm.reset_chat()
+```
 
 ## Bringing Support to a Broader Range of AMD Devices
 
