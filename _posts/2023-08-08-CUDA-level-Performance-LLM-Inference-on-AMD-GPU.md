@@ -126,6 +126,10 @@ enough for rocm driver to support a 4-bit 7B model. Luckily, we find out that
 Mesa's vulkan driver on steamdeck have robust support that allows buffer to go
 beyond the 4GB cap(likely reuses some unified memory on CPU). 
 
+<p align="center">
+  <img src="/img/amd/steam-deck.png" width="60%">
+</p>
+
 ```
 (deck@steamdeck mlc-llm)$ ./build/mlc_chat_cli --local-id Llama-2-7b-chat-hf-q4f16_1
 Use MLC config: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/params/mlc-chat-config.json"
