@@ -52,12 +52,12 @@ inference problem as a starting point. We are also interested in asking how well
 can AMD GPUs do compared to a performant CUDA solution on Nvidia GPUs.
 
 
-## Machine Learning Compilation
+## Machine Learning Compilation for LLM Inference
 
 In order to perform such a comparison. We will need an inference framework that is universally deployed and more importantly, optimizes for both Nvidia and AMD GPUs. Here we leverage MLC-LLM, an inference framework that offers **high-performance universal deployment for LLMs**.
 Specifically, MLC-LLM brings state-of-the-art performance for a wide variety of backends, including CUDA, Metal, ROCm, Vulkan, and OpenCL, spanning both server-class GPUs to mobile (iPhone and Android). At a high level, the framework let the user take open language models and provide Python-based API to productively transform, and optimize the tensor computations in the model inference workload, and generates code for the platform of interest.
 
-MLC-LLM leverages machine learning compilation, an emerging technology that compiles and automates 
+<!-- MLC-LLM leverages machine learning compilation, an emerging technology that compiles and automates 
 optimization of machine learning programs. Specifically, we build a solution on Apache TVM unity, a deep-learning compiler that utilizes a unified IR to represent the DL model at both graph and operator levels throughout the compilation stages. It allows *customizable model construction, composable model transformation, and transferable kernel optimization* for ML engineers to effectively customize and reuse ML compilation pipelines, reducing the effort of repeatedly implementing the same mechanism for different models or backends. TVM Unity also implements universal deployment runtime that enables developers to deploy the solution to the programming language and platform of their choice.
 
 What makes TVM Unity different and even more productive is the Python-first development flow, where we can
@@ -68,9 +68,9 @@ What makes TVM Unity different and even more productive is the Python-first deve
 * Write the kernel optimization generically in Python and the compiler generates shader language codes for different backends accordingly, which allows us to transfer the kernel optimization techniques across backends
 
 We are leveraging the Python-first development, and universal deployment solution to quickly enable high-performance AMD GPU 
-support less than one human week's effort.
+support less than one human week's effort. -->
 
-### Bringing ROCm support to MLC 
+### Bringing ROCm support to MLC-LLM
 
 <p align="center">
   <img src="/img/amd/arch.svg" width="80%">
@@ -130,10 +130,6 @@ One limitation of the deck is that the bios caped the GPU VRAM to 4GB, which is 
 enough for the ROCm driver to support a 4-bit 7B model. Luckily, we find out that
 Mesa's Vulkan driver on Steamdeck has robust support that allows the buffer to go
 beyond the 4GB cap (likely reuses some unified memory on the CPU). 
-
-<p align="center">
-  <img src="/img/amd/steam-deck.png" width="60%">
-</p>
 
 ```
 (deck@steamdeck mlc-llm)$ ./build/mlc_chat_cli --local-id Llama-2-7b-chat-hf-q4f16_1
