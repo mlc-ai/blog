@@ -98,7 +98,7 @@ Our ROCm support flow is as follows:
 - Finally, everything is packed into a shared library that can be invoked by Python and rest APIs.
 
 
-## Benchmark
+## Benchmark with MLC Python Package
 
 The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generating 512 tokens.
 
