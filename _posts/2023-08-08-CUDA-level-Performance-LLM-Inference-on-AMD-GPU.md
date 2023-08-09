@@ -66,7 +66,7 @@ support less than one human week's effort. -->
 **MLC for AMD GPUs and APUs.** There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, and WebGPU. ROCm stack is what AMD recently push for and has a lot of the corresponding 
 building blocks similar to the CUDA stack. Vulkan is the latest graphics standard and offers the widest range of support across GPU devices. WebGPU is the latest web standard that allows the computation to run on web browsers. MLC supports automatic code generation targeting all the backends above.
 
-We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that ROCm stack just works out of box and a few more hours to further bring an optimized version, thanks to the productive python development pipeline in MLC. We made the following things to use ROCm support from MLC:
+We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that ROCm stack just works out of box and require a few more hours to further bring an optimized version, thanks to the productive python development pipeline in MLC. We made the following things to use ROCm support from MLC:
 
 - Reuse the whole MLC pipeline for existing targets (such as CUDA and Metal), including memory planning, operator fusion, etc.
 - Reuse a generic GPU kernel optimization space written in TVM TensorIR and re-target it to AMD GPUs.
@@ -81,10 +81,10 @@ The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we
   <img src="/img/amd/perf.png" width="60%">
 </p>
 
-<!-- |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 |
-|:----------------:|:-----------------------:|:--------------------------:|
-|        7B        |       134.3 tok/s       |         164.3 tok/s        |
-|        13B       |        75.2 tok/s       |         94.4 tok/s         | -->
+|             | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
+|:-----------:|:-----------------------:|:--------------------------:|:-----------------------------:|
+|  Llama 2 7B |          130.9          |            159.4           |             138.5             |
+| Llama 2 13B |           74.7          |            90.7            |              80.3             |
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
