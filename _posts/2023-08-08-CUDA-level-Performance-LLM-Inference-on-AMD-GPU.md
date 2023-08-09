@@ -68,27 +68,15 @@ support less than one human week's effort. -->
   <img src="/img/amd/arch.svg" width="80%">
 </p>
 
-There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, and WebGPU.
-ROCm stack is what AMD recently push for and has a lot of the corresponding 
-building blocks similar to the CUDA stack. 
-Vulkan is the latest graphics standard and offers the widest range of support
-across GPU devices. WebGPU is the latest web standard that allows the computation to run on web browsers.
+**MLC for AMD GPUs and APUs.** There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, and WebGPU. ROCm stack is what AMD recently push for and has a lot of the corresponding 
+building blocks similar to the CUDA stack. Vulkan is the latest graphics standard and offers the widest range of support across GPU devices. WebGPU is the latest web standard that allows the computation to run on web browsers. MLC supports automatic code generation targeting all the backends above.
 
-MLC can automatically generate code for all of them so we can also do some cross-comparisons. 
-We pick ROCm for most of our results in the 7900 XTX and use Vulkan (mesa driver) for Steamdeck.
+We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that ROCm stack just works out of box and a few more hours to further bring an optimized version, thanks to the productive python development pipeline in MLC. We made the following things to use ROCm support from MLC:
 
-We find that ROCm stack just works out of box, and it takes **2 human day** to bring the optimized version, thanks to the productive python development pipeline in MLC.
-
-Our ROCm support flow is as follows:
-
-- Reuse the whole MLC pipeline for existing targets, including CUDA and Metal, which includes high-level optimizations
-  such as static memory planning for dynamic computation and operator fusion, etc.
-- We reused a generic GPU kernel optimization space written in TensorIR and do some profiling to specialize
-  the hyperparameters for AMD cards. Importantly, this kernel transformation is purely written in Python
-  allowing us to do such optimization in the order of a day.
-- We leverage ROCm LLVM backend to translate the IR of each kernel to ROCm code.
-- Finally, everything is packed into a shared library that can be invoked by Python and rest APIs.
-
+- Reuse the whole MLC pipeline for existing targets (such as CUDA and Metal), including memory planning, operator fusion, etc.
+- Reuse a generic GPU kernel optimization space written in TensorIR and do a quick profiling-guided optimization targeting AMD GPUs.
+- Reuse TVM's ROCm code generation flow that generates low-level ROCm kernels through LLVM.
+- Finally, export generated code as a shared or static library that can be invoked by CLI, Python and REST APIs.
 
 ## Benchmark with MLC Python Package
 
