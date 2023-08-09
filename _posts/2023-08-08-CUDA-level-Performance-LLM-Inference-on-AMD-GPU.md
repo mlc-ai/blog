@@ -135,6 +135,8 @@ print(f"Statistics: {cm.stats()}")
 # cm.reset_chat()
 ```
 
+**Chat with model interactively.** MLC-LLM implements a CLI that allows you to chat with the model interactively. For ROCm it requires to build the CLI from source. Please follow the instructions [here](https://mlc.ai/mlc-llm/docs/deploy/cli.html#option-2-build-mlc-runtime-from-source) to build the CLI from source:
+
 ## Running on SteamDeck using Vulkan with Unified Memory
 
 Let us also look into a broader set of AMD devices,
