@@ -39,6 +39,7 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 From the spec comparison, we can see that AMD's RX 7900 XTX is a good match for NVIDIA's RTX 4090 and RTX 3090 Ti.
 * All have 24GB memory, which means they can fit models of the same size.
 * All have similar memory bandwidth.
+* 4090 has 2x more Fp16 performance than 7900 XTX, while 3090 Ti has 1.3x more Fp16 performance than 7900 XTX. For LLM inference, however, the kernels are largely memory-bound, and the Fp16 performance is not the bottleneck.
 * RX 7900 XTX is 40% cheaper than RTX 4090.
 
 It is harder to compare the price of 3090Ti as that was a previous generation. We put it here as a reference point to provide more information.
