@@ -111,13 +111,11 @@ All the results are measured for single batch inference.
 
 For single batch inference performance, it can reach 80% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
-  **Note on the comparison**: How strong is our CUDA baseline? Given the software optimization changes, it is hard to get a static comparison.
-  We note that the CUDA performance of MLC-LLM is competitive or better than other alternative solutions in this particular task.
-  There is still room for improvements, e.g. through better attention optimizations. Putting these extra possible optimizations
-  that we are aware of for NVIDIA and assuming AMD numbers do not change, the new gap gets to around 70%.
-  We anticipate both AMD and NVIDIA numbers will improve as we continue improving the solutions.
-  Based on these factors, we recommend putting 10% error bar when looking at the numbers here.
-
+  **Note on the comparison**: How strong is our CUDA baseline? It is the state-of-the-art for this task to the best of our knowledge.
+  We believe there is still room for improvements, e.g. through better attention optimizations.
+  As soon as those optimizations land in MLC, we anticipate both AMD and NVIDIA numbers improved.
+  If such optimizations are only implemented on NVIDIA side, it brings the gap up from 20% to 30%.
+  And therefore, we recommend putting 10% error bar when looking at the numbers here
 
 ### Try it out yourself
 
