@@ -33,7 +33,7 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |        TDP       |           320W          |            450W            |              450W             |
 |       Price      |           999$          |            1599$           |             1999$             | -->
 
-### Discussions on the HW and Software
+### Discussions on the Hardware and Software
 
 From the spec comparison, we can see that AMD's RX 7900 XTX is a good match for NVIDIA's RTX 4090 and RTX 3090 Ti.
 * All have 24GB memory, which means they can fit models of the same size.
