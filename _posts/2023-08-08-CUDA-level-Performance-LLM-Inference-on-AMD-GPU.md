@@ -74,7 +74,7 @@ We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that RO
 
 ## Benchmark with MLC Python Package
 
-The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generating 512 tokens.
+The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens to be 1 and generating 512 tokens.
 
 <p align="center">
   <img src="/img/amd/perf.png" width="90%">
@@ -180,13 +180,13 @@ for more diverse set of of consumers.
 
 **ML compilation (MLC) solves hardware scarcity.** Hardware availability has become a pressing issue in the age of generative AI. Our study reveals that AMD GPUs, with adept software support from MLC techniques, can rival CUDA-level performance for low-latency LLM inference at more friendly FLOPs-per-dollar. With the set of evidence so far, we believe that with the right price and availability, AMD GPUs can start to be effective for LLM inference.
 
-**Generalizable performance on both cloud and consumer GPUs, NVIDIA and AMD GPUs.** Furthermore, as a universal deployment technique, MLC provides performant backends for CUDA, ROCm, Vulkan, Metal, Vulkan, and OpenCL. Although this study focuses on consumer-grade GPUs, we observe that optimizations for one GPU model usually can be generalizable, for example, from RTX 4090 to A100 and A10g, from RTX 3090Ti to RX 7900 XTX. We are confident that this generalization happens universally, and will update our study once we have access to more cloud and consumer-class GPUs.
+**Generalizable performance across cloud- and consumer-class, NVIDIA and AMD GPUs.** Furthermore, as a universal deployment technique, MLC provides performant backends for CUDA, ROCm, Vulkan, Metal, Vulkan, and OpenCL. Although this study focuses on consumer-grade GPUs, we observe that optimizations for one GPU model usually can be generalizable, for example, from RTX 4090 to A100 and A10g, from RTX 3090Ti to RX 7900 XTX. We are confident that this generalization happens universally, and will update our study once we have access to more cloud and consumer-class GPUs.
 
-**Ongoing efforts.** This post is part of an ongoing effort that brings high-performance universal deployment via MLC. 
+**Ongoing efforts.** This post is part of the ongoing effort that brings high-performance universal deployment via MLC. 
 We are also actively working on several areas that can generalize our study.
-- Enable batching and multi-GPU support.
-- Integration with PyTorch ecosystem.
-- Empowering more quantization and model architectures.
+- Enable batching and multi-GPU support;
+- Integration with PyTorch ecosystem;
+- Empowering more quantization and model architectures;
 - Bringing in more automatic optimizations on more hardware backends.
 
 ## Links
