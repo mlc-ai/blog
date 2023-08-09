@@ -181,11 +181,13 @@ for more diverse set of of consumers.
 
 Hardware availability has become a pressing issue in the age of generative AI.
 ML compilation can help by bringing high-performance universal deployment across hardware backends.
-Given the presented solutions and results, with the right price and availability, we think AMD GPUs can start to be useful for LLM inference.
+Given the presented evidences, with the right price and availability, we think AMD GPUs can start to be useful for LLM inference.
 
-Our study focuses on consumer-grade GPUs as of now. We want to remark that when using an MLC-based approach,
-optimizations for consumer GPU models usually can be generalizable to cloud GPUs (e.g. from RTX 4090 to A100 and A10g)
-on this task. We will also update our study once we have access to more GPUs.
+Our study focuses on consumer-grade GPUs as of now. Based on our past experiences,
+MLC optimizations for consumer GPU models usually are generalizable to cloud GPUs (e.g. from RTX 4090 to A100 and A10g).
+We are confident that the solution generalizes across cloud and consumer-class AMD and Nvidia GPUs,
+and will also update our study once we have access to more GPUs. We also encourage the community to build solutions
+on top of the MLC universal deployment flow.
 
 This post is part of the ongoing effort that brings high-performance universal deployment via MLC.
 We are also actively working on several areas that can generalize our study.
@@ -193,6 +195,14 @@ We are also actively working on several areas that can generalize our study.
 - Integration with PyTorch ecosystem;
 - Empowering more quantization and model architectures;
 - Bringing in more automatic optimizations on more hardware backends.
+
+Our final takeaway is that machine learning system engineering is a continuous problem.
+Nvidia is still leading the field with continuous innovations, and we anticipate the landscape to
+change with new hardware and, more importantly, software evolutions. So the key question is not only
+about building the right solution now but also how to catch up and bring ML engineering to new platforms continuously.
+Productivity in machine learning engineering is the key here. Thanks to the Python-first ML compilation development flow,
+we get ROCm-optimized support in a few hours. We anticipate related approaches to become even more useful as we explore more
+ideas to bring universal deployments and solve the hardware availability problem.
 
 
 ## Links
