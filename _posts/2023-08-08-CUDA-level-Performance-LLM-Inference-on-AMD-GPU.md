@@ -144,7 +144,11 @@ the Mesa Vulkan driver has robust support that allows the buffer to go
 beyond the cap using unified memory up to 16GB,
 which is sufficient to run 4bit-quantized Llama-7B.
 
-```
+<p align="center">
+  <img src="/img/amd/steam-deck.png" width="80%">
+</p>
+
+<!-- ```
 (deck@steamdeck mlc-llm)$ ./build/mlc_chat_cli --local-id Llama-2-7b-chat-hf-q4f16_1
 Use MLC config: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/params/mlc-chat-config.json"
 Use model weights: "/home/deck/mlc-llm/dist/Llama-2-7b-chat-hf-q4f16_1/params/ndarray-cache.json"
@@ -164,7 +168,7 @@ System prompts finished
 [/INST]: Hello! I'm here to help you with any questions or concerns you may have. However, I must inform you that I cannot provide advice or suggestions that promote or facilitate harmful or illegal activities. It is important to always act in a safe and responsible manner, and to respect the laws and well-being of yourself and others. Is there anything else I can help you with?
 [INST]: /stats
 prefill: 48.3 tok/s, decode: 13.2 tok/s
-```
+``` -->
 
 These results shed some light on how a broad spectrum of AMD devices can be supported
 for more diverse set of of consumers.
