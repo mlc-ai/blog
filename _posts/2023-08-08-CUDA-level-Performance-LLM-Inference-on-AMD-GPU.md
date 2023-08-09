@@ -8,16 +8,11 @@ notitle: true
 
 ## TL;DR
 
-
-MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using ROCm with **CUDA-level performance**. More specifically, AMD Radeon™ RX 7900 XTX gives **80%~85%** of the speed of NVIDIA® GeForce RTX™ 4090 for Llama2-7B/13B.
+MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using **ROCm** with CUDA-level performance. More specifically, AMD Radeon™ RX 7900 XTX gives **80%~85%** of the speed of NVIDIA® GeForce RTX™ 4090 for Llama2-7B/13B. Besides ROCm, our Vulkan support allows us to generalize LLM deployment to other AMD devices, for example, a SteamDeck with an AMD APU.
 
 <p align="center">
   <img src="/img/amd/amd.svg" width="60%">
 </p>
-
-Besides ROCm, our Vulkan support allows us to generalize LLM deployment to other AMD devices, for example, a SteamDeck with an AMD APU.
-
-Follow the instructions below 🔽 to try it out yourself if you have an AMD card!
 
 ## Background
 
