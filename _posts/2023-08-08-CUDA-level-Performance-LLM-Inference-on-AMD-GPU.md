@@ -90,13 +90,10 @@ For single batch inference performance, it can reach 80%~85% of the speed of NVI
 
 ### Try it out yourself!
 
-We provide prebuilt wheels and instructions so you can also try these out on your own devices.
+We provide prebuilt wheels and instructions to reproduce our results on your own AMD devices. To run those benchmarks, please ensure that you have an AMD GPU with ROCm 5.6 or above running in Linux.
 
-- Prerequisites: AMD GPU, with ROCm 5.6 or Vulkan support.
-- Install mlc python packages: see instructions  https://mlc.ai/package/
+**Install MLC Python Package.** Follow the instructions below to install a prebuilt MLC package with ROCm enabled:
 
-if you are using ROCm on Linux, the installation command is
-  
 ```bash
 pip install --pre --force-reinstall mlc-ai-nightly-rocm mlc-chat-nightly-rocm -f https://mlc.ai/wheels
 
@@ -105,31 +102,31 @@ pip install --pre --force-reinstall mlc-ai-nightly-rocm mlc-chat-nightly-rocm -f
 python -c "from mlc_chat import ChatModule; print(ChatModule)"
 ```
 
-- Download the quanzized model parameters and compiled model library
+**Download Llama2.** Download the quanzized model parameters and compiled model library
 
 ```bash
 # Install Git and Git-LFS if you haven't already. Then run
 git lfs install
 mkdir -p dist/prebuilt
 
-# compiled model library
+# Download the compiled model library
 git clone https://github.com/mlc-ai/binary-mlc-llm-libs.git dist/prebuilt/lib
+
+# Download the quanzized model parameters
 cd dist/prebuilt
-# quanzized model parameters
-git clone https://huggingface.co/mlc-ai/mlc-chat-Llama-2-7b-chat-hf-q4f16_1; cd ../../
+git clone https://huggingface.co/mlc-ai/mlc-chat-Llama-2-7b-chat-hf-q4f16_1
+cd ../../
 ```
 
-- Then test the perfomance with the following Python script, note that it should be put under the same folder with `dist` folder.
+**Reproduce performance numbers.** Run the Python script below that uses our MLC package to reproduce performance numbers:
 
 ```python
 from mlc_chat import ChatModule
 
-# From the mlc-llm directory, run
-# $ python examples/python/benchmark.py
-
-# Create a ChatModule instance
+# Create a ChatModule instance that loads from `./dist/prebuilt/Llama-2-7b-chat-hf-q4f16_1`
 cm = ChatModule(model="Llama-2-7b-chat-hf-q4f16_1")
 
+# Run the benchmarks
 output = cm.benchmark_generate("Hi", generate_length=512)
 print(f"Generated text:\n{output}\n")
 print(f"Statistics: {cm.stats()}")
