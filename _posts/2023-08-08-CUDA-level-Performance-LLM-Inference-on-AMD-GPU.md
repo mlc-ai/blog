@@ -78,13 +78,13 @@ We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that RO
 The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generating 512 tokens.
 
 <p align="center">
-  <img src="/img/amd/perf.png" width="60%">
+  <img src="/img/amd/perf.png" width="100%">
 </p>
 
-|             | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
+<!-- |             | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
 |:-----------:|:-----------------------:|:--------------------------:|:-----------------------------:|
 |  Llama 2 7B |          130.9          |            159.4           |             138.5             |
-| Llama 2 13B |           74.7          |            90.7            |              80.3             |
+| Llama 2 13B |           74.7          |            90.7            |              80.3             | -->
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
