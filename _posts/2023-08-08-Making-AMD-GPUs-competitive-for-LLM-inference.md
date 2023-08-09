@@ -17,7 +17,7 @@ MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using **RO
 ## Background
 
 There have been many LLM inference solutions since the bloom of open-source LLMs.
-Most of the performant inference solutions are based on CUDA and optimized for Nvidia GPUs.
+Most of the performant inference solutions are based on CUDA and optimized for NVIDIA GPUs.
 In the meantime, with the high demand for compute availability, it is useful to bring
 support to a broader class of hardware accelerators. AMD is one potential candidate.
 
@@ -29,32 +29,32 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |:----------------:|:-----------------------:|:--------------------------:|:-----------------------------:|
 |       Cores      |  6144 stream processors |      16384 CUDA cores      |        10752 CUDA cores       |
 |      Memory      |        24GB GDDR6       |         24GB GDDR6X        |          24GB GDDR6X          |
-|  Fp16 Performance|         123 TFLOPS      |         330 TFLOPS         |          160 TFLOPS           |
+|  FP16 Performance|         123 TFLOPS      |         330 TFLOPS         |          160 TFLOPS           |
 | Memory Bandwidth |         960 GB/s        |          1008 GB/s         |           1008 GB/s           |
 |        TDP       |           320W          |            450W            |              450W             |
 |       Price      |           999$          |            1599$           |             1999$             | -->
 
-### Discussions on the Hardware and Software
+### Discussion on the Hardware and Software
 
 From the spec comparison, we can see that AMD's RX 7900 XTX is a good match for NVIDIA's RTX 4090 and RTX 3090 Ti.
 * All have 24GB memory, which means they can fit models of the same size.
 * All have similar memory bandwidth.
-* 4090 has 2x more Fp16 performance than 7900 XTX, while 3090 Ti has 1.3x more Fp16 performance than 7900 XTX.
-  Lantency sensitive LLM inference is mostly memory bound, so the Fp16 performance is not a bottleneck here.
+* 4090 has 2x more FP16 performance than 7900 XTX, while 3090 Ti has 1.3x more FP16 performance than 7900 XTX.
+  Lantency sensitive LLM inference is mostly memory bound, so the FP16 performance is not a bottleneck here.
 * RX 7900 XTX is 40% cheaper than RTX 4090.
 
 It is harder to compare the price of 3090Ti as that was a previous generation. We put it here as a reference point to provide more information.
 At a high-level, we can find that AMD 7900 XTX is comparable to RTX 3090 Ti from the hardware spec perspective.
 
 Hardware is not necessarily the reason why AMD lagged in the past.
-The main gaps were due to a lack of software stacks that fully support and optimize for the relevant models.
+The main gaps were due to a lack of software support and optimizations for the relevant models.
 There are two factors in the ecosystem that starts to bring changes to the picture:
 
 - AMD is trying to catch up with investments in the ROCm stack.
 - Emerging technologies like machine learning compilation helps to reduce overall cost of
   more universal software support across backends.
 
-In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on Nvidia GPUs as of now.
+In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on NVIDIA GPUs as of now.
 
 
 ## Machine Learning Compilation for ROCm
@@ -114,8 +114,8 @@ For single batch inference performance, it can reach 80% of the speed of NVIDIA 
   **Note on the comparison**: How strong is our CUDA baseline? Given the software optimization changes, it is hard to get a static comparison.
   We note that the CUDA performance of MLC-LLM is competitive or better than other alternative solutions in this particular task.
   There is still room for improvements, e.g. through better attention optimizations. Putting these extra possible optimizations
-  that we are aware of for Nvidia and assuming AMD numbers do not change, the new gap gets to around 70%.
-  We anticipate both AMD and Nvidia numbers will improve as we continue improving the solutions.
+  that we are aware of for NVIDIA and assuming AMD numbers do not change, the new gap gets to around 70%.
+  We anticipate both AMD and NVIDIA numbers will improve as we continue improving the solutions.
   Based on these factors, we recommend putting 10% error bar when looking at the numbers here.
 
 
@@ -180,7 +180,7 @@ prefill: 48.3 tok/s, decode: 13.2 tok/s
 These results shed some light on how a broad spectrum of AMD devices can be supported
 for more diverse set of of consumers.
 
-## Discussions and Future Work
+## Discussion and Future Work
 
 Hardware availability has become a pressing issue in the age of generative AI.
 ML compilation can help by bringing high-performance universal deployment across hardware backends.
@@ -188,7 +188,7 @@ Given the presented evidences, with the right price and availability, we think A
 
 Our study focuses on consumer-grade GPUs as of now. Based on our past experiences,
 MLC optimizations for consumer GPU models usually are generalizable to cloud GPUs (e.g. from RTX 4090 to A100 and A10g).
-We are confident that the solution generalizes across cloud and consumer-class AMD and Nvidia GPUs,
+We are confident that the solution generalizes across cloud and consumer-class AMD and NVIDIA GPUs,
 and will also update our study once we have access to more GPUs. We also encourage the community to build solutions
 on top of the MLC universal deployment flow.
 
@@ -200,7 +200,7 @@ We are also actively working on several areas that can generalize our study.
 - Bringing in more automatic optimizations on more hardware backends.
 
 Our final takeaway is that machine learning system engineering is a continuous problem.
-Nvidia is still leading the field with continuous innovations, and we anticipate the landscape to
+NVIDIA is still leading the field with continuous innovations, and we anticipate the landscape to
 change with new hardware such as H100 and, more importantly, software evolutions. So the key question is not only
 about building the right solution now but also how to catch up and bring ML engineering to new platforms continuously.
 Productivity in machine learning engineering is the key here. Thanks to the Python-first ML compilation development flow,

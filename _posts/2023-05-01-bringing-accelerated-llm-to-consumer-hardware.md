@@ -82,7 +82,7 @@ to accelerate the AI  workload of interest. Additionally, there are also increas
 support for accelerating ML workloads. Of course, there is also a great deal of challenges here
 
 **Diversity of hardware and software stack** Consumer devices comes with great deal with diversity.  To name a few, many of
-the desktops may come with Nvidia, AMD, or Intel GPU, each have their own software stack.  Game consoles like steam-deck comes
+the desktops may come with NVIDIA, AMD, or Intel GPU, each have their own software stack.  Game consoles like steam-deck comes
 with APU. Laptops also can come with integrated GPU of several kinds, from AMD, intel and apple. The mobile space have brings
 a great deal of diversity. Of course if we are talking about web apps, there is a need for GPU acceleration in the web.
 There are also different ways to programs a subset of these hardwares on different kinds of platforms The list includes
