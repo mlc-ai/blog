@@ -45,10 +45,7 @@ From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidi
   we can expect similar performance.
 * Most importantly, AMD 7900 XTX is 60% cheaper than Nvidia 4090. So the performance (toks/sec) per dollar can be much better if we can get a similar performance.
 
-In this post, we are taking a deep look at the large language model inference problem
-and see how well can AMD GPUs do. We specifically look at single-batch 4-bit LLM 
-inference problem as a starting point. We are also interested in asking how well 
-can AMD GPUs do compared to a performant CUDA solution on Nvidia GPUs.
+In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on Nvidia GPUs.
 
 
 ## Machine Learning Compilation for LLM Inference
