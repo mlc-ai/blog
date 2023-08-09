@@ -106,7 +106,7 @@ All the results are measured for single batch inference.
 |  Llama 2 7B |       130.9 toks/s      |        159.4 toks/s        |          138.5 toks/s         |
 | Llama 2 13B |       74.7 toks/s       |         90.7 toks/s        |          80.3 toks/s          | -->
 
-For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
+For single batch inference performance, it can reach 80% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
   **Note on the comparison**: How strong is our CUDA baseline? Given the software optimization changes, it is hard to get a static comparison.
   We note that the CUDA performance of MLC-LLM is competitive or better than other alternative solutions in this particular task.
