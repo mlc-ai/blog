@@ -62,7 +62,7 @@ In this post, we are taking a deep look at how well AMD GPUs can do compared to 
 **What is machine learning compilation (MLC).** Machine learning compilation is an emerging technology that compiles and automates the optimization of machine learning workloads.
 Instead of crafting specific kernels for each individual backend like ROCm or CUDA, an MLC solution automatically generate code for different backends.
 Here we leverage MLC-LLM, an ML compilation-based solution that offers **high-performance universal deployment** for LLMs.
-MLC-LLM builds on top of [Apache TVM](tvm.apache.org) unity, a machine-learning compilation stack that offers productive Python-first development and universal deployment.
+MLC-LLM builds on top of [Apache TVM](https://tvm.apache.org) unity, a machine-learning compilation stack that offers productive Python-first development and universal deployment.
 MLC-LLM brings state-of-the-art performance for a wide variety of backends, including CUDA, Metal, ROCm, Vulkan, and OpenCL, spanning both server-class GPUs to mobile (iPhone and Android). At a high level, the framework lets the user take open language models and compiles it with Python-based workflow, including APIs to transform computational graphs, optimize the layout and scheduling of GPU kernels, and deploys it natively on platforms of interest.
 
 <!-- MLC-LLM leverages machine learning compilation, an emerging technology that compiles and automates
@@ -210,7 +210,7 @@ ideas to bring universal deployments and solve the hardware availability problem
 
 ## Links
 
-Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcome to join the [Discord Channel](https://discord.com/invite/9Xpy2HGBuD) for further discussion.
+Please refer to our [project page](https://mlc.ai/mlc-llm/docs/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcome to join the [Discord Channel](https://discord.com/invite/9Xpy2HGBuD) for further discussion.
 
 ## Acknowledgement
 
