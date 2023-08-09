@@ -33,19 +33,36 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |        TDP       |           320W          |            450W            |              450W             |
 |       Price      |           999$          |            1599$           |             1999$             | -->
 
-### Discussions on HW spec
+### Discussions on the HW and Software
+
 From the spec comparison, we can see that AMD's RX 7900 XTX is a good match for NVIDIA's RTX 4090 and RTX 3090 Ti.
 * All have 24GB memory, which means they can fit models of the same size.
-* All have similar memory bandwidth, considering LLM inference is largely memory bound, we can expect similar performance.
-* Most importantly, RX 7900 XTX is 40% cheaper than RTX 4090, 50% cheaper than RTX 3090 Ti. Therefore, its FLOPs-per-dollar value would significantly outperform NVIDIA alternatives if it delievrs comparable performance.
+* All have similar memory bandwidth.
+* RX 7900 XTX is 40% cheaper than RTX 4090.
 
-In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on Nvidia GPUs.
+It is harder to compare the price of 3090Ti as that was a previous generation. We put it here as a reference point to provide more information.
+At a high-level, we can find that AMD 7900 XTX is comparable to RTX 4090 from the hardware spec perspective.
+
+Hardware is not necessarily the reason why AMD lagged in the past.
+The main gaps were due to a lack of software stacks that fully support and optimize for the relevant models.
+There are two factors in the ecosystem that starts to bring changes to the picture:
+
+- AMD is trying to catching up with investments in the ROCm stack.
+- Emerging technologies like machine learning compilation helps to reduce overall cost of
+  more universal software support across backends.
+
+In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on Nvidia GPUs as of now.
+
 
 ## Machine Learning Compilation for ROCm
 
-**What is machine learning compilation (MLC).** MLC is an emerging technology that compiles and automates optimization of machine learning workloads. Here we leverage MLC-LLM, an ML compilation-based solution that offers **high-performance universal deployment** for LLMs. Specifically, MLC-LLM brings state-of-the-art performance for a wide variety of backends, including CUDA, Metal, ROCm, Vulkan, and OpenCL, spanning both server-class GPUs to mobile (iPhone and Android). At a high level, the framework lets the user take open language models and compiles it with python-based workflow, including APIs to transform computational graphs, optimize layout and scheduling of GPU kernels, and deploys it natively on platforms of interest.
+**What is machine learning compilation (MLC).** Machine learning compilation is an emerging technology that compiles and automates the optimization of machine learning workloads.
+Instead of crafting specific kernels for each individual backend like ROCm or CUDA, an MLC solution automatically generate code for different backends.
+Here we leverage MLC-LLM, an ML compilation-based solution that offers **high-performance universal deployment** for LLMs.
+MLC-LLM builds on top of Apache TVM unity, a machine-learning compilation stack that offers productive Python-first development and universal deployment.
+MLC-LLM brings state-of-the-art performance for a wide variety of backends, including CUDA, Metal, ROCm, Vulkan, and OpenCL, spanning both server-class GPUs to mobile (iPhone and Android). At a high level, the framework lets the user take open language models and compiles it with Python-based workflow, including APIs to transform computational graphs, optimize the layout and scheduling of GPU kernels, and deploys it natively on platforms of interest.
 
-<!-- MLC-LLM leverages machine learning compilation, an emerging technology that compiles and automates 
+<!-- MLC-LLM leverages machine learning compilation, an emerging technology that compiles and automates
 optimization of machine learning programs. Specifically, we build a solution on Apache TVM unity, a deep-learning compiler that utilizes a unified IR to represent the DL model at both graph and operator levels throughout the compilation stages. It allows *customizable model construction, composable model transformation, and transferable kernel optimization* for ML engineers to effectively customize and reuse ML compilation pipelines, reducing the effort of repeatedly implementing the same mechanism for different models or backends. TVM Unity also implements universal deployment runtime that enables developers to deploy the solution to the programming language and platform of their choice.
 
 What makes TVM Unity different and even more productive is the Python-first development flow, where we can
@@ -55,17 +72,20 @@ What makes TVM Unity different and even more productive is the Python-first deve
 * Inspect and write self-defined operators in Python, and compile them with other pre-defined operators composable in the same computational graph
 * Write the kernel optimization generically in Python and the compiler generates shader language codes for different backends accordingly, which allows us to transfer the kernel optimization techniques across backends
 
-We are leveraging the Python-first development, and universal deployment solution to quickly enable high-performance AMD GPU 
+We are leveraging the Python-first development, and universal deployment solution to quickly enable high-performance AMD GPU
 support less than one human week's effort. -->
 
 <p align="center">
   <img src="/img/amd/arch.svg" width="80%">
 </p>
 
-**MLC for AMD GPUs and APUs.** There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, and WebGPU. ROCm stack is what AMD recently push for and has a lot of the corresponding 
-building blocks similar to the CUDA stack. Vulkan is the latest graphics standard and offers the widest range of support across GPU devices. WebGPU is the latest web standard that allows the computation to run on web browsers. MLC supports automatic code generation targeting all the backends above.
-
-We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that ROCm stack just works out of box and require a few more hours to further bring an optimized version, thanks to the productive python development pipeline in MLC. We made the following things to use ROCm support from MLC:
+**MLC for AMD GPUs and APUs.** There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, and WebGPU. ROCm stack is what AMD recently push for and has a lot of the corresponding
+building blocks similar to the CUDA stack. Vulkan is the latest graphics standard and offers the widest range of support across GPU devices. WebGPU is the latest web standard that allows the computation to run on web browsers. While there are so many possible ways, few ML software solutions that build for solutions other than CUDA, largely due to the engineering cost to replicate a stack for a new hardware or GPU
+programming model. We support automatic code generation without having to recraft GPU kernels for each and bring support to all these ways.
+This being said, the performance still depends on how good the low-level GPU runtimes are and their availability in each platform.
+We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU.
+We find that ROCm stack works out of the box. Thanks to the productive Python-based development pipeline in TVM unity,
+we spent a few more hours to further bring an optimized version. We made the following things to bring ROCm support:
 
 - Reuse the whole MLC pipeline for existing targets (such as CUDA and Metal), including memory planning, operator fusion, etc.
 - Reuse a generic GPU kernel optimization space written in TVM TensorIR and re-target it to AMD GPUs.
@@ -74,7 +94,8 @@ We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that RO
 
 ## Benchmark with MLC Python Package
 
-The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens to be 1 and generating 512 tokens.
+We benchmarked the Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting a single prompt token and generating 512 tokens.
+All the results are measured for single batch inference.
 
 <p align="center">
   <img src="/img/amd/perf.png" width="90%">
@@ -87,39 +108,19 @@ The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
-> **Note**: How strong is our CUDA baseline? Since the CUDA numbers also come from MLC-LLM, one may wonder if the baseline is sufficiently strong to be compared with. In fact, its performance is state-of-the-art to the best of our knowledge. The benchmark repo can be found [here](https://github.com/mlc-ai/llm-perf-bench). We disabled cutlass-specific optimizations in this blog post to ensure fair comparison.
+  **Note on the comparison**: How strong is our CUDA baseline? Given the software optimization changes, it is hard to get a static comparison.
+  We note that the CUDA performance of MLC-LLM is competitive or better than other alternative solutions in this particular task.
+  There is still room for improvements, e.g. through better attention optimizations. Putting these extra possible optimizations
+  that we are aware of for Nvidia and assuming AMD numbers do not change, the new gap gets to around 70%.
+  We anticipate both AMD and Nvidia numbers will improve as we continue improving the solutions.
+  Based on these factors, we recommend putting 10% error bar when looking at the numbers here.
 
-### Try it out yourself!
 
-We provide prebuilt wheels and instructions to reproduce our results on your own AMD devices. To run those benchmarks, please ensure that you have an AMD GPU with ROCm 5.6 or above running in Linux.
+### Try it out yourself
 
-**Install MLC Python Package.** Follow the instructions below to install a prebuilt MLC package with ROCm enabled:
-
-```bash
-pip install --pre --force-reinstall mlc-ai-nightly-rocm mlc-chat-nightly-rocm -f https://mlc.ai/wheels
-
-# Verify the installation of the Python package.
-# You are expected to see "<class 'mlc_chat.chat_module.ChatModule'>" printed out.
-python -c "from mlc_chat import ChatModule; print(ChatModule)"
-```
-
-**Download Llama2.** Download the quanzized model parameters and compiled model library
-
-```bash
-# Install Git and Git-LFS if you haven't already
-git lfs install
-mkdir -p dist/prebuilt
-
-# Download the compiled model library
-git clone https://github.com/mlc-ai/binary-mlc-llm-libs.git dist/prebuilt/lib
-
-# Download the quanzized model parameters
-cd dist/prebuilt
-git clone https://huggingface.co/mlc-ai/mlc-chat-Llama-2-7b-chat-hf-q4f16_1
-cd ../../
-```
-
-**Reproduce performance numbers.** Run the Python script below that uses our MLC package to reproduce performance numbers:
+We provide prebuilt wheels and instructions to reproduce our results on your own devices. To run those benchmarks, please ensure that you have an AMD GPU with ROCm 5.6 or above running in Linux.
+Follow the instructions [here](https://mlc.ai/mlc-llm/docs/get_started/try_out.html) to install a prebuilt MLC package with ROCm enabled:
+Run the Python script below that uses our MLC package to reproduce performance numbers:
 
 ```python
 from mlc_chat import ChatModule
@@ -136,7 +137,7 @@ print(f"Statistics: {cm.stats()}")
 # cm.reset_chat()
 ```
 
-**Chat with model interactively.** MLC-LLM implements a CLI that allows you to chat with the model interactively. For ROCm it requires to build the CLI from source. Please follow the instructions [here](https://mlc.ai/mlc-llm/docs/deploy/cli.html#option-2-build-mlc-runtime-from-source) to build the CLI from source
+MLC-LLM also provides a CLI that allows you to chat with the model interactively. For ROCm it requires to build the CLI from source. Please follow the instructions [here](https://mlc.ai/mlc-llm/docs/deploy/cli.html#option-2-build-mlc-runtime-from-source) to build the CLI from source
 
 ## Running on SteamDeck using Vulkan with Unified Memory
 
@@ -178,16 +179,21 @@ for more diverse set of of consumers.
 
 ## Discussions and Future Works
 
-**ML compilation (MLC) solves hardware scarcity.** Hardware availability has become a pressing issue in the age of generative AI. Our study reveals that AMD GPUs, with adept software support from MLC techniques, can rival CUDA-level performance for low-latency LLM inference at more friendly FLOPs-per-dollar. With the set of evidence so far, we believe that with the right price and availability, AMD GPUs can start to be effective for LLM inference.
+Hardware availability has become a pressing issue in the age of generative AI.
+ML compilation can help alleviate this issue by bringing high-performance universal deployment across hardware backends.
+Our study shows that, with the right price and availability, AMD GPUs can start to be useful for LLM inference scenarios.
 
-**Generalizable performance across cloud- and consumer-class, NVIDIA and AMD GPUs.** Furthermore, as a universal deployment technique, MLC provides performant backends for CUDA, ROCm, Vulkan, Metal, Vulkan, and OpenCL. Although this study focuses on consumer-grade GPUs, we observe that optimizations for one GPU model usually can be generalizable, for example, from RTX 4090 to A100 and A10g, from RTX 3090Ti to RX 7900 XTX. We are confident that this generalization happens universally, and will update our study once we have access to more cloud and consumer-class GPUs.
+Our study focuses on consumer-grade GPUs as of now. We want to remark that when using an MLC-based approach,
+optimizations for consumer GPU models usually can be generalizable to cloud GPUs (e.g. from RTX 4090 to A100 and A10g)
+on this task. We will also update our study once we have access to more GPUs.
 
-**Ongoing efforts.** This post is part of the ongoing effort that brings high-performance universal deployment via MLC. 
+This post is part of the ongoing effort that brings high-performance universal deployment via MLC.
 We are also actively working on several areas that can generalize our study.
 - Enable batching and multi-GPU support;
 - Integration with PyTorch ecosystem;
 - Empowering more quantization and model architectures;
 - Bringing in more automatic optimizations on more hardware backends.
+
 
 ## Links
 
