@@ -34,11 +34,11 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |       Price      |           999$          |            1599$           |             1999$             | -->
 
 ### Discussions on HW spec
-From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidia 4090.
-* Both have 24GB memory, which means they can fit models of the same size.
-* Both have similar memory bandwidth, considering LLM inference is largely memory bound, 
+From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidia 4090 and 3090 Ti.
+* All have 24GB memory, which means they can fit models of the same size.
+* All have similar memory bandwidth, considering LLM inference is largely memory bound, 
   we can expect similar performance.
-* Most importantly, AMD 7900 XTX is 60% cheaper than Nvidia 4090. So the performance (toks/sec) per dollar can be much better if we can get a similar performance.
+* Most importantly, AMD 7900 XTX is 40% (50%) cheaper than Nvidia 4090 (3090 Ti). So the performance (toks/sec) per dollar can be much better if we can get a similar performance.
 
 In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on Nvidia GPUs.
 
