@@ -25,13 +25,13 @@ support to a broader class of hardware accelerators. AMD is one potential candid
   <img src="/img/amd/7900-4090.png" width="70%">
 </p>
 
-|                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
+<!-- |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
 |:----------------:|:-----------------------:|:--------------------------:|:-----------------------------:|
 |       Cores      |  6144 stream processors |      16384 CUDA cores      |        10752 CUDA cores       |
 |      Memory      |        24GB GDDR6       |         24GB GDDR6X        |          24GB GDDR6X          |
 | Memory Bandwidth |         960 GB/s        |          1008 GB/s         |           1008 GB/s           |
 |        TDP       |           320W          |            450W            |              450W             |
-|       Price      |           999$          |            1599$           |             1999$             |
+|       Price      |           999$          |            1599$           |             1999$             | -->
 
 ### Discussions on HW spec
 From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidia 4090.
