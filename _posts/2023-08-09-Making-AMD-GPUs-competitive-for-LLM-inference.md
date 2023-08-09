@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Making AMD GPUs competitive for LLM inference"
-date:   2023-08-08 09:30:00 -0400
+date:   2023-08-09 09:30:00 -0400
 author:   MLC Community
 notitle: true
 ---
