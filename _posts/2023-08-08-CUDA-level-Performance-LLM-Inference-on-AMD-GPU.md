@@ -79,7 +79,7 @@ We are leveraging the Python-first development, and universal deployment solutio
 support less than one human week's effort. -->
 
 <p align="center">
-  <img src="/img/amd/arch.svg" width="80%">
+  <img src="/img/amd/arch.svg" width="90%">
 </p>
 
 **MLC for AMD GPUs and APUs.** There are several possible ways to support AMD GPU: ROCm, OpenCL, Vulkan, and WebGPU. ROCm stack is what AMD recently push for and has a lot of the corresponding
