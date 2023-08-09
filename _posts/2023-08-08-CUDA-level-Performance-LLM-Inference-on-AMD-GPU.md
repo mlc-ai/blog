@@ -181,7 +181,7 @@ for more diverse set of of consumers.
 
 Hardware availability has become a pressing issue in the age of generative AI.
 ML compilation can help alleviate this issue by bringing high-performance universal deployment across hardware backends.
-Given the presented solutions and results, with the right price and availability, AMD GPUs can be effective for LLM inference scenarios.
+Given the presented solutions and results, with the right price and availability, we think AMD GPUs can start to be useful for LLM inference.
 
 Our study focuses on consumer-grade GPUs as of now. We want to remark that when using an MLC-based approach,
 optimizations for consumer GPU models usually can be generalizable to cloud GPUs (e.g. from RTX 4090 to A100 and A10g)
