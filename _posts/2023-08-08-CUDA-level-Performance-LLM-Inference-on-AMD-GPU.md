@@ -138,14 +138,14 @@ print(f"Statistics: {cm.stats()}")
 # cm.reset_chat()
 ```
 
-## Running on SteamDeck using Vulkan
+## Running on SteamDeck using Vulkan with Unified Memory
 
-After having fun with the 7900 XTX. Let us start to look into a broader set of AMD devices.
-Specifically, we looked into SteamDeck, which comes with an AMD APU.
-One limitation of the deck is that the bios caped the GPU VRAM to 4GB, which is not
-enough for the ROCm driver to support a 4-bit 7B model. Luckily, we find out that
-Mesa's Vulkan driver on Steamdeck has robust support that allows the buffer to go
-beyond the 4GB cap (likely reuses some unified memory on the CPU). 
+Let us also look into a broader set of AMD devices,
+more specifically, SteamDeck equipped with an AMD APU.
+While the GPU VRAM available in ROCm is capped to 4GB in BIOS,
+the Mesa Vulkan driver has robust support that allows the buffer to go
+beyond the cap using unified memory up to 16GB,
+which is sufficient to run 4bit-quantized Llama-7B.
 
 ```
 (deck@steamdeck mlc-llm)$ ./build/mlc_chat_cli --local-id Llama-2-7b-chat-hf-q4f16_1
@@ -169,9 +169,8 @@ System prompts finished
 prefill: 48.3 tok/s, decode: 13.2 tok/s
 ```
 
-We applied the Vulkan backend on this device, and successfully deployed Llama 2 7B 13.2 tok/s.
 These results shed some light on how a broad spectrum of AMD devices can be supported
-for different consumers.
+for more diverse set of of consumers.
 
 ## Discussions and Future Works
 
