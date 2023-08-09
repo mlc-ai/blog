@@ -47,10 +47,9 @@ From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidi
 
 In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on Nvidia GPUs.
 
+## Machine Learning Compilation for ROCm
 
-## Machine Learning Compilation for LLM Inference
-
-In order to perform such a comparison. We will need an inference framework that is universally deployed and more importantly, optimizes for both Nvidia and AMD GPUs. Here we leverage MLC-LLM, an inference framework that offers **high-performance universal deployment for LLMs**.
+**What is machine learning compilation (MLC).** In order to perform such a comparison. We will need an inference framework that is universally deployed and more importantly, optimizes for both Nvidia and AMD GPUs. Here we leverage MLC-LLM, an inference framework that offers **high-performance universal deployment for LLMs**.
 Specifically, MLC-LLM brings state-of-the-art performance for a wide variety of backends, including CUDA, Metal, ROCm, Vulkan, and OpenCL, spanning both server-class GPUs to mobile (iPhone and Android). At a high level, the framework let the user take open language models and provide Python-based API to productively transform, and optimize the tensor computations in the model inference workload, and generates code for the platform of interest.
 
 <!-- MLC-LLM leverages machine learning compilation, an emerging technology that compiles and automates 
@@ -65,8 +64,6 @@ What makes TVM Unity different and even more productive is the Python-first deve
 
 We are leveraging the Python-first development, and universal deployment solution to quickly enable high-performance AMD GPU 
 support less than one human week's effort. -->
-
-### Bringing ROCm support to MLC-LLM
 
 <p align="center">
   <img src="/img/amd/arch.svg" width="80%">
