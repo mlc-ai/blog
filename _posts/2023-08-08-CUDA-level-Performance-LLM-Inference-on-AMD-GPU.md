@@ -78,7 +78,7 @@ We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that RO
 The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we measure the decoding performance by setting prompt tokens=1 and generating 512 tokens.
 
 <p align="center">
-  <img src="/img/amd/perf.png" width="100%">
+  <img src="/img/amd/perf.png" width="90%">
 </p>
 
 <!-- |             | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
