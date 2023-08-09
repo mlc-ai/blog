@@ -155,7 +155,7 @@ from mlc_chat import ChatModule
 # Create a ChatModule instance
 cm = ChatModule(model="Llama-2-7b-chat-hf-q4f16_1")
 
-output = cm.benchmark_generate("What's the meaning of life?", generate_length=512)
+output = cm.benchmark_generate("Hi", generate_length=512)
 print(f"Generated text:\n{output}\n")
 print(f"Statistics: {cm.stats()}")
 
