@@ -143,7 +143,7 @@ print(f"Statistics: {cm.stats()}")
 # cm.reset_chat()
 ```
 
-## Bringing Support to a Broader Range of AMD Devices
+## Running on SteamDeck using Vulkan
 
 After having fun with the 7900 XTX. Let us start to look into a broader set of AMD devices.
 Specifically, we looked into SteamDeck, which comes with an AMD APU.
