@@ -22,7 +22,7 @@ In the meantime, with the high demand for compute availability, it is useful to 
 support to a broader class of hardware accelerators. AMD is one potential candidate.
 
 <p align="center">
-  <img src="/img/amd/7900-4090.png" width="70%">
+  <img src="/img/amd/7900-4090.png" width="80%">
 </p>
 
 <!-- |                  | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
