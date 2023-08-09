@@ -87,7 +87,7 @@ The models we are testing are Llama 2 7B and 13B with 4-bit quantization. And we
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
-**Note**: Since the CUDA baseline is also measured with MLC-LLM, one may wonder if the baseline is strong enough to compare with. We have done a lot of optimization on CUDA backend and the performance is state-of-the-art to the best of our knowledge. The benchmark repo can be found [here](https://github.com/mlc-ai/llm-perf-bench) if you are interested to reproduce. You may find that the perf numbers are 10%~15% higher than the numbers reported here. The reason is that we are enabling fused multi-head attention with CUTLASS dispatch. Here to have a fair comparison, we disable the fused multi-head attention for CUDA backend. This also suggests that there is still room for improvement for AMD GPU.
+> **Note**: How strong is our CUDA baseline? Since the CUDA numbers also come from MLC-LLM, one may wonder if the baseline is sufficiently strong to be compared with. In fact, its performance is state-of-the-art to the best of our knowledge. The benchmark repo can be found [here](https://github.com/mlc-ai/llm-perf-bench). We disabled cutlass-specific optimizations in this blog post to ensure fair comparison.
 
 ### Try it out yourself!
 
