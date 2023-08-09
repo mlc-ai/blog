@@ -15,8 +15,7 @@ MLC-LLM makes it possible to compile LLMs and deploy them on AMD GPUs using ROCm
   <img src="/img/amd/amd.svg" width="60%">
 </p>
 
-Our solution also generalizes to a variety of AMD GPUs and APUs. We also deployed Llama 2 7B on SteamDeck using Vulkan, 
-which has an AMD APU. The speed is 13.2 tok/s.
+Besides ROCm, our Vulkan support allows us to generalize LLM deployment to other AMD devices, for example, a SteamDeck with an AMD APU.
 
 Follow the instructions below 🔽 to try it out yourself if you have an AMD card!
 
