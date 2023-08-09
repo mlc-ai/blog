@@ -101,10 +101,10 @@ All the results are measured for single batch inference.
   <img src="/img/amd/perf.png" width="90%">
 </p>
 
-|             | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
+<!-- |             | AMD Radeon™ RX 7900 XTX | NVIDIA ® GeForce RTX™ 4090 | NVIDIA ® GeForce RTX™ 3090 Ti |
 |:-----------:|:-----------------------:|:--------------------------:|:-----------------------------:|
 |  Llama 2 7B |       130.9 toks/s      |        159.4 toks/s        |          138.5 toks/s         |
-| Llama 2 13B |       74.7 toks/s       |         90.7 toks/s        |          80.3 toks/s          |
+| Llama 2 13B |       74.7 toks/s       |         90.7 toks/s        |          80.3 toks/s          | -->
 
 For single batch inference performance, it can reach 80%~85% of the speed of NVIDIA 4090 with the release of ROCm 5.6.
 
