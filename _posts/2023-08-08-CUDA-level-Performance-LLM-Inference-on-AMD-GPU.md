@@ -34,11 +34,10 @@ support to a broader class of hardware accelerators. AMD is one potential candid
 |       Price      |           999$          |            1599$           |             1999$             | -->
 
 ### Discussions on HW spec
-From the spec comparison, we can see that AMD 7900 XTX is a good match for Nvidia 4090 and 3090 Ti.
+From the spec comparison, we can see that AMD's RX 7900 XTX is a good match for NVIDIA's RTX 4090 and RTX 3090 Ti.
 * All have 24GB memory, which means they can fit models of the same size.
-* All have similar memory bandwidth, considering LLM inference is largely memory bound, 
-  we can expect similar performance.
-* Most importantly, AMD 7900 XTX is 40% (50%) cheaper than Nvidia 4090 (3090 Ti). So the performance (toks/sec) per dollar can be much better if we can get a similar performance.
+* All have similar memory bandwidth, considering LLM inference is largely memory bound, we can expect similar performance.
+* Most importantly, RX 7900 XTX is 40% cheaper than RTX 4090, 50% cheaper than RTX 3090 Ti. Therefore, its FLOPs-per-dollar value would significantly outperform NVIDIA alternatives if it delievrs comparable performance.
 
 In this post, we are taking a deep look at how well AMD GPUs can do compared to a performant CUDA solution on Nvidia GPUs.
 
@@ -179,24 +178,16 @@ for more diverse set of of consumers.
 
 ## Discussions and Future Works
 
-With the arrival of generative AI, we are facing a hardware availability issue. 
-The ability to bring a broad spectrum of hardware devices and make them performant is more important than ever.
-In this post, we show that with the right software support, AMD GPU can get to CUDA-level performance
-on large-language model inference for the latency sensitive use cases. 
+**ML compilation (MLC) solves hardware scarcity.** Hardware availability has become a pressing issue in the age of generative AI. Our study reveals that AMD GPUs, with adept software support from MLC techniques, can rival CUDA-level performance for low-latency LLM inference at more friendly FLOPs-per-dollar. With the set of evidence so far, we believe that with the right price and availability, AMD GPUs can start to be effective for LLM inference.
 
-Although our study focuses on consumer-grade GPUs, our experience is that as we 
-optimize for 4090, we also observe correlated performance improvements on A10g and A100.
-So we are confident that the study generalizes to server-grade GPUs and will update our study
-once we have access to those devices.
-With the set of evidence so far, we believe that with the right price and availability, 
-AMD GPUs can start to be effective for LLM inference.
+**Generalizable performance on both cloud and consumer GPUs, NVIDIA and AMD GPUs.** Furthermore, as a universal deployment technique, MLC provides performant backends for CUDA, ROCm, Vulkan, Metal, Vulkan, and OpenCL. Although this study focuses on consumer-grade GPUs, we observe that optimizations for one GPU model usually can be generalizable, for example, from RTX 4090 to A100 and A10g, from RTX 3090Ti to RX 7900 XTX. We are confident that this generalization happens universally, and will update our study once we have access to more cloud and consumer-class GPUs.
 
-This post is part of an ongoing effort on bringing high-performance universal deployment via MLC. 
+**Ongoing efforts.** This post is part of an ongoing effort that brings high-performance universal deployment via MLC. 
 We are also actively working on several areas that can generalize our study.
 - Enable batching and multi-GPU support.
-- Bringing connections to the PyTorch ecosystem.
-- Enabling more quantization and model architectures.
-- Enabling more automatic hardware backend optimizations.
+- Integration with PyTorch ecosystem.
+- Empowering more quantization and model architectures.
+- Bringing in more automatic optimizations on more hardware backends.
 
 ## Links
 
