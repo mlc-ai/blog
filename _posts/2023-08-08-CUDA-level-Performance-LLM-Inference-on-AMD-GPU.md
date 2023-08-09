@@ -194,8 +194,6 @@ We are also actively working on several areas that can generalize our study.
 - Enabling more quantization and model architectures.
 - Enabling more automatic hardware backend optimizations.
 
-You are more than welcome to check out to learn more
-
 ## Links
 
 Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcomed to join the [Discord Channel](https://discord.com/invite/9Xpy2HGBuD) for further discussion.
