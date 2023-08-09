@@ -122,7 +122,7 @@ We provide prebuilt wheels and instructions so you can also try these out on you
 
 if you are using ROCm on Linux, the installation command is
   
-```Bash
+```bash
 pip install --pre --force-reinstall mlc-ai-nightly-rocm mlc-chat-nightly-rocm -f https://mlc.ai/wheels
 
 # Verify the installation of the Python package.
@@ -132,7 +132,7 @@ python -c "from mlc_chat import ChatModule; print(ChatModule)"
 
 - Download the quanzized model parameters and compiled model library
 
-```Bash
+```bash
 # Install Git and Git-LFS if you haven't already. Then run
 git lfs install
 mkdir -p dist/prebuilt
@@ -146,7 +146,7 @@ git clone https://huggingface.co/mlc-ai/mlc-chat-Llama-2-7b-chat-hf-q4f16_1; cd 
 
 - Then test the perfomance with the following Python script, note that it should be put under the same folder with `dist` folder.
 
-```Python
+```python
 from mlc_chat import ChatModule
 
 # From the mlc-llm directory, run
