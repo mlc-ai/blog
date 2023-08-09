@@ -69,7 +69,7 @@ building blocks similar to the CUDA stack. Vulkan is the latest graphics standar
 We pick ROCm for Radeon 7900 XTX and Vulkan for Steamdeck's APU. We find that ROCm stack just works out of box and a few more hours to further bring an optimized version, thanks to the productive python development pipeline in MLC. We made the following things to use ROCm support from MLC:
 
 - Reuse the whole MLC pipeline for existing targets (such as CUDA and Metal), including memory planning, operator fusion, etc.
-- Reuse a generic GPU kernel optimization space written in TensorIR and do a quick profiling-guided optimization targeting AMD GPUs.
+- Reuse a generic GPU kernel optimization space written in TVM TensorIR and re-target it to AMD GPUs.
 - Reuse TVM's ROCm code generation flow that generates low-level ROCm kernels through LLVM.
 - Finally, export generated code as a shared or static library that can be invoked by CLI, Python and REST APIs.
 
