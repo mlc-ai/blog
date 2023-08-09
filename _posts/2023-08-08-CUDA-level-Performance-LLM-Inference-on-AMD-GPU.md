@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "CUDA-level Performance LLM Inference on AMD GPU"
+title:  "Making AMD GPUs competitive for LLM inference”"
 date:   2023-08-08 09:30:00 -0400
 author:   MLC Community
 notitle: true
@@ -177,7 +177,7 @@ prefill: 48.3 tok/s, decode: 13.2 tok/s
 These results shed some light on how a broad spectrum of AMD devices can be supported
 for more diverse set of of consumers.
 
-## Discussions and Future Works
+## Discussions and Future Work
 
 Hardware availability has become a pressing issue in the age of generative AI.
 ML compilation can help by bringing high-performance universal deployment across hardware backends.
@@ -198,7 +198,7 @@ We are also actively working on several areas that can generalize our study.
 
 Our final takeaway is that machine learning system engineering is a continuous problem.
 Nvidia is still leading the field with continuous innovations, and we anticipate the landscape to
-change with new hardware and, more importantly, software evolutions. So the key question is not only
+change with new hardware such as H100 and, more importantly, software evolutions. So the key question is not only
 about building the right solution now but also how to catch up and bring ML engineering to new platforms continuously.
 Productivity in machine learning engineering is the key here. Thanks to the Python-first ML compilation development flow,
 we get ROCm-optimized support in a few hours. We anticipate related approaches to become even more useful as we explore more
@@ -207,7 +207,7 @@ ideas to bring universal deployments and solve the hardware availability problem
 
 ## Links
 
-Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcomed to join the [Discord Channel](https://discord.com/invite/9Xpy2HGBuD) for further discussion.
+Please refer to our [project page](https://mlc.ai/mlc-llm/) for a detailed guide on how to try out the MLC LLM deployment. The source code of MLC LLM is available on our official [GitHub repository](https://github.com/mlc-ai/mlc-llm/). You are also more than welcome to join the [Discord Channel](https://discord.com/invite/9Xpy2HGBuD) for further discussion.
 
 ## Acknowledgement
 
