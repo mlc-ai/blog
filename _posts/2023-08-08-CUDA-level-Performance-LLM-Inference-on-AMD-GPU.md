@@ -47,7 +47,7 @@ Hardware is not necessarily the reason why AMD lagged in the past.
 The main gaps were due to a lack of software stacks that fully support and optimize for the relevant models.
 There are two factors in the ecosystem that starts to bring changes to the picture:
 
-- AMD is trying to catching up with investments in the ROCm stack.
+- AMD is trying to catch up with investments in the ROCm stack.
 - Emerging technologies like machine learning compilation helps to reduce overall cost of
   more universal software support across backends.
 
