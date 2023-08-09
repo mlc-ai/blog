@@ -105,7 +105,7 @@ python -c "from mlc_chat import ChatModule; print(ChatModule)"
 **Download Llama2.** Download the quanzized model parameters and compiled model library
 
 ```bash
-# Install Git and Git-LFS if you haven't already. Then run
+# Install Git and Git-LFS if you haven't already
 git lfs install
 mkdir -p dist/prebuilt
 
