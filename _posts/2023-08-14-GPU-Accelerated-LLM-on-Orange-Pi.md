@@ -139,4 +139,3 @@ This post contributes to our quest to integrate LLMs into affordable devices and
 ## Contributions
 
 LLM on Orange Pi is primarily completed by Haolin Zhang. The support of mali optimizations comes from Siyuan Feng, with foundation support from Junru Shao and Bohan Hou and other community members.
-
