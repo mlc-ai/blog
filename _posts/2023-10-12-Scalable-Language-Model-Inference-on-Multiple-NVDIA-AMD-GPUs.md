@@ -45,12 +45,12 @@ We focus on auto-regressive decoding performance in this blog post. Long-context
 
 ### Performance
 
-<p align="center">
-  <img src="/img/multi-gpu/figure-1.svg" width="80%">
-  <figcaption>Figure 1. FP16 performance on two RTX 4090.</figcaption>
-</p>
-
 We first examine the single-batch decoding performance of the solution on two RTX 4090 GPUs. This configuration allows us to effectively work with Llama-70B using 4-bit setups. To provide a reference point, we also benchmarked other solutions in this setup. This post focuses on the optimal latency that a multi-GPU system could possibly achieve; the reference frameworks may not be optimized for a multi-GPU latency-focused scenario. Nevertheless, we include these reference results to help us gauge the performance of the multi-GPU solution.
+
+<p align="center">
+  <img src="/img/multi-gpu/figure-1.svg" width="50%">
+  <figcaption>Figure 1. CodeLlama-34B and Llama2-70B performance on two RTX 4090.</figcaption>
+</p>
 
 On two RTX 4090 GPUs, we achieve 34 tokens/sec on Llama2-70B and 64 tokens/sec on CodeLlama-34B. It is remarkable to witness such a significant speedup with consumer GPUs, which are also accessible to those with limited access to high-end GPUs.
 
@@ -59,8 +59,8 @@ On two RTX 4090 GPUs, we achieve 34 tokens/sec on Llama2-70B and 64 tokens/sec o
 The second question we ask is how the solution scales with the number of GPUs. The figure on the left below shows the performance of FP16 on A100-PCIe and A10G-PCIe, while the figure on the right shows the performance of 4-bit-quantized models on the same set of server-class GPUs. FP16 serving numbers are not provided for Exllama because it does not support FP16. Across all the experiments, we can observe that our solution continues to improve performance as we increase the number of GPUs.
 
 <p align="center">
-  <img src="/img/multi-gpu/figure-2.svg" width="80%">
-  <figcaption>Figure 2. Scaling MLC LLM across multiple A100 and A10G GPUs.</figcaption>
+  <img src="/img/multi-gpu/figure-2.svg" width="100%">
+  <figcaption>Figure 2. Scaling fp16 and 4-bit models across multiple A100 and A10G GPUs.</figcaption>
 </p>
 
 It is worth mentioning that the scaling is not yet linear in this case. This is because we are working on a more challenging strong scaling case while keeping the single batch for latency optimal settings. There are also other related factors that contribute to the result:
@@ -76,7 +76,7 @@ Nevertheless, having the ability to scale means we can achieve faster speeds or 
 There have been many LLM inference solutions since the bloom of open-source LLMs. Most of the performant inference solutions are based on CUDA and optimized for NVIDIA GPUs. Meanwhile, due to the high demand for compute availability, it is useful to extend support to a broader class of hardware accelerators, with AMD being one potential candidate.
 
 <p align="center">
-  <img src="/img/multi-gpu/figure-3.svg" width="80%">
+  <img src="/img/multi-gpu/figure-3.svg" width="30%">
   <figcaption>Figure 3. Deploying MLC LLM on both NVIDIA RTX 4090 and AMD GPU Radeon 7900 XTX.</figcaption>
 </p>
 
