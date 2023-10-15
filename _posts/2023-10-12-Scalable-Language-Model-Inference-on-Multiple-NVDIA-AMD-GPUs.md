@@ -11,19 +11,19 @@ notitle: true
 
 ## TL;DR
 
-Machine Learning Compilation (MLC) makes it possible to compile and deploy large-scale language models on multiple NVIDIA and AMD GPUs with competitive performance. Specifically, we run 4-bit quantized Llama2-70B at 34.5 tok/sec on two NVIDIA RTX 4090 and 29.9 tok/sec on two AMD Radeon 7900XTX. We also observe that the solution consistently scales with more GPUs.
+Machine Learning Compilation (MLC) makes it possible to compile and deploy large-scale language models running on multi-GPU systems with support for NVIDIA and AMD GPUs with high performance. Specifically, we run 4-bit quantized Llama2-70B at 34.5 tok/sec on two NVIDIA RTX 4090 and 29.9 tok/sec on two AMD Radeon 7900XTX. The same solution also scales well beyond two GPUs. Our evaluation shows the performance consistently improves up to eight A10G GPUs when running Llama2-70B and CodeLlama 34B.
 
 ## Background
 
-We are currently facing a global shortage of powerful GPUs, leading to their increasing cost and limited availability. Despite this, the demand for large-scale Large Language Models (LLMs) remains strong within academia and industry. However, many of the largest models, such as Meta's Llama2-70B, face a bottleneck due to their size and cannot be accommodated on a single less-powerful GPU. To address this challenge and assist the GPU-poor during this scarcity era, an ideal LLM serving framework should be universal and capable of deploying on a broader spectrum of devices, highly performant, and able to scale up with the addition of more GPUs.
+Demand for access to powerful GPUs exceeds supply, leading to their increasing cost and limited availability. A significant driver behind this demand is that the appetite for large-scale Large Language Models (LLMs) is strong within academia and industry. However, many of the largest models, such as Meta's Llama2-70B, face a bottleneck due to their size and cannot be accommodated on a single less-powerful GPU. To address this challenge and assist the GPU-poor during this scarcity era, an ideal LLM serving framework should be universal and capable of deploying on a broader spectrum of devices, highly performant, and able to scale up with the addition of more GPUs.
 
-Machine learning compilation (MLC) techniques offer such a solution, which allow **universal deployment** on all GPUs. Backed by TVM Unity, the latest generation of Apache TVM, MLC LLM is capable of generating highly performant code across all GPU backends, such as CUDA, ROCm, Vulkan, OpenCL, Metal, and WebGPU, achieving **state-of-the-art performance** across NVIDIA, AMD, and Intel GPUs. Most importantly, unlike a traditional C++ compiler, it compiles for both single-node and **multi-GPU and distributed** use cases, as machine learning necessitates.
+Machine learning compilation (MLC) techniques offer such a solution, which allow **universal deployment** on all viable GPUs. Backed by TVM Unity, the latest generation of Apache TVM, MLC LLM is capable of generating highly performant code across all GPU backends, such as CUDA, ROCm, Vulkan, OpenCL, Metal, and WebGPU, achieving **state-of-the-art performance** across NVIDIA, AMD, and Intel GPUs. Most importantly, unlike a traditional C++ compiler, it compiles for both single-node and **multi-GPU and distributed** use cases, as machine learning necessitates.
 
 In this blog post, MLC LLM demonstrates multiple advantages in serving large-scale LLMs:
 
 - Performance: It compiles and generates highly performant code for multi-GPU inference.
-- Universal deployment: It empowers universal deployment of LLMs onto GPUs across a variety of vendors and architectures.
-- Scalability: It meaningfully scales and provides more acceleration as the number of GPUs increases.
+- Universal deployment: It enables universal deployment of LLMs onto GPUs across a variety of vendors and architectures.
+- Scalability: It scales efficiently and provides more acceleration as the number of GPUs increases.
 
 ## MLC-Powered Multi-GPU Inference
 
@@ -35,9 +35,9 @@ This section demonstrates MLC LLM’s multi-GPU capability by answering the foll
 
 ### Settings
 
-We focus on auto-regressive decoding performance in this blog post. Long-context prefilling is left for future blog series.
+We focus on auto-regressive decoding performance in this blog post. Long-context prefilling is left for future blog posts.
 
-**GPUs**. We have chosen GPUs from two representative groups: server- and consumer-class GPUs. In the server class, we use A100 (80GB) and A10g (24GB), and in consumer-class GPUs, we use NVIDIA’s RTX 4090 (24GB) and AMD Radeon 7900 XTX (24GB). All numbers are based on PCIe, not NVLink.
+**GPUs**. We have chosen GPUs from two representative groups: server- and consumer-class GPUs. In the server class, we use A100 (80GB) and A10G (24GB), and in consumer-class GPUs, we use NVIDIA’s RTX 4090 (24GB) and AMD Radeon 7900 XTX (24GB). All numbers are based on PCIe, not NVLink.
 
 **Models**. We focus on sufficiently large models; in our case, CodeLlama-34B and Llama2-70B. The 4-bit quantized model could fit into 2 GPUs in all our experimental settings, while FP16 numbers are provided whenever VRAM is sufficient.
 
@@ -49,10 +49,10 @@ We first examine the single-batch decoding performance of the solution on two RT
 
 <p align="center">
   <img src="/img/multi-gpu/figure-1.svg" width="50%">
-  <figcaption>Figure 1. CodeLlama-34B and Llama2-70B performance on two RTX 4090.</figcaption>
+  <figcaption>Figure 1. Single batch performance of 4-bit CodeLlama-34B and Llama2-70B on two NVIDIA RTX 4090.</figcaption>
 </p>
 
-On two RTX 4090 GPUs, we achieve 34 tokens/sec on Llama2-70B and 64 tokens/sec on CodeLlama-34B. It is remarkable to witness such a significant speedup with consumer GPUs, which are also accessible to those with limited access to high-end GPUs.
+On two RTX 4090 GPUs, we achieve 34 tok/sec on Llama2-70B and 64 tok/sec on CodeLlama-34B. It is remarkable that our solution enables significant performance using consumer GPUs, which is concretely accessible to a broader set of users who have limited access to high-end cloud GPUs.
 
 ### Scalability
 
@@ -60,29 +60,23 @@ The second question we ask is how the solution scales with the number of GPUs. T
 
 <p align="center">
   <img src="/img/multi-gpu/figure-2.svg" width="100%">
-  <figcaption>Figure 2. Scaling fp16 and 4-bit models across multiple A100 and A10G GPUs.</figcaption>
+  <figcaption>Figure 2. Scaling of fp16 and 4-bit CodeLlama-34 and Llama2-70B on A100-80G-PCIe and A10G-24G-PCIe, up to 8 GPUs, single batch.</figcaption>
 </p>
 
-It is worth mentioning that the scaling is not yet linear in this case. This is because we are working on a more challenging strong scaling case while keeping the single batch for latency optimal settings. There are also other related factors that contribute to the result:
-
-First, the absence of NVLink. We noticed that PCIe and the host CPU may significantly contribute to the overhead and potential noise in our 8xA100 experiment. More specifically, LLM performance could degrade by up to 30% when the CPU is busy with tasks from other tenants, indicating that a much faster independent data path could potentially help with performance.
-
-Also, resource under-saturation. It is generally more challenging for auto-regressive decoding to saturate GPU resources. We noticed that the kernel speeds up less proportionally as workloads reduce on each GPU. For example, the multi-head attention kernel from cutlass operates at a similar latency with half of the attention heads in one of our experiments.
+It is worth mentioning that the scaling is not yet linear in this case. There are several factors that contribute to the result: First, the absence of NVLink. We noticed that PCIe and the host CPU may significantly contribute to the overhead and potential noise in our 8xA100 experiment. More specifically, LLM performance could degrade by up to 30% when the CPU is busy with tasks from other tenants, indicating that a much faster independent interconnect could potentially help with performance. Also, resource under-saturation. It is generally more challenging for auto-regressive decoding to saturate GPU resources. We noticed that the kernel speeds up less proportionally as workloads reduce on each GPU. For example, the multi-head attention kernel from cutlass operates at a similar latency with half of the attention heads in one of our experiments.
 
 Nevertheless, having the ability to scale means we can achieve faster speeds or simply leverage multiple resource-constrained devices to serve even bigger models.
 
-### Universal deployment
+### Universal deployment: Support for Multi-AMD-GPU
 
-There have been many LLM inference solutions since the bloom of open-source LLMs. Most of the performant inference solutions are based on CUDA and optimized for NVIDIA GPUs. Meanwhile, due to the high demand for compute availability, it is useful to extend support to a broader class of hardware accelerators, with AMD being one potential candidate.
+There have been many LLM inference solutions since the bloom of open-source LLMs. Most of the performant inference solutions are based on CUDA and optimized for NVIDIA GPUs. Meanwhile, due to the high demand for compute availability and growing diversity of devices, it is useful to extend support to a broader class of hardware accelerators, with AMD being one potential candidate.
 
 <p align="center">
-  <img src="/img/multi-gpu/figure-3.svg" width="30%">
-  <figcaption>Figure 3. Deploying MLC LLM on both NVIDIA RTX 4090 and AMD GPU Radeon 7900 XTX.</figcaption>
+  <img src="/img/multi-gpu/figure-3.svg" width="25%">
+  <figcaption>Figure 3. Two-GPU single-batch inference: NVIDIA RTX 4090 vs AMD Radeon 7900 XTX on 4-bit Llama2-70B and CodeLlama-34B.</figcaption>
 </p>
 
-By adopting the universal deployment approach, MLC enables us to deploy on AMD GPUs through ROCm. We tested the same solution on two AMD 7900 XTX GPUs, and the results showed that these two AMD GPUs can achieve 30 tokens/sec for Llama2-70B. This indicates that we can achieve approximately 85% of the results produced by two RTX 4090 GPUs.
-
-Considering that AMD GPUs cost $1000 per card, the setup with two AMD GPUs can be cost-effective for running Llama 70B models. This result suggests that, given the right price and availability, AMD GPUs could become valuable for LLM inference."
+By adopting the universal deployment approach, MLC enables us to deploy on AMD GPUs through ROCm. We tested the same solution on two AMD 7900 XTX GPUs, and the results showed that these two AMD GPUs can achieve 30 tok/sec for Llama2-70B. This indicates that we can achieve approximately 85% of the results produced by two RTX 4090 GPUs. Considering that AMD GPUs cost $1000 per card, the setup with two AMD GPUs can be cost-effective for running Llama2-70B models. This result suggests that, empowered by MLC LLM, with the right price and availability, AMD GPUs could have viable performance/cost competitiveness.
 
 ## Using MLC LLM
 
@@ -129,7 +123,7 @@ python3 -m mlc_llm.build --build-model-only \
     --target cuda --use-cuda-graph
 ```
 
-**Step 3. Run Llama2-70B using Python API**. The following Python script showcases the Multi-GPUs inference of MLC LLM:
+**Step 3. Run Llama2-70B using Python API**. Follow the snippet below to use the Python API for multi-GPU inference:
 
 ```python
 from mlc_chat import ChatModule, ChatConfig
@@ -137,7 +131,7 @@ from mlc_chat.callback import StreamToStdout
 
 cm = ChatModule(
   model="Llama-2-70b-chat-hf-q4f16_1",
-  chat_config=ChatConfig(num_shards=2),
+  chat_config=ChatConfig(num_shards=2), # Number of GPUs
 )
 cm.generate(
     prompt="What is the meaning of life?",
@@ -146,7 +140,7 @@ cm.generate(
 ```
 
 ## Discussion and Future works
-**Machine Learning Compilation**. We leverage Apache TVM Unity, the latest machine learning compilation techniques that allow the representation and optimization of machine learning programs. MLC utilizes cross-layer representation and optimization for an end-to-end machine learning stack and makes use of lower-level compilers (LLVM/MLIR) and libraries to generate binary code. We model multi-GPU inference in TVM’s IRModule through a Single-Program-Multiple-Data (SPMD) representation. It further reduces collective library calls to NCCL/RCCL, highly optimized by NVIDIA and AMD. With MLC, we can conveniently represent pipelines, tensor parallelism, their lowering, and potential cross-layer optimization opportunities.
+**Machine Learning Compilation**. We leverage Apache TVM Unity, the latest machine learning compilation techniques that allow the representation and optimization of machine learning programs. MLC utilizes cross-layer representation and optimization for an end-to-end machine learning stack and makes use of lower-level compilers (LLVM/MLIR) and libraries to generate binary code. Specifically, we model multi-GPU inference using TVM Unity’s Single-Program-Multiple-Data (SPMD) representation. It further reduces collective library calls to NCCL/RCCL, highly optimized by NVIDIA and AMD. With MLC, we can conveniently represent pipelines, tensor parallelism, their lowering, and potential cross-layer optimization opportunities.
 
 This post is part of the ongoing effort to bring high-performance universal deployment via MLC. We are also actively working on several areas to generalize our study:
 
@@ -155,4 +149,4 @@ This post is part of the ongoing effort to bring high-performance universal depl
 - Empowering more quantization and model architectures;
 - Optimizations for long-context.
 
-Our final takeaway is that machine learning system engineering is a continuous challenge. The key question is not only about building the right solution now but also about how to keep up and continuously bring ML engineering to new platforms. Productivity in machine learning engineering is crucial. Thanks to the Python-first ML compilation development flow, we have a universal multi-GPU solution and can integrate it with our past improvements in multi-backend code generation. We anticipate that related approaches will become even more valuable as we explore more ideas to achieve universal deployments and address the hardware availability problem.
+Our final takeaway is that machine learning system engineering is a continuous challenge because model progress is moving very fast and the others of the stack (HW and system software) also evolve. Therefore, effectiveness is not just about building “currently-working” solutions, but also about continuously bringing in the latest ML research and engineering techniques and adapting to new platforms. Productivity in machine learning engineering is crucial. Thanks to the Python-first ML compilation development flow in TVM Unity, we have built a universal multi-GPU solution seamlessly integrated with existing multi-backend code generation. We anticipate that related approaches will become even more valuable as we explore more ideas to achieve universal deployments and address the hardware availability problem.
