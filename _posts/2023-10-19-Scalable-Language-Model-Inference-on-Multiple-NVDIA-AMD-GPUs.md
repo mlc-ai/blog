@@ -84,7 +84,7 @@ Similar scalability is anticipated with more than two consumer GPUs, which we un
 
 ### Docker
 
-The Dockerfile and corresponding instructions are provided in a dedicated GitHub [repo](https://github.com/mlc-ai/llm-perf-bench) to reproduce MLC LLM performance for both single-GPU and multi-GPU, CUDA and ROCm.
+The Dockerfile and corresponding instructions are provided in a dedicated [GitHub repo](https://github.com/mlc-ai/llm-perf-bench) to reproduce MLC LLM performance for both single-GPU and multi-GPU, CUDA and ROCm.
 
 ### Python API
 
