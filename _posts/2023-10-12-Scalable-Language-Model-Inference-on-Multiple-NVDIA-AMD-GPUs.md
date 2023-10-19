@@ -35,7 +35,7 @@ This section demonstrates MLC LLM’s multi-GPU capability by answering the foll
 
 ### Settings
 
-We focus on auto-regressive decoding performance in this blog post. Long-context prefilling is left for future blog posts.
+We focus on auto-regressive decoding performance with batch one latency in this blog post because minimum latency is often an important consideration for application builders and a core aspect of good inference performance (prefill = 8, decoding = 256). Long-context prefilling and continuous batching performance are left for future blog posts.
 
 **GPUs**. We have chosen GPUs from two representative groups: server- and consumer-class GPUs. In the server class, we use A100 (80GB) and A10G (24GB), and in consumer-class GPUs, we use NVIDIA’s RTX 4090 (24GB) and AMD Radeon 7900 XTX (24GB). All numbers are based on PCIe, not NVLink.
 
@@ -78,6 +78,8 @@ There have been many LLM inference solutions since the bloom of open-source LLMs
 
 By adopting the universal deployment approach, MLC enables us to deploy on AMD GPUs through ROCm. We tested the same solution on two AMD 7900 XTX GPUs, and the results showed that these two AMD GPUs can achieve 30 tok/sec for Llama2-70B. This indicates that we can achieve approximately 85% of the results produced by two RTX 4090 GPUs. Considering that AMD GPUs cost $1000 per card, the setup with two AMD GPUs can be cost-effective for running Llama2-70B models. This result suggests that, empowered by MLC LLM, with the right price and availability, AMD GPUs could have viable performance/cost competitiveness.
 
+Similar scalability is anticipated with more than two consumer GPUs, which we unfortunately do not have access to at the time of writing. In this case, the existing A10G experiment is a good proxy to scaling with NVIDIA and AMD consumer GPUs.
+
 ## Using MLC LLM
 
 ### Docker
@@ -118,7 +120,7 @@ curl https://raw.githubusercontent.com/mlc-ai/llm-perf-bench/main/model_configs/
 python3 -m mlc_llm.build --build-model-only \
     --model ./dist/models/$MODEL/ \
     --quantization q4f16_1 \
-    --max-seq-len 2048 \
+    --max-seq-len 4096 \
     --num-shards 2 \ # e.g. 2, 4, 8
     --target cuda --use-cuda-graph
 ```
@@ -140,7 +142,7 @@ cm.generate(
 ```
 
 ## Discussion and Future works
-**Machine Learning Compilation**. We leverage Apache TVM Unity, the latest machine learning compilation techniques that allow the representation and optimization of machine learning programs. MLC utilizes cross-layer representation and optimization for an end-to-end machine learning stack and makes use of lower-level compilers (LLVM/MLIR) and libraries to generate binary code. Specifically, we model multi-GPU inference using TVM Unity’s Single-Program-Multiple-Data (SPMD) representation. It further reduces collective library calls to NCCL/RCCL, highly optimized by NVIDIA and AMD. With MLC, we can conveniently represent pipelines, tensor parallelism, their lowering, and potential cross-layer optimization opportunities.
+**Machine Learning Compilation**. We leverage Apache TVM Unity, the latest machine learning compilation techniques that allow the representation and optimization of machine learning programs. MLC utilizes cross-layer representation and optimization for an end-to-end machine learning stack and makes use of lower-level compilers (LLVM/MLIR) and libraries to generate binary code. Specifically, we model multi-GPU inference using TVM Unity’s Single-Program-Multiple-Data (SPMD) representation with tensor parallelism. It further reduces collective library calls to NCCL/RCCL, highly optimized by NVIDIA and AMD. With MLC, we can conveniently represent pipelines, tensor parallelism, their lowering, and potential cross-layer optimization opportunities.
 
 This post is part of the ongoing effort to bring high-performance universal deployment via MLC. We are also actively working on several areas to generalize our study:
 

@@ -35,7 +35,7 @@ notitle: true
 
 ### 实验设定
 
-在这篇博文中，我们关注自回归解码性能。长上下文填充留待将来的博文系列来讨论。
+我们在这篇博文中侧重于单批次自回归解码的延迟，因为最小延迟通常是应用程序构建者关注的重要因素，也是良好推理性能的核心方面（预填充=8，解码=256）。长文本预填充和持续批处理性能将在未来的博文中详细介绍。
 
 **显卡**. 我们选择了来自两个代表性群体的显卡：服务器级别和消费级别的GPU。在服务器级别，我们使用 A100 (80GB) 和 A10G (24GB)，在消费级别的GPU中，我们使用NVIDIA的RTX 4090（24GB）和AMD Radeon 7900 XTX（24GB）。所有显卡通信均基于 PCIe 而非 NVLink。
 
@@ -79,6 +79,8 @@ notitle: true
 
 TVM Unity 的通用部署能力使得 MLC LLM 能够利用其 ROCm 后段在 AMD 显卡上部署。据此，我们在两块 AMD 7900 XTX 显卡上测试了相同的解决方案，结果显示这两块 AMD 显卡可以在 Llama2-70B 上达到 30 tok/sec，也就是 NVIDIA RTX 4090 显卡 85% 左右的性能。考虑到 AMD 显卡的价格为每张卡 1000 美元，使用两个 AMD 显卡的设置可能是运行 Llama2-70B 模型最经济有效的方法之一。因此，运用 MLC LLM 的通用部署能力，我们能够将 AMD 显卡变成经济实惠且性能强劲的大模型推断方案。
 
+同样的，我们预计在可以两个以上的消费级显卡上展现出相同的可拓展性。但不幸的是，截至目前我们无法获得这样的设备。在这种情况下，现有的 A10G 实验可以作为 NVIDIA 和 AMD 消费级显卡扩展性一个良好近似。
+
 ## 使用 MLC LLM
 
 ### Docker
@@ -119,7 +121,7 @@ curl https://raw.githubusercontent.com/mlc-ai/llm-perf-bench/main/model_configs/
 python3 -m mlc_llm.build --build-model-only \
     --model ./dist/models/$MODEL/ \
     --quantization q4f16_1 \
-    --max-seq-len 2048 \
+    --max-seq-len 4096 \
     --num-shards 2 \ # e.g. 2, 4, 8
     --target cuda --use-cuda-graph
 ```
@@ -142,7 +144,7 @@ cm.generate(
 
 ## 更多讨论，未来的工作
 
-**机器学习编译**. MLC LLM 项目广泛使用 Apache TVM Unity，这是一种允许表示和优化机器学习程序的最新机器学习编译技术。MLC 注重于跨层的联合表示和联合优化，并通过低层级的编译器（LLVM/MLIR）和库来生成二进制代码。在多卡推理中，我们即利用 TVM 的 Single-Program-Mulit-Data (SPMD) 表示对多显卡推断进行建模。这个 SPMD 表示会进一步下降到由 NVIDIA 和 AMD 高度优化的 NCCL/RCCL 库中，并且基于 TVM，我们可以方便地表示和发现管道、张量并行、它们的下降以及潜在的跨层优化机会。
+**机器学习编译**. MLC LLM 项目广泛使用 Apache TVM Unity，这是一种允许表示和优化机器学习程序的最新机器学习编译技术。MLC 注重于跨层的联合表示和联合优化，并通过低层级的编译器（LLVM/MLIR）和库来生成二进制代码。在多卡推理中，我们即利用 TVM 的 Single-Program-Mulit-Data (SPMD) 表示和张量并行 (Tensor Parallelism) 对多显卡推断进行建模。这个 SPMD 表示会进一步下降到由 NVIDIA 和 AMD 高度优化的 NCCL/RCCL 库中，并且基于 TVM，我们可以方便地表示和发现管道、张量并行、它们的下降以及潜在的跨层优化机会。
 
 本文是通过MLC带来高性能通用部署的持续努力的一部分。我们还在积极开展以下几个方面的研究：
 
