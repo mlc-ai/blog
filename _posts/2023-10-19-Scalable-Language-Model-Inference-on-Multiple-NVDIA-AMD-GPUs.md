@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Scalable Language Model Inference on Multiple NVIDIA and AMD GPUs"
-date:   2023-10-12 09:30:00 -0400
+date:   2023-10-19 07:30:00 -0700
 author:   MLC Community
 notitle: true
 ---
@@ -11,7 +11,7 @@ notitle: true
 
 ## TL;DR
 
-Machine Learning Compilation (MLC) makes it possible to compile and deploy large-scale language models running on multi-GPU systems with support for NVIDIA and AMD GPUs with high performance. Specifically, we run 4-bit quantized Llama2-70B at 34.5 tok/sec on two NVIDIA RTX 4090 and 29.9 tok/sec on two AMD Radeon 7900XTX. The same solution also scales well beyond two GPUs. Our evaluation shows the performance consistently improves up to eight A10G GPUs when running Llama2-70B and CodeLlama 34B.
+Machine Learning Compilation ([MLC](https://github.com/mlc-ai/mlc-llm)) makes it possible to compile and deploy large-scale language models running on multi-GPU systems with support for NVIDIA and AMD GPUs with high performance. Specifically, we run 4-bit quantized Llama2-70B at 34.5 tok/sec on two NVIDIA RTX 4090 and 29.9 tok/sec on two AMD Radeon 7900XTX. The same solution also scales well beyond two GPUs. Our evaluation shows the performance consistently improves up to eight A10G GPUs when running Llama2-70B and CodeLlama 34B.
 
 ## Background
 
