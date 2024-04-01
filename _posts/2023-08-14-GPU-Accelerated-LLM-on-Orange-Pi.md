@@ -11,7 +11,7 @@ notitle: true
 This post shows GPU-accelerated LLM running smoothly on an embedded device at a reasonable speed. More specifically, on a \$100 Orange Pi 5 with Mali GPU, we achieve 2.5 tok/sec for Llama2-7b and 5 tok/sec for RedPajama-3b through Machine Learning Compilation (MLC) techniques. Additionally, we are able to run a Llama-2 13b model at 1.5 tok/sec on a 16GB version of the Orange Pi 5+ under $150.
 
 <p align="center">
-  <img src="/img/orange-pi/orange-pi.jpg" width="90%">
+  <img src="/img/orange-pi/orange-pi.png" width="90%">
 </p>
 
 
@@ -24,7 +24,7 @@ Many embedded devices come with mobile GPUs that can serve as a source of accele
 ## Machine Learning Compilation for Mali
 
 <p align="center">
-  <img src="/img/orange-pi/WebXYZ Images.svg" width="90%">
+  <img src="/img/orange-pi/compilation_flow.svg" width="90%">
 </p>
 
 Machine learning compilation (MLC) is an emerging technology that automatically compiles and optimizes machine learning workloads, and deploys the compiled workload to a broad set of backends. At the time of writing, based on Apache TVM Unity, MLC supports platforms including browsers (WebGPU, WASM), NVIDIA GPUs (CUDA), AMD GPUs (ROCm, Vulkan), Intel GPUs (Vulkan), iOS and MacBooks (Metal), Android (OpenCL), and Mali GPUs (this post).
@@ -44,7 +44,7 @@ This section provides a step-by-step guide so that you can try it out on your ow
 
 ### Prepare
 
-Please first follow the instruction [here](https://mlc.ai/mlc-llm/docs/install/gpu.html#orange-pi-5-rk3588-based-sbc), to setup the RK3588 board with OpenCL driver. Then clone the MLC-LLM from the source, and download weights and prebuilt libs.
+Please first follow the instruction [here](https://llm.mlc.ai/docs/install/gpu.html#orange-pi-5-rk3588-based-sbc), to setup the RK3588 board with OpenCL driver. Then clone the MLC-LLM from the source, and download weights and prebuilt libs.
 
 ```bash
 # clone mlc-llm from GitHub
@@ -53,7 +53,7 @@ git clone --recursive https://github.com/mlc-ai/mlc-llm.git && cd mlc-llm
 git lfs install
 mkdir -p dist/prebuilt && cd dist/prebuilt
 git clone https://github.com/mlc-ai/binary-mlc-llm-libs.git lib
-git clone https://huggingface.co/mlc-ai/mlc-chat-RedPajama-INCITE-Chat-3B-v1-q4f16_1
+git clone https://huggingface.co/mlc-ai/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC
 cd ../../..
 ```
 
@@ -67,28 +67,16 @@ cd mlc-llm/
 mkdir -p build && cd build
 # generate build configuration
 python3 ../cmake/gen_cmake_config.py
-# build `mlc_chat_cli`
+# build `mlc_llm python package`
 cmake .. && cmake --build . --parallel $(nproc) && cd ..
 ```
 
 Verify installation
 
 ```bash
-# expected to see `mlc_chat_cli`, `libmlc_llm.so` and `libtvm_runtime.so`
+# expected to see , `libmlc_llm.so` and `libmlc_llm_module.so`
 ls -l ./build/
-# expected to see help message
-./build/mlc_chat_cli --help
 ```
-
-Run LLMs through mlc_chat_cli
-
-```bash
-./build/mlc_chat_cli --local-id RedPajama-INCITE-Chat-3B-v1-q4f16_1 –device mali
-```
-
-<p align="center">
-  <img src="/img/orange-pi/cli.png" width="90%">
-</p>
 
 ### Try out the Python API
 
@@ -101,7 +89,7 @@ git clone --recursive https://github.com/mlc-ai/relax.git tvm_unity && cd tvm_un
 mkdir -p build && cd build
 # generate build configuration
 cp ../cmake/config.cmake . && echo "set(CMAKE_BUILD_TYPE RelWithDebInfo)\nset(USE_OPENCL ON)" >> config.cmake
-# build `mlc_chat_cli`
+# build `TVM runtime`
 cmake .. && cmake --build . --target runtime --parallel $(nproc) && cd ../..
 ```
 
@@ -116,19 +104,24 @@ export PYTHONPATH=$TVM_HOME/python:$MLC_LLM_HOME/python:${PYTHONPATH}
 Run the following python script.
 
 ```python
-from mlc_chat import ChatModule
-from mlc_chat.callback import StreamToStdout
-cm = ChatModule(model="RedPajama-INCITE-Chat-3B-v1-q4f16_1")
+from mlc_llm import ChatModule
+from mlc_llm.callback import StreamToStdout
+
+cm = ChatModule(
+     model="dist/prebuilt/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC",
+     model_lib_path="dist/prebuilt/lib/RedPajama-INCITE-Chat-3B-v1/RedPajama-INCITE-Chat-3B-v1-q4f16_1-mali.so",
+     device="opencl"
+ )
 
 # Generate a response for a given prompt
-output = cm.generate(
-   prompt="What is the meaning of life?",
-   progress_callback=StreamToStdout(callback_interval=2),
-)
-
+cm.generate(prompt="What is the meaning of life?", progress_callback=StreamToStdout(callback_interval=2))
 # Print prefill and decode performance statistics
 print(f"Statistics: {cm.stats()}\n")
 ```
+
+<p align="center">
+  <img src="/img/orange-pi/chat.png" width="90%">
+</p>
 
 ## Discussion and Future Work
 
@@ -138,4 +131,4 @@ This post contributes to our quest to integrate LLMs into affordable devices and
 
 ## Contributions
 
-LLM on Orange Pi is primarily completed by [Haolin Zhang](https://www.linkedin.com/in/haolin-zhang-534530231/). The support of mali optimizations comes from Siyuan Feng, with foundation support from Junru Shao and Bohan Hou and other community members.
+LLM on Orange Pi is primarily completed by [Haolin Zhang](https://www.linkedin.com/in/haolin-zhang-534530231/), update by Mengshiun Yu. The support of mali optimizations comes from Siyuan Feng, with foundation support from Junru Shao and Bohan Hou and other community members.
