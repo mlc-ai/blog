@@ -1,14 +1,14 @@
 ---
 layout: post
 title:  "GPU-Accelerated LLM on a $100 Orange Pi"
-date:   2023-08-09 09:30:00 -0400
+date:   2024-04-20 09:30:00 -0400
 author:   MLC Community
 notitle: true
 ---
 
 ## TL;DR
 
-This post shows GPU-accelerated LLM running smoothly on an embedded device at a reasonable speed. More specifically, on a \$100 Orange Pi 5 with Mali GPU, we achieve 2.5 tok/sec for Llama2-7b and 5 tok/sec for RedPajama-3b through Machine Learning Compilation (MLC) techniques. Additionally, we are able to run a Llama-2 13b model at 1.5 tok/sec on a 16GB version of the Orange Pi 5+ under $150.
+This post shows GPU-accelerated LLM running smoothly on an embedded device at a reasonable speed. More specifically, on a \$100 Orange Pi 5 with Mali GPU, we achieve 2.3 tok/ser for Llama3-8b, 2.5 tok/sec for Llama2-7b and 5 tok/sec for RedPajama-3b through Machine Learning Compilation (MLC) techniques. Additionally, we are able to run a Llama-2 13b model at 1.5 tok/sec on a 16GB version of the Orange Pi 5+ under $150.
 
 <p align="center">
   <img src="/img/orange-pi/orange-pi.png" width="90%">
@@ -19,7 +19,7 @@ This post shows GPU-accelerated LLM running smoothly on an embedded device at a 
 
 Progress in open language models has been catalyzing innovation across question-answering, translation, and creative tasks. While current solutions demand high-end desktop GPUs to achieve satisfactory performance, to unleash LLMs for everyday use, we wanted to understand how usable we could deploy them on the affordable embedded devices.
 
-Many embedded devices come with mobile GPUs that can serve as a source of acceleration. In this post, we pick Orange Pi 5, a RK35888-based board that is similar to Raspberry Pi but also features a more powerful Mali-G610 GPU. This post summarizes our first attempt at leveraging Machine Learning Compilation and provides out-of-box GPU acceleration for this device.
+Many embedded devices come with mobile GPUs that can serve as a source of acceleration. In this post, we pick Orange Pi 5, a RK3588-based board that is similar to Raspberry Pi but also features a more powerful Mali-G610 GPU. This post summarizes our first attempt at leveraging Machine Learning Compilation and provides out-of-box GPU acceleration for this device.
 
 ## Machine Learning Compilation for Mali
 
@@ -31,7 +31,7 @@ Machine learning compilation (MLC) is an emerging technology that automatically 
 
 ### Generalizable ML Compilation for Mali Codegen
 
-MLC is built on top of  Apache TVM Unity, a generalizable stack for compiling machine learning models across different hardwares and backends. To compile LLMs onto Mali GPUs, we reuse all the existing compilation pipeline without any code optimizations. More specifically, we successfully deployed Llama-2 and RedPajama models with the following steps:
+MLC is built on top of  Apache TVM Unity, a generalizable stack for compiling machine learning models across different hardwares and backends. To compile LLMs onto Mali GPUs, we reuse all the existing compilation pipeline without any code optimizations. More specifically, we successfully deployed Llama-2/3 and RedPajama models with the following steps:
 
 - Reuse model optimization passes, including quantization, fusion, layout optimization, etc;
 - Reuse a generic GPU kernel optimization space written in TVM TensorIR and re-target it to Mali GPUs;
@@ -40,7 +40,7 @@ MLC is built on top of  Apache TVM Unity, a generalizable stack for compiling ma
 
 ## Try it out
 
-This section provides a step-by-step guide so that you can try it out on your own orange pi device. Here we use `RedPajama-INCITE-Chat-3B-v1-q4f16_1` as the running example. You can replace that by `​​Llama-2-7b-chat-hf-q4f16_1` or `​​Llama-2-13b-chat-hf-q4f16_1` (requires a 16GB board).
+This section provides a step-by-step guide so that you can try it out on your own orange pi device. Here we use `Llama-3-8B-Instruct-q4f16_1-MLC` as the running example. You can replace that by `​​Llama-2-7b-chat-hf-q4f16_1` or `​​Llama-2-13b-chat-hf-q4f16_1` (requires a 16GB board).
 
 ### Prepare
 
@@ -53,7 +53,7 @@ git clone --recursive https://github.com/mlc-ai/mlc-llm.git && cd mlc-llm
 git lfs install
 mkdir -p dist/prebuilt && cd dist/prebuilt
 git clone https://github.com/mlc-ai/binary-mlc-llm-libs.git lib
-git clone https://huggingface.co/mlc-ai/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC
+git clone https://huggingface.co/mlc-ai/Llama-3-8B-Instruct-q4f16_1-MLC
 cd ../../..
 ```
 
@@ -108,8 +108,8 @@ from mlc_llm import ChatModule
 from mlc_llm.callback import StreamToStdout
 
 cm = ChatModule(
-     model="dist/prebuilt/RedPajama-INCITE-Chat-3B-v1-q4f16_1-MLC",
-     model_lib_path="dist/prebuilt/lib/RedPajama-INCITE-Chat-3B-v1/RedPajama-INCITE-Chat-3B-v1-q4f16_1-mali.so",
+     model="dist/prebuilt/Llama-3-8B-Instruct-q4f16_1-MLC",
+     model_lib_path="dist/prebuilt/lib/Llama-3-8b-Instruct/Llama-3-8B-Instruct-q4f16_1-mali.so",
      device="opencl"
  )
 
@@ -125,7 +125,7 @@ print(f"Statistics: {cm.stats()}\n")
 
 ## Discussion and Future Work
 
-Our current experiments show that 3B models might be a sweet spot. The RedPajama-3B model can provide up to 5 tok/sec and a decent chat experience. There is also room for improvements, specifically around the integer-to-float conversions. Moving forward, we will address the related issues and improve Mali GPUs' performance.
+Our current experiments show that 8B models might be a sweet spot. The Llama-3-8b-Instruct model can provide up to 2 tok/sec and a decent chat experience. There is also room for improvements, specifically around the integer-to-float conversions. Moving forward, we will address the related issues and improve Mali GPUs' performance.
 
 This post contributes to our quest to integrate LLMs into affordable devices and bring AI to everyone. Our future endeavors will focus on harnessing advancements in single-board computers, refining software frameworks like OpenCL and MLC-LLM, and exploring broader applications such as smart home devices. Collaborative efforts in the open-source community and a commitment to continuous learning and adaptation will be pivotal in navigating the evolving landscape of LLM deployment on emerging hardware.
 
