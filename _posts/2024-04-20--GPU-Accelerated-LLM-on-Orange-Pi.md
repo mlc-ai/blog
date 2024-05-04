@@ -4,6 +4,9 @@ title:  "GPU-Accelerated LLM on a $100 Orange Pi"
 date:   2024-04-20 09:30:00 -0400
 author:   MLC Community
 notitle: true
+
+redirect_from:
+  - /2023/08/09/GPU-Accelerated-LLM-on-Orange-Pi
 ---
 
 ## TL;DR
