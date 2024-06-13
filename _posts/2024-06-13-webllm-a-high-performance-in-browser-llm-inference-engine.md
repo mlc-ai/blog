@@ -112,7 +112,7 @@ However, we demonstrate that WebLLM’s performance is close to native performan
 
 <p align="center">
     <img src="/img/webllm-engine/perf.png" width="60%">
-    <figcaption>Table 1. Decode speed comparison of WebGPU and native Metal. Run with 64 prefill tokens, decoding 128 tokens. Both models are 4-bit quantized.</figcaption>
+    <figcaption>Figure 9. Decode speed comparison of WebGPU and native Metal. Run with 64 prefill tokens, decoding 128 tokens. Both models are 4-bit quantized.</figcaption>
 </p>
 
 Our result shows that WebGPU can preserve up to 85% of the native performance. This is still an early stage of WebGPU support as most browsers just shipped it this year. We anticipate that the gap can continue to improve, as the WebGPU to native shader translation improves.
