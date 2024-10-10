@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Optimizing and Characterizing High-Throughput Low-Latency LLM Inference in MLCEngine"
-date:   2024-10-10 12:00:00 -0400
+date:   2024-10-10 8:00:00 -0400
 author:   MLC Community
 notitle: true
 ---
@@ -77,7 +77,7 @@ As a compiler-based solution, MLCEngine supports leveraging GPU kernels from dif
 For example, we dispatch GeMM operators to cuBLAS or CUTLASS kernels for large request concurrency,
 while using the compiler-generated efficient GeMV kernels for the request concurrency of 1 and low request concurrency.
 
-**Dynamic shape-aware Memory planning and CUDA Graph.**
+**Dynamic shape-aware memory planning and CUDA Graph.**
 MLC supports a dynamic shape-aware memory planning compiler pass that can help statically allocate the required GPU memory
 and thus avoid any runtime memory allocation/deallocation during inference.
 We have CUDA Graph rewrite compiler pass that further allows us to leverage CUDA Graph and reduce GPU kernel launch overhead.
