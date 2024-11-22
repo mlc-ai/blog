@@ -6,29 +6,13 @@ author:   MLC Community
 notitle: true
 ---
 
-We are witnessing an exciting era for large language models (LLMs).
-As LLM applications evolve, we are increasingly moving toward LLM agents that not only respond in
-raw text but can also generate code, call environment functions, and even control robots.
-To enable these richer LLM agent applications, LLM engines need to produce structured outputs that can be consumed by downstream agent systems.
-Examples of these structures include JSON, SQL, Python, and more.
-This paradigm is known as the structured generation in LLM inference.
-Fundamentally, an ideal LLM structured generation system should satisfy the following requirements:
+We are witnessing an exciting era for large language models (LLMs). As LLM applications evolve, we are increasingly moving toward LLM agents that not only respond in raw text but can also generate code, call environment functions, and even control robots. To enable these richer LLM agent applications, LLM engines need to produce structured outputs that can be consumed by downstream agent systems. Examples of these structures include JSON, SQL, Python, and more. This paradigm is known as the structured generation in LLM inference. Fundamentally, an ideal LLM structured generation system should satisfy the following requirements:
 
-* First, the structured generation support should not slow down the LLM service for the sake of efficiency.
+* First, efficiency should be the top priority of LLM inference engines, and the structured generation support should not slow down the LLM service.
 * Equally important, the structure specification needs to support a diverse range of structures relevant to current and future applications.
 * On top of the above two goals, the solution should be portable to enable structured generation applications everywhere.
 
-Existing solutions do not address all these goals simultaneously.
-Some libraries introduce efficiency optimizations but at the cost of restricting to a small set of structures
-(e.g., those representable by finite-state machines).
-Conversely, supporting more general structures through expressive representations like context-free grammar
-(CFG) introduces challenges in efficiency, as it has infinitely many possible intermediate states,
-so it is impossible to preprocess every possible state to speed up.
-Furthermore, with the performance boost of the latest GPUs such as H100 and B200, the issue of
-CPU overhead introduced by the structured generation engine has been exacerbated.
-Modern LLM inference on the latest GPUs can generate tens of thousands of tokens per second in large batch scenarios.
-All existing open-source structured generation solutions will introduce large CPU overhead,
-resulting in a significant slowdown in LLM inference.
+It is challenging to address all these goals simultaneously. Some libraries introduce efficiency optimizations but at the cost of restricting to a small set of structures (e.g., those representable by finite-state machines). Conversely, supporting more general structures through expressive representations like context-free grammar (CFG) introduces challenges in efficiency, as it has infinitely many possible intermediate states, so it is impossible to preprocess every possible state to speed up. Furthermore, these challenges will only get harder with the latest GPUs getting faster. Modern LLM inference on the latest GPUs can generate tens of thousands of tokens per second in large batch scenarios. All existing open-source structured generation solutions will introduce large CPU overhead, resulting in a significant slowdown in LLM inference.
 
 In this post, we introduce XGrammar, an open-source library for **efficient**, **flexible**, and **portable** structured generation.
 We achieve these three goals without compromise and are committed to a focused mission: bringing flexible, zero-overhead structured generation everywhere.
@@ -36,23 +20,18 @@ We achieve these three goals without compromise and are committed to a focused m
 
 <p align="center">
     <img src="/img/xgrammar/masking-logits.png" width="70%">
-    <figcaption>Figure 1. Speed of masking logits. (Llama-3-8B, AMD 7950X CPU, H100 GPU)</figcaption>
+    <figcaption>Figure 1: Overhead of masking logits. (Llama-3-8B, AMD 7950X CPU, RTX 4090)</figcaption>
 </p>
 
 <p align="center">
     <img src="/img/xgrammar/e2e-llm.png" width="70%">
-    <figcaption>Figure 2: Output token rate for end-to-end LLM inference. (Llama-3-8B, AMD 7950X CPU, H100 GPU)</figcaption>
+    <figcaption>Figure 2: Time per output token for end-to-end LLM inference. (Llama-3-8B, AMD 7950X CPU, H100 GPU)</figcaption>
 </p>
 
 
-We benchmark XGrammar on both JSON schema generation and unconstrained CFG-guided JSON grammar generation tasks.
-Figure 1 shows that XGrammar outperforms existing structured generation solutions by up to 3.5x on JSON schema workloads and up to 10x on CFG-guided generation tasks.
-We also integrate XGrammar into the LLM serving engine MLC-LLM to benchmark end-to-end structured generation speed.
+We benchmark XGrammar on both JSON schema generation and unconstrained CFG-guided JSON grammar generation tasks. Figure 1 shows that XGrammar outperforms existing structured generation solutions by up to 3.5x on JSON schema workloads and up to 10x on CFG-guided generation tasks.
 
-Additionally, we benchmark end-to-end structured generation engines powered by XGrammar with the Llama-3 model on NVIDIA H100 GPUs.
-Figure 2 shows that our solution outperforms existing LLM engines up to 14x in JSON-schema generation and up to 80x in CFG-guided generation.
-We have released our code and a [tech report](https://github.com/mlc-ai/blog/blob/main/pdf/xgrammar-paper.pdf) (the ArXiv version will be up soon).
-In the remainder of this post, we will introduce the background and key techniques of XGrammar.
+Additionally, we benchmark end-to-end structured generation engines powered by XGrammar with the Llama-3 model on NVIDIA H100 GPUs. Figure 2 shows that our solution outperforms existing LLM engines up to 14x in JSON-schema generation and up to 80x in CFG-guided generation. We have released our [code](https://github.com/mlc-ai/xgrammar) and a [tech report](https://github.com/mlc-ai/blog/blob/main/pdf/xgrammar-paper.pdf) (the ArXiv version will be up soon). In the remainder of this post, we will introduce the background and key techniques of XGrammar.
 
 
 
@@ -84,36 +63,21 @@ A CFG contains multiple rules, each of which can include a concrete set of chara
 
 <p align="center">
     <img src="/img/xgrammar/cfg-example.png" width="50%">
-    <figcaption>Figure 4: Left: An example of a CFG that includes arrays and strings, and each array can contain multiple strings or subarrays.
-    Some examples of strings accepted by this CFG are also provided.
-    Right: the pushdown automata (PDA) converted from the context-free grammar, with an example of the matching stack of the PDA.</figcaption>
+    <figcaption>Figure 4: Left: An example of a CFG that includes arrays and strings, and each array can contain multiple strings or subarrays. Some examples of strings accepted by this CFG are also provided. Right: the pushdown automata (PDA) converted from the context-free grammar, along with a demonstration of a matching stack.</figcaption>
 </p>
 
-We choose CFGs as the structure specification method for XGrammar due to their expressive nature.
-Many common programming languages, such as JSON, XML, and SQL, can be described using CFGs.
-They are also superior to alternative formats such as JSON Schema and regular expressions because they can support recursive nested structures.
-To interpret a CFG, the pushdown automaton (PDA) is commonly used.
-It works like a finite automaton but has a stack to handle the nested recursion of rules.
-The PDA reads an input string, uses the stack to store or remove symbols, and decides whether to accept the input based on its rules and stack contents.
+We choose CFGs as the structure specification method for XGrammar due to their expressive nature. Many common programming languages, such as JSON, XML, and SQL, can be described using CFGs. They are also superior to alternative formats such as JSON Schema and regular expressions because they can support recursive nested structures.
 
-**Why is it hard to accelerate general CFGs?**
-The flexible nature of CFGs and PDAs makes them more challenging to accelerate.
-To generate token masks in constrained decoding, we need to check the validity of every token in the vocabulary—which can be as many as 128,000 tokens in models like Llama 3!
-The execution of PDA depends on internal stacks, which have infinitely many possible states, making it impractical to precompute the mask for every possible state.
-Moreover, CFG often exhibits ambiguity during the matching process, which is reflected in the PDA execution as multiple possible state transitions.
-The PDA will split the state and store one stack for each possibility.
-The increase in the number of stacks slows down the execution of the PDA and multiplies the computation of token checking severalfold.
+A pushdown automaton (PDA) is a common approach to execute a CFG. Each PDA contains multiple finite state machines (FSM), each representing a rule in the CFG. Transitions in the PDA can either consume an input character or recurse into another rule. The PDA begins processing the input string by executing state transitions in the FSM associated with the root rule. When it encounters a transition referencing another rule, it recurses into that rule to continue matching. The PDA leverages a stack to store the historical rules, enabling us to traverse among rules recursively. Once a rule is fully matched, the PDA pops the stack to return to the previous context and continues processing. Notably, when multiple transitions are possible, it becomes necessary to maintain multiple stacks. The ability to recurse into other rules makes PDAs much more powerful than single FSMs (or regular expressions convertible into FSMs), providing extra ability to handle recursion and nested structures.
+
+**Why is it hard to accelerate general CFGs?** The flexible nature of CFGs and PDAs makes them more challenging to accelerate. To generate token masks in constrained decoding, we need to check the validity of every token in the vocabulary—which can be as many as 128,000 tokens in models like Llama 3! The execution of PDA depends on internal stacks, which have infinitely many possible states, making it impractical to precompute the mask for every possible state. Moreover, we need to maintain multiple stacks during the execution of the PDA, whose number can be up to dozens. We need to check the validity of tokens for every stack, which increases the computation of token checking severalfold.
 
 
 
 
 ## XGrammar Overview
 
-XGrammar solves the above challenges and provides full and efficient support for context-free
-grammar in LLM structured generation through a series of optimizations.
-Our primary insight is that although we cannot precompute complete masks for infinitely many states of the pushdown automaton,
-a significant portion (usually more than 99%) of the tokens in the mask can be precomputed in advance.
-Thus we categorize the tokens into two sets:
+XGrammar solves the above challenges and provides full and efficient support for context-free grammar in LLM structured generation through a series of optimizations. Our primary insight is that although we cannot precompute complete masks for infinitely many states of the pushdown automaton, a significant portion (usually more than 99%) of the tokens in the mask can be precomputed in advance. Thus we categorize the tokens into two sets:
 
 - **Context-independent tokens**: tokens whose validity can be determined by only looking at the current position in the PDA and not the stack.
 - **Context-dependent tokens**: tokens whose validity must be determined with the entire stack.
@@ -141,7 +105,7 @@ By skipping checking the majority of tokens at runtime, we can significantly spe
 We designed an additional set of algorithms and system optimizations to further enhance the mask generation speed and reduce preprocessing time, summarized below:
 
 1. **Context expansion**. We detect additional context information for each rule in the grammar and use it to decrease the number of context-dependent tokens and further speed up the runtime check.
-2. **Persistent execution stack**. To handle the issue of stack state splitting caused by the ambiguity of grammar, we design a tree-based data structure that efficiently manages multiple stacks together. It can also store state from previous times and enable efficient state rollback, which speeds up the runtime checking of context-dependent tokens.
+2. **Persistent execution stack**. To speed up the maintenance of multiple parallel stacks during splitting and merging due to multiple possible expansion paths, we design a tree-based data structure that efficiently manages multiple stacks together.  It can also store state from previous times and enable efficient state rollback, which speeds up the runtime checking of context-dependent tokens.
 3. **Pushdown automata structure optimizations**. We leverage a series of optimizations adopted from compiler techniques, particularly inlining and equivalent state merging to reduce the number of nodes in the pushdown automata, speeding up both the preprocessing phase and the runtime mask generation phase.
 4. **Parallel grammar compilation**. We parallelize the compilation of grammar using multiple CPU cores to further reduce the overall preprocessing time.
 
@@ -163,25 +127,14 @@ fulfilling our goal of flexible and efficient structured generation.
 
 We evaluate our system with the Llama-3.1-8B-Instruct model on two workloads:
 
-* JSON schema: this setting leverages JSON schema as the structure specification, helping to evaluate the effectiveness of the system on schema-guided generation.* 
+* JSON schema: this setting leverages JSON schema as the structure specification, helping to evaluate the effectiveness of the system on schema-guided generation.
 * JSON context-free grammar: this setting takes a CFG that specifies standard JSON grammar adopted from ECMA-404. Notably, this is a more challenging task because the input is a general CFG. It helps to evaluate how well a system performs in general grammar-guided generation.
 
-Our hardware for evaluation is AMD Ryzen 9 7950X CPU and NVIDIA H100 GPU. We utilize the [JSON-mode-eval](https://huggingface.co/datasets/NousResearch/json-mode-eval) dataset.
+We utilize the [JSON-mode-eval](https://huggingface.co/datasets/NousResearch/json-mode-eval) dataset.
 
-We first evaluate the speed of masking logits.
-We take the ground truth response and measure the time of mask generation and logit process.
-We benchmark both Outlines’ latest rust backend (v0.1.3) and Python backend (v0.0.46) and report the best among the two.
-We also benchmarked llama-cpp’s built-in grammar engine.
-As shown in Figure 1, XGrammar outperforms existing structured generation solutions by up to 3.5x on the JSON schema workload and more than 10x on the CFG workload.
-Notably, the gap in CFG-guided generation is larger. This is because many JSON schema specifications can be expressed as regular expressions, bringing more optimizations that are not directly applicable to CFGs.
+We first evaluate the speed of masking logits. We take the ground truth response and measure the time of mask generation and logit process. We benchmark both Outlines’ latest rust backend (v0.1.3) and Python backend (v0.0.45) and report the best among the two. We also benchmarked llama-cpp’s built-in grammar engine (b3998) and lm-format-enforcer (v0.10.9, lm-format-enforcer has no CFG support). As shown in Figure 1, XGrammar outperforms existing structured generation solutions by up to 3.5x on the JSON schema workload and more than 10x on the CFG workload. Notably, the gap in CFG-guided generation is larger. This is because many JSON schema specifications can be expressed as regular expressions, bringing more optimizations that are not directly applicable to CFGs.
 
-For end-to-end evaluation, we benchmarked the LLM inference engine efficiency in serving scenarios with different batch sizes.
-We ensure that the number of output tokens is almost the same by limiting the output length.
-Figure 2 shows end-to-end inference performance on LLM serving tasks.
-We can find the trend again that the gap on CFG-guided settings is larger, and the gap grows on larger batch sizes.
-This is because the GPU throughput is higher on larger batch sizes, putting greater pressure on the grammar engine running on CPUs.
-Note that the main slowdown of vLLM comes from its structured generation engine, which can be potentially eliminated by integrating with XGrammar.
-In all cases, XGrammar enables high-performance generation in both settings without compromising flexibility and efficiency.
+For end-to-end evaluation, we benchmarked the LLM inference engine efficiency in serving scenarios with different batch sizes. We ensure that the number of output tokens is almost the same by limiting the output length. Figure 2 shows end-to-end inference performance on LLM serving tasks. We can find the trend again that the gap on CFG-guided settings is larger, and the gap grows on larger batch sizes. This is because the GPU throughput is higher on larger batch sizes, putting greater pressure on the grammar engine running on CPUs. Note that the main slowdown of vLLM comes from its structured generation engine, which can be potentially eliminated by integrating with XGrammar. In all cases, XGrammar enables high-performance generation in both settings without compromising flexibility and efficiency.
 
 
 
@@ -207,10 +160,7 @@ Please check out our [GitHub](https://github.com/mlc-ai/xgrammar) and [documenta
 
 ## Summary
 
-In this post, we introduce XGrammar, an efficient, flexible, and portable engine for structured generation.
-This project is made possible by many contributions from the open-source community.
-We are committed to our mission of bringing zero-overhead flexible structured generation to everyone and warmly welcome feedback and contributions from the community.
-To try out, or learn more about it, please check out the following resources:
+In this post, we introduce XGrammar, an efficient, flexible, and portable engine for structured generation. This project is made possible by many contributions from the open-source community. We are committed to our mission of bringing zero-overhead flexible structured generation to everyone and warmly welcome feedback and contributions from the community. To try out, or learn more about it, please check out the following resources:
 
 - [Documentations](https://xgrammar.mlc.ai/docs/)
 - [GitHub repo](https://github.com/mlc-ai/xgrammar)
@@ -222,5 +172,3 @@ To try out, or learn more about it, please check out the following resources:
 
 We thank (alphabetically) the DeepSeek team, Hugging Face team, SGLang team, TensorRT-LLM team, vLLM team, and WebLLM team for their helpful feedback and discussions.
 We also thank Weihua Du (CMU), Haoran Peng (UW), Xinyu Yang (CMU), Zihao Ye (UW), Yilong Zhao (UC Berkeley), Zhihao Zhang (CMU), and Ligeng Zhu (MIT) for their insightful discussion and feedback.
-
-
