@@ -66,7 +66,7 @@ The figure below illustrates an example of an LLM structured generation process 
 
 
 <p align="center">
-    <img src="/img/xgrammar/constrained-decoding.png" width="70%">
+    <img src="/img/xgrammar/constrained-decoding.png" width="60%">
     <figcaption>Figure 3: Constrained Decoding with JSON Schema.</figcaption>
 </p>
 
@@ -83,7 +83,7 @@ The figure below shows an example of a CFG for nested recursive string arrays.
 A CFG contains multiple rules, each of which can include a concrete set of characters or references to other rules.
 
 <p align="center">
-    <img src="/img/xgrammar/cfg-example.png" width="70%">
+    <img src="/img/xgrammar/cfg-example.png" width="50%">
     <figcaption>Figure 4: Left: An example of a CFG that includes arrays and strings, and each array can contain multiple strings or subarrays.
     Some examples of strings accepted by this CFG are also provided.
     Right: the pushdown automata (PDA) converted from the context-free grammar, with an example of the matching stack of the PDA.</figcaption>
@@ -124,7 +124,7 @@ We can precompute the validity of context-independent tokens for each position i
 This process is known as grammar compilation.
 
 <p align="center">
-    <img src="/img/xgrammar/token-mask-cache.png" width="70%">
+    <img src="/img/xgrammar/token-mask-cache.png" width="40%">
     <figcaption>Figure 5: The adaptive token mask cache. It stores the validity of all context-independent tokens.</figcaption>
 </p>
 
