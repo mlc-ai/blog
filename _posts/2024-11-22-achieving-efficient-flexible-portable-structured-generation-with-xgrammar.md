@@ -31,7 +31,7 @@ We achieve these three goals without compromise and are committed to a focused m
 
 We benchmark XGrammar on both JSON schema generation and unconstrained CFG-guided JSON grammar generation tasks. Figure 1 shows that XGrammar outperforms existing structured generation solutions by up to 3.5x on JSON schema workloads and up to 10x on CFG-guided generation tasks.
 
-Additionally, we benchmark end-to-end structured generation engines powered by XGrammar with the Llama-3 model on NVIDIA H100 GPUs. Figure 2 shows that our solution outperforms existing LLM engines up to 14x in JSON-schema generation and up to 80x in CFG-guided generation. We have released our [code](https://github.com/mlc-ai/xgrammar) and a [tech report](https://github.com/mlc-ai/blog/blob/main/pdf/xgrammar-paper.pdf) (the ArXiv version will be up soon). In the remainder of this post, we will introduce the background and key techniques of XGrammar.
+Additionally, we benchmark end-to-end structured generation engines powered by XGrammar with the Llama-3 model on NVIDIA H100 GPUs. Figure 2 shows that our solution outperforms existing LLM engines up to 14x in JSON-schema generation and up to 80x in CFG-guided generation. We have released our [code](https://github.com/mlc-ai/xgrammar) and a [tech report](https://arxiv.org/abs/2411.15100). In the remainder of this post, we will introduce the background and key techniques of XGrammar.
 
 
 
@@ -165,7 +165,7 @@ In this post, we introduce XGrammar, an efficient, flexible, and portable engine
 - [Documentations](https://xgrammar.mlc.ai/docs/)
 - [GitHub repo](https://github.com/mlc-ai/xgrammar)
 - [XGrammar WebLLM in-browser playground](https://huggingface.co/spaces/mlc-ai/WebLLM-Structured-Generation-Playground)
-- [Tech report](https://github.com/mlc-ai/blog/blob/main/pdf/xgrammar-paper.pdf) (the ArXiv version will be up soon)
+- [Tech report](https://arxiv.org/abs/2411.15100)
 
 
 ## Acknowledgments
