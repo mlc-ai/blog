@@ -145,7 +145,9 @@ We also provide ready-to-use Python and TypeScript libraries.
 It already powers many LLM frameworks:
 
 - [MLC-LLM](https://github.com/mlc-ai/mlc-llm) leveraged the C++ backend to build cross-platform support for high-performance structured generation, enabling support on a diverse set of server, laptop, and edge platforms.
-- [SGLang](https://github.com/sgl-project/sglang) integrated the Python library and showed a significant reduction of JSON Schema generation overhead compared to its previous backend.
+- [SGLang](https://github.com/sgl-project/sglang) integrated the Python library and showed a significant reduction of JSON Schema generation overhead compared to its previous backend. To use it:
+  - Add `--grammar-backend xgrammar` when you launch the server
+  - Query it with OpenAI-compatible API <https://sgl-project.github.io/backend/openai_api_completions.html#JSON>
 - [WebLLM](https://webllm.mlc.ai/) integrated the typescript library and enabled in-browser local structured generation. You can check out a demo in [WebLLM Structured Generation Playground](https://huggingface.co/spaces/mlc-ai/WebLLM-Structured-Generation-Playground).
 - We are working with the [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM) team to bring first-class XGrammar support, which will soon be integrated into the preview main branch.
 - We are working with the [vLLM](https://github.com/vllm-project/vllm) team to enable first-class XGrammar integration in vLLM.
