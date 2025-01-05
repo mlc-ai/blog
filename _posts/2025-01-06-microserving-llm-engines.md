@@ -21,7 +21,7 @@ In this blog post, we will discuss:
 * Whether using multiple orchestration patterns via MicroServing APIs improves performance
 
 <p align="center">
-    <img src="../img/microserving/overview.png" width="95%">
+    <img src="/img/microserving/overview.png" width="95%">
 </p>
 
 ### Background: LLM Serving Orchestration
@@ -32,7 +32,7 @@ As LLMs scale, serving systems commonly employ multiple LLM engines and orchestr
 * **Prefill-Decode Disaggregation**: A more advanced strategy that assigns prefill and decode operations to separate engines. To support this division, a KV transfer step sends prefilled KVs from the prefill engine to the decode engine before the decode phase begins.
 
 <p align="center">
-    <img src="../img/microserving/existing_approach.png" width="40%">
+    <img src="/img/microserving/existing_approach.png" width="40%">
 </p>
 
 Each orchestration pattern favors different workload characteristics. For example, prefill-decode disaggregation performs better with moderate input lengths but can underperform for very short or very long inputs. Ideally, one might switch between different orchestration patterns dynamically as workloads change. However, existing LLM serving systems typically treat token generation for a request as an atomic operation, causing two problems:
@@ -87,7 +87,7 @@ With MicroServing APIs, users can implement different orchestration patterns on 
 Since no KV transfer is required, we only need to call the `start_generate` API.
 
 <p align="center">
-    <img src="../img/microserving/dp.png" width="70%">
+    <img src="/img/microserving/dp.png" width="70%">
 </p>
 
 #### Prefill-decode disaggregation
@@ -99,13 +99,13 @@ The sequence of API calls is as follows:
 3. **`start_generate`** (decode engine): Initiates token generation on the decode engine.
 
 <p align="center">
-    <img src="../img/microserving/pd_disagg.png" width="70%">
+    <img src="/img/microserving/pd_disagg.png" width="70%">
 </p>
 
 With MicroServing’s context-cache-aware design, this pattern can further utilize context cache. For example, `prep_recv` returns the matched prefix length on the decode engine. The matched prefix length is then passed to the prefill engine to avoid redundant KV transfer and computation.
 
 <p align="center">
-    <img src="../img/microserving/pd_with_context_cache.png" width="70%">
+    <img src="/img/microserving/pd_with_context_cache.png" width="70%">
 </p>
 
 #### Balanced prefill-decode disaggregation
@@ -115,7 +115,7 @@ One issue of prefill-decode disaggregation is that the prefill and decode worklo
 Thanks to the fine-grained MicroServing API, we can explore a different strategy that dynamically offloads a part of the prefill computation into the decode engine. To achieve this, the router needs to decide \`decode\_start\` (the position that the decode engine starts to prefill) and pass it into all the APIs like below.
 
 <p align="center">
-    <img src="../img/microserving/balanced_pd.png" width="70%">
+    <img src="/img/microserving/balanced_pd.png" width="70%">
 </p>
 
 #### Context Cache Migration
@@ -124,7 +124,7 @@ When serving QA workloads, developers tend to place the context cache of differe
 
 MicroServing supports this via **`prep_recv`** and **`remote_send`**, enabling efficient KV transfers between engines without interrupting service.  
 <p align="center">
-    <img src="../img/microserving/context_migration.png" width="70%">
+    <img src="/img/microserving/context_migration.png" width="70%">
 </p>
 
 ### Dynamic Reconfiguration: Adapting to Workload Changes
@@ -139,7 +139,7 @@ This adaptability ensures that MicroServing can optimize performance for differe
 The router-side code to reconfigure orchestration pattern can be like below:
 
 <p align="center">
-    <img src="../img/microserving/router_code.png" width="70%">
+    <img src="/img/microserving/router_code.png" width="70%">
 </p>
 
 In comparison, other systems often implement different orchestration patterns in separate codepaths, which makes it hard to customize new orchestration patterns, and often requires system restart to reconfigure patterns.
@@ -157,7 +157,7 @@ Although MicroServing cannot dynamically reconfigure tensor parallel degree beca
 We use [LLMPerf](https://github.com/ray-project/llmperf)’s synthetic sonnet dataset to construct requests with an average input length of 3000 and an average output length of 100\. We fix the request rate ranging from 1.6 to 5.6. The figures will be shown with the x-axis representing the request rate and the y-axis representing TTFT(time to first token)/TPOT(time per output token, the average number of tokens received per second after the first token is received)/JCT(job completion time).
 
 <p align="center">
-    <img src="../img/microserving/evaluation.png" width="90%">
+    <img src="/img/microserving/evaluation.png" width="90%">
 </p>
 
 In both figures above, we find that the optimal orchestration pattern under different disaggregation patterns shifts. Using one engine with a larger tensor parallel degree achieves up to 8% lower mean JCT than other strategies when the request rate is 1.6, but it scales poorly as the request rate increases. Prefill-decode disaggregation achieves up to 16% lower mean JCT and 28% P99 JCT than data parallel. This significant speedup attributes to the substantial reduction of TPOT in disaggregation, achieved by eliminating the decode interference caused by long prefill in data parallelism. As the request rate increases, heavier traffic puts more pressure on the prefill engine, so moving part of the prefill computation to decode the engine makes the system balanced and reduces latency.
