@@ -5,7 +5,6 @@ date:   2025-01-06 15:00:00 -0400
 author:   MLC Community
 notitle: true
 ---
-# Microserving LLM engines
 
 Large language models (LLMs) have made a profound impact in AI, excelling in tasks ranging from text generation to code synthesis. As LLM serving scales towards multiple GPUs and even multiple compute instances, many orchestration patterns arise, including prefill-decode disaggregation, context cache migration, and traffic-adaptive request routing. However, most inference frameworks today expose a coarse-grained request-level API with a pre-configured orchestration strategy hidden within the framework’s LLM engine. This limits framework users’ ability to customize and explore different coordination strategies and dynamically reconfigure them based on the incoming traffic.
 
@@ -24,7 +23,7 @@ In this blog post, we will discuss:
     <img src="/img/microserving/overview.png" width="95%">
 </p>
 
-### Background: LLM Serving Orchestration
+## Background: LLM Serving Orchestration
 
 As LLMs scale, serving systems commonly employ multiple LLM engines and orchestrate their usage through specific scheduling patterns. Two frequently used approaches are:
 
@@ -40,13 +39,11 @@ Each orchestration pattern favors different workload characteristics. For exampl
 1. **Development**: Since scheduling logic is baked into the system, developers/services built on top of these systems cannot easily customize or experiment with different orchestration patterns without modifying the underlying code.  
 2. **Production**: Adjusting orchestration strategies at runtime typically involves restarting the system, which leads to service interruptions and complicates production deployments.
 
-### 
-
-### MicroServing APIs: Flexible and Fine-Grained Control
+## MicroServing APIs: Flexible and Fine-Grained Control
 
 MicroServing addresses this limitation by exposing **three simple fine-grained APIs** that allow precise control over system operations, such as transferring key-value (KV) data between engines and initiating token generation with existing context KV.  In addition, the APIs are fully context-cache aware. With these fine-grained APIs, dynamic orchestration patterns can be implemented easily in just a few lines of code.
 
-#### Core MicroServing APIs
+### Core MicroServing APIs
 
 ```py
 class LLMEngine:
@@ -78,19 +75,19 @@ class LLMEngine:
 
 Note that the APIs are independent of the underlying engine implementation. For example, engine may decide to pipeline the LLM inference and KV cache transfer layer-by-layer.
 
-### How to compose orchestration patterns with MicroServing APIs?
+## How to compose orchestration patterns with MicroServing APIs?
 
 With MicroServing APIs, users can implement different orchestration patterns on a programmable router. Here is how patterns can be implemented:
 
-#### Data parallel (round-robin)
+### Data parallel (round-robin)
 
 Since no KV transfer is required, we only need to call the `start_generate` API.
 
 <p align="center">
-    <img src="/img/microserving/dp.png" width="70%">
+    <img src="/img/microserving/dp.png" width="50%">
 </p>
 
-#### Prefill-decode disaggregation
+### Prefill-decode disaggregation
 
 The sequence of API calls is as follows:
 
@@ -99,35 +96,35 @@ The sequence of API calls is as follows:
 3. **`start_generate`** (decode engine): Initiates token generation on the decode engine.
 
 <p align="center">
-    <img src="/img/microserving/pd_disagg.png" width="70%">
+    <img src="/img/microserving/pd_disagg.png" width="50%">
 </p>
 
 With MicroServing’s context-cache-aware design, this pattern can further utilize context cache. For example, `prep_recv` returns the matched prefix length on the decode engine. The matched prefix length is then passed to the prefill engine to avoid redundant KV transfer and computation.
 
 <p align="center">
-    <img src="/img/microserving/pd_with_context_cache.png" width="70%">
+    <img src="/img/microserving/pd_with_context_cache.png" width="50%">
 </p>
 
-#### Balanced prefill-decode disaggregation
+### Balanced prefill-decode disaggregation
 
 One issue of prefill-decode disaggregation is that the prefill and decode workloads can get unbalanced. When processing long prompts, the prefill engine can get over-utilized while the decode engine runs with low utilization or even stays idle. 
 
 Thanks to the fine-grained MicroServing API, we can explore a different strategy that dynamically offloads a part of the prefill computation into the decode engine. To achieve this, the router needs to decide \`decode\_start\` (the position that the decode engine starts to prefill) and pass it into all the APIs like below.
 
 <p align="center">
-    <img src="/img/microserving/balanced_pd.png" width="70%">
+    <img src="/img/microserving/balanced_pd.png" width="50%">
 </p>
 
-#### Context Cache Migration
+### Context Cache Migration
 
 When serving QA workloads, developers tend to place the context cache of different categories into different engines and dispatch incoming traffic based on which context category it matches. Consider there are several engines, with some specialized for the history context and others for the science context. If there are more science requests than history requests, we may want to switch some history engines to science engines through context migration, and vice versa.
 
 MicroServing supports this via **`prep_recv`** and **`remote_send`**, enabling efficient KV transfers between engines without interrupting service.  
 <p align="center">
-    <img src="/img/microserving/context_migration.png" width="70%">
+    <img src="/img/microserving/context_migration.png" width="50%">
 </p>
 
-### Dynamic Reconfiguration: Adapting to Workload Changes
+## Dynamic Reconfiguration: Adapting to Workload Changes
 
 Another advantage of MicroServing’s flexible fine-grained API is its ability to **dynamically reconfigure orchestration patterns** based on workload characteristics, without changes to the underlying engines. The programmable router allows seamless switching between different orchestration strategies. For example:
 
@@ -139,12 +136,12 @@ This adaptability ensures that MicroServing can optimize performance for differe
 The router-side code to reconfigure orchestration pattern can be like below:
 
 <p align="center">
-    <img src="/img/microserving/router_code.png" width="70%">
+    <img src="/img/microserving/router_code.png" width="50%">
 </p>
 
 In comparison, other systems often implement different orchestration patterns in separate codepaths, which makes it hard to customize new orchestration patterns, and often requires system restart to reconfigure patterns.
 
-### Evaluation
+## Evaluation
 
 We evaluate MicroServe’s programmability for various LLM engine orchestration patterns and the performance of each pattern. The benchmarks are performed with Llama-3.1-70B-Instruct FP8 with 8 H100 SXM GPUs. For each model, we start 2 LLM engines, each of which has tensor parallel degree 4\. The engine orchestration patterns evaluated are:
 
@@ -157,20 +154,20 @@ Although MicroServing cannot dynamically reconfigure tensor parallel degree beca
 We use [LLMPerf](https://github.com/ray-project/llmperf)’s synthetic sonnet dataset to construct requests with an average input length of 3000 and an average output length of 100\. We fix the request rate ranging from 1.6 to 5.6. The figures will be shown with the x-axis representing the request rate and the y-axis representing TTFT(time to first token)/TPOT(time per output token, the average number of tokens received per second after the first token is received)/JCT(job completion time).
 
 <p align="center">
-    <img src="/img/microserving/evaluation.png" width="90%">
+    <img src="/img/microserving/evaluation.png" width="70%">
 </p>
 
 In both figures above, we find that the optimal orchestration pattern under different disaggregation patterns shifts. Using one engine with a larger tensor parallel degree achieves up to 8% lower mean JCT than other strategies when the request rate is 1.6, but it scales poorly as the request rate increases. Prefill-decode disaggregation achieves up to 16% lower mean JCT and 28% P99 JCT than data parallel. This significant speedup attributes to the substantial reduction of TPOT in disaggregation, achieved by eliminating the decode interference caused by long prefill in data parallelism. As the request rate increases, heavier traffic puts more pressure on the prefill engine, so moving part of the prefill computation to decode the engine makes the system balanced and reduces latency.
 
 The evaluation shows that different orchestration patterns have different preferences on the traffic. Some have lower TTFT, which performs better on prefill-dominated workloads. Others have lower TPOT, more suitable on decode-dominated workloads. MicroServing provides microserving APIs and programmability, supporting the representation of various orchestration patterns and the dynamic reconfiguration among these patterns.
 
-### Conclusion: Unlocking New Possibilities with MicroServing
+## Conclusion: Unlocking New Possibilities with MicroServing
 
 MicroServing provides an efficient and flexible framework for orchestrating LLM engines, enabling dynamic adaptation to varying workloads. Its fine-grained APIs allow easy composition of orchestration patterns, from simple round-robin dispatch to complex prefill-decode disaggregation, in only a few lines of router code. MicroServing’s flexibility ensures that developers can optimize their systems without needing to reconfigure engines or disrupt production environments.
 
 By integrating MicroServing with [**MLC-LLM**](https://github.com/mlc-ai/mlc-llm), we are opening up exciting opportunities for the community to experiment with and improve LLM orchestration patterns. We look forward to collaborating with others to refine dynamic adaptive reconfiguration algorithms and expand the library of orchestration patterns supported by MicroServing.
 
-### Appendix: Benchmark Instructions
+## Appendix: Benchmark Instructions
 
 ```bash
 # install nvshmem (https://developer.nvidia.com/nvshmem-downloads)
