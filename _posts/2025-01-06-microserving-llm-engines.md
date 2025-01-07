@@ -73,7 +73,7 @@ class LLMEngine:
      """
      pass
 
-  def start_generate(prompt, begin, seq_id) -> AsyncGenerator[int]:
+  def start_generate(prompt, begin, seq_id) -> AsyncGenerator[TokenId]:
      """
      One-line summary: Start token generation
 
