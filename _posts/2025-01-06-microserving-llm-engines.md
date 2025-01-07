@@ -39,12 +39,14 @@ As LLMs scale, serving systems commonly employ multiple LLM engines and orchestr
 
 Each orchestration pattern favors different workload characteristics. For example, prefill-decode disaggregation performs better with moderate input lengths but can underperform for very short or very long inputs. With very short or very long inputs, one of the engines has heavy load, while the other has light load, causing computation power and memory bandwidth to be wasted. Ideally, one might switch between different orchestration patterns dynamically as workloads change. However, existing LLM serving systems typically treat token generation for a request as an atomic operation, causing two problems:
 
-1. **Development**: Since scheduling logic is baked into the system, developers/services built on top of these systems cannot easily customize or experiment with different orchestration patterns without modifying the underlying code.  
+1. **Development**: Since engine coordination patterns are usually baked in the background, developers/services built on top of these systems cannot easily customize or experiment with different orchestration patterns without modifying the underlying code.  
 2. **Production**: Adjusting orchestration strategies at runtime typically involves restarting the system, which leads to service interruptions and complicates production deployments.
+
+Can we introduce programmable APIs to LLM microservices to easily explore different strategies?
 
 ## MicroServing APIs: Flexible and Fine-Grained Control
 
-MicroServing addresses this limitation by exposing **three simple fine-grained APIs** that allow precise control over system operations, such as transferring key-value (KV) data between engines and initiating token generation with existing context KV.  In addition, the APIs are fully context-cache aware. With these fine-grained APIs, dynamic orchestration patterns can be implemented easily in just a few lines of code.
+MicroServing is a new approach to design LLM serving APIs. It addresses this limitation by exposing **three simple fine-grained APIs** that allow precise control over system operations, such as transferring key-value (KV) data between engines and initiating token generation with existing context KV.  In addition, the APIs are fully context-cache aware. With these fine-grained APIs, dynamic orchestration patterns can be implemented easily in just a few lines of code.
 
 ### Core MicroServing APIs
 
@@ -182,9 +184,12 @@ The evaluation shows that different orchestration patterns have different prefer
 
 MicroServing provides an efficient and flexible framework for orchestrating LLM engines, enabling dynamic adaptation to varying workloads. Its fine-grained APIs allow easy composition of orchestration patterns, from simple round-robin dispatch to complex prefill-decode disaggregation, in only a few lines of router code. MicroServing’s flexibility ensures that developers can optimize their systems without needing to reconfigure engines or disrupt production environments.
 
-By integrating MicroServing with [**MLC-LLM**](https://github.com/mlc-ai/mlc-llm), we are opening up exciting opportunities for the community to experiment with and improve LLM orchestration patterns. We look forward to collaborating with others to refine dynamic adaptive reconfiguration algorithms and expand the library of orchestration patterns supported by MicroServing.
+By integrating MicroServing with [**MLC-LLM**](https://github.com/mlc-ai/mlc-llm), we are opening up exciting opportunities for the community to experiment with and improve LLM orchestration patterns. We look forward to collaborating with others to refine dynamic adaptive reconfiguration algorithms and expand the library of orchestration patterns supported by MicroServing. To try out, or learn more about it, please check out the following resources:
+ - [Tech Report](https://arxiv.org/abs/2412.12488)
+ - [Github Repo](https://github.com/mlc-ai/mlc-llm)
 
-Arxiv paper: [https://arxiv.org/abs/2412.12488](https://arxiv.org/abs/2412.12488)
+## Acknowledgments
+We thank (alphabetically) SGLang team, TensorRT-LLM team, vLLM team for their helpful feedback and discussions.
 
 ## Appendix: Benchmark Instructions
 
