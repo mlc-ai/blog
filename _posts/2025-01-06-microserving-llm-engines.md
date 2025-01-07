@@ -6,7 +6,7 @@ author:   MLC Community
 notitle: true
 ---
 
-Large language models (LLMs) have made a profound impact in AI, excelling in tasks ranging from text generation to code synthesis. As LLM serving scales towards multiple GPUs and even multiple compute instances, many orchestration patterns arise, including prefill-decode disaggregation, context cache migration, and traffic-adaptive request routing. However, most inference frameworks today expose a coarse-grained request-level API with a pre-configured orchestration strategy hidden within the framework’s LLM engine. This limits framework users’ ability to customize and explore different coordination strategies and dynamically reconfigure them based on the incoming traffic.
+Large language models (LLMs) have made a profound impact in AI, excelling in tasks ranging from text generation to code synthesis. As LLM serving scales towards multiple GPUs and even multiple compute instances, many orchestration patterns arise, including prefill-decode disaggregation, context cache migration, and traffic-adaptive request routing. However, most inference frameworks today expose a coarse-grained request-level API with a pre-configured orchestration strategy hidden within the framework’s LLM engine. This limits framework users’ ability to customize and explore different coordination strategies and dynamically reconfigure them based on the incoming traffic. How can we design LLM serving API that makes cross-engine serving programmable?
 
 To address this gap, we introduce **MicroServing**, a multi-level architecture that provides simple yet effective fine-grained APIs for orchestrating LLM engines. MicroServing introduces simple yet effective APIs to support fine-grained sub-request level actions. The overall design philosophy draws close inspiration from “RISC-style” in computer architectures – we can view the coarse-grained request-level APIs as CISC instruction set, and Microserving brings “RISC-style” APIs for LLM serving. A programmable router transforms user requests into sub-request calls, lifting fine-grained scheduling to the API level, thus enabling the dynamic reconfiguration of different orchestration patterns.
 
@@ -46,7 +46,7 @@ Can we introduce programmable APIs to LLM microservices to easily explore differ
 
 ## MicroServing APIs: Flexible and Fine-Grained Control
 
-MicroServing is a new approach to design LLM serving APIs. It addresses this limitation by exposing **three simple fine-grained APIs** that allow precise control over system operations, such as transferring key-value (KV) data between engines and initiating token generation with existing context KV.  In addition, the APIs are fully context-cache aware. With these fine-grained APIs, dynamic orchestration patterns can be implemented easily in just a few lines of code.
+MicroServing addresses this limitation by exposing **three simple fine-grained APIs** that allow precise control over system operations, such as transferring key-value (KV) data between engines and initiating token generation with existing context KV.  In addition, the APIs are fully context-cache aware. With these fine-grained APIs, dynamic orchestration patterns can be implemented easily in just a few lines of code.
 
 ### Core MicroServing APIs
 
