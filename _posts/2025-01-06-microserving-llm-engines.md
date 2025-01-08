@@ -189,8 +189,8 @@ By integrating MicroServing with [**MLC-LLM**](https://github.com/mlc-ai/mlc-llm
  - [Github Repo](https://github.com/mlc-ai/mlc-llm)
 
 ## Acknowledgments
-We thank (alphabetically) SGLang team, TensorRT-LLM team, vLLM team for their helpful feedback and discussions. We also thank Zihao Ye (UW) and Kuntai Du (UChicago) for their insightful discussion and feedback.
 
+We thank (alphabetically) SGLang team, TensorRT-LLM team, vLLM team, Zihao Ye (UW) and Kuntai Du (UChicago) for their helpful feedback and discussions. We also thank DistServe team and Hao Zhang (UCSD) for their exploration of disaggregated LLM serving.
 
 ## Appendix: Benchmark Instructions
 
