@@ -231,7 +231,7 @@ The two figures below show the results for the fixed input length of 1000 and ou
 
 ```bash
 # Install MLC-LLM
-python3 -m pip install --pre -U -f https://mlc.ai/wheels mlc-llm-cu123 mlc-ai-cu123
+python3 -m pip install --pre -U --no-index -f https://mlc.ai/wheels mlc-llm-cu123 mlc-ai-cu123
 
 export SERVER_ADDR="127.0.0.1"
 export SERVER_PORT="8000"

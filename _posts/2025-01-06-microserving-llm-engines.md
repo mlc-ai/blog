@@ -200,7 +200,7 @@ We thank (alphabetically) SGLang team, TensorRT-LLM team, vLLM team, Zihao Ye (U
 # if you install on ubuntu 22.04 with apt, /path/to/nvshmem should be /usr/lib/x86_64-linux-gnu/nvshmem/12. Otherwise, check which path includes nvshmem*.so files.
 export LD_LIBRARY_PATH=/path/to/nvshmem:$LD_LIBRARY_PATH
 # Install MLC-LLM
-python3 -m pip install --pre -U -f https://mlc.ai/wheels "mlc-llm-cu123==0.18.1" "mlc-ai-cu123==0.18.1"
+python3 -m pip install --pre -U --no-index -f https://mlc.ai/wheels "mlc-llm-cu123==0.18.1" "mlc-ai-cu123==0.18.1"
 
 # Llama3 70B
 ## Compile model for MLC
