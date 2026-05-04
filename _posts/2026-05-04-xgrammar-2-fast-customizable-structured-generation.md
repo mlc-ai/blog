@@ -6,7 +6,7 @@ author:   MLC Community
 notitle: true
 ---
 
-**TL;DR.** XGrammar-2 is a major upgrade of XGrammar built for agent applications. It introduces **Structural Tag**, a composable JSON DSL that uniformly expresses OpenAI harmony format, tool calling, reasoning channels, and any custom output structure, exposed directly through serving engines' API. Multiple **efficiency optimizations**, such as cross-grammar caching, repetition-state compression, and batching and speculative decoding support, ensure fast processing and minimal overhead even for huge structures. XGrammar-2 has been adopted by **leading frontier AI labs and** **leading AI companies** in their products. **SGLang, vLLM, TensorRT-LLM, and MLC-LLM** integrate it for strict tool calling and expose customization through API.
+**TL;DR.** XGrammar-2 is a major upgrade of XGrammar built for agent applications. It introduces **Structural Tag**, a composable JSON protocol that uniformly expresses OpenAI harmony format, tool calling, reasoning channels, and any custom output structure, exposed directly through serving engines' API. Multiple **efficiency optimizations**, such as cross-grammar caching, repetition-state compression, and batching and speculative decoding support, ensure fast processing and minimal overhead even for huge structures. XGrammar-2 has been adopted by **leading frontier AI labs and** **leading AI companies** in their products. **SGLang, vLLM, TensorRT-LLM, and MLC-LLM** integrate it for strict tool calling and expose customization through API.
 
 Over the past year, agent applications, from Claude Code to OpenClaw, have grown rapidly in complexity. These systems define sophisticated *harnesses* that LLMs must interact with by producing specific output structures, such as tool calls and structured JSON. As these structures grow more complex, they pose greater challenges for LLMs to follow reliably.
 
@@ -110,7 +110,9 @@ This example comprises five Structural Tag types, each with a clear role:
 
 The key idea behind Structural Tag is that these types are **composable**. JSON Schema, regex, literal strings, and token IDs are all first-class atomic types within the language. By nesting and combining them, you can describe arbitrarily complex output structures, from a simple JSON response to a multi-part reasoning-plus-tool-call format like the one above.
 
-XGrammar ships with **built-in Structural Tags** for common models such as DeepSeek V4, Qwen 3.6, GPT-OSS, and more. The structural tag is already integrated into SGLang, vLLM, TensorRT-LLM, and other serving engines, providing strict tool calling and reasoning support out of the box. Structural Tag is also exposed as an **OpenAI-compatible response format**, so you can customize it directly from outside:
+XGrammar ships with **built-in Structural Tags** for common models such as DeepSeek V4, Qwen 3.6, GPT-OSS, and more. The structural tag is already integrated into SGLang, vLLM, TensorRT-LLM, and other serving engines, providing strict tool calling and reasoning support out of the box.
+
+Structural Tag is also exposed as an **OpenAI-compatible response format** by serving engines, so you can customize your own output structure for your agent application:
 
 ```py
 # Assume the client is connected to a hosted vLLM, SGLang, or TensorRT-LLM server.
@@ -140,7 +142,7 @@ response = client.chat.completions.create(
 )
 ```
 
-Structural tags let you define a custom output structure for your agent application. For example, we used Molmo-2 model to build a multimodal video agent that detects objects in videos and renders annotated outputs. By specifying the desired format with structural tags, including each object’s time range, location, and name, we obtain precise model outputs that can be mapped directly onto the video in downstream processing.
+For example, we used Molmo-2 model to build a multimodal video agent that detects objects in videos and renders annotated outputs. By specifying the desired format with structural tags, including each object’s time range, location, and name, we obtain precise model outputs that can be mapped directly onto the video in downstream processing.
 
 <p align="center">
     <img src="/img/xgrammar2/image5.png" width="70%">
@@ -213,7 +215,7 @@ Going forward, we plan to collaborate with partners to bring XGrammar to even mo
 - [Quick Start](https://xgrammar.mlc.ai/docs/start/quick_start.html)
 - [Structural Tag Doc](https://xgrammar.mlc.ai/docs/structural_tag/structural_tag_api.html)
 - [Technical Report](https://arxiv.org/abs/2601.04426)
-- Evaluation Scripts
+- [Evaluation Scripts](https://gist.github.com/Seven-Streams/75e16fd33cd29f92024f86b167f1b98e)
 
 ## Acknowledgments
 
