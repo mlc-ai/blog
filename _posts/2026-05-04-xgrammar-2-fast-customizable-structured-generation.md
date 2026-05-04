@@ -15,13 +15,13 @@ More than a year ago, we released [XGrammar](https://github.com/mlc-ai/xgrammar/
 To address these challenges, we are excited to introduce **XGrammar-2**: a major upgrade purpose-built for agent applications. It lets you easily express complex structures for agents, delivers high performance even for very large grammars, offers native cross-platform APIs, and remains fully backward compatible. In this post, we first recap XGrammar and then walk through the key features of XGrammar-2.
 
 <p align="center">
-    <img src="/img/xgrammar2/image1.png" width="70%">
+    <img src="/img/xgrammar2/image4.png" width="70%">
     <figcaption style="color: #6b7280; text-align: center;">Figure 1: XGrammar-2 achieves 100% schema accuracy and delivers higher end-to-end accuracy on tool-calling tasks.</figcaption>
 </p>
 
 
 <p align="center">
-    <img src="/img/xgrammar2/image2.png" width="70%">
+    <img src="/img/xgrammar2/image5.png" width="70%">
     <figcaption style="color: #6b7280; text-align: center;">Figure 2: XGrammar-2 delivers up to 80x efficiency gain compared to XGrammar, and achieves near-zero overhead in LLM serving scenarios.</figcaption>
 </p>
 
@@ -31,7 +31,7 @@ To address these challenges, we are excited to introduce **XGrammar-2**: a major
 XGrammar uses constrained decoding to ensure LLM outputs conform 100% to a given structure. At each decoding step, constrained decoding produces a mask that blocks invalid tokens according to the structure. During sampling, invalid tokens are assigned zero probability, so only valid tokens will be generated. XGrammar's key insight is precomputing an efficient token mask cache at compilation time, which substantially reduces mask generation time and achieves near-zero overhead during generation.
 
 <p align="center">
-    <img src="/img/xgrammar2/image3.png" width="70%">
+    <img src="/img/xgrammar2/image2.png" width="70%">
     <figcaption style="color: #6b7280; text-align: center;">Figure 3: Constrained Decoding: Generating Output from a JSON Schema</figcaption>
 </p>
 
@@ -41,7 +41,7 @@ XGrammar is best used to enforce format constraints, not to change the semantics
 ## Structural Tag: Abstraction for All Tool Calling and Complex Structures
 
 <p align="center">
-    <img src="/img/xgrammar2/image4.png" width="70%">
+    <img src="/img/xgrammar2/image1.png" width="70%">
     <figcaption style="color: #6b7280; text-align: center;">Figure 4: Workflow of the Structural Tag</figcaption>
 </p>
 
@@ -145,7 +145,7 @@ response = client.chat.completions.create(
 For example, we built a multimodal video agent with Molmo-2 model that detects objects in videos and renders annotated outputs. By specifying the desired format with structural tags, including each object’s time range, location, and name, we obtain precise model outputs that can be mapped directly onto the video in downstream processing.
 
 <p align="center">
-    <img src="/img/xgrammar2/image5.png" width="70%">
+    <img src="/img/xgrammar2/image6.png" width="70%">
     <figcaption style="color: #6b7280; text-align: center;">Figure 5: Multimodal Agent Powered by Structural Tags for Precise Output</figcaption>
 </p>
 
@@ -169,7 +169,7 @@ XGrammar-2 also supports batching and speculative decoding, both key features in
 For speculative decoding, XGrammar-2 provides [`traverse_draft_tree`](https://xgrammar.mlc.ai/docs/api/python/grammar_matcher.html#xgrammar.GrammarMatcher.traverse_draft_tree) to traverse a draft tree once and generate masks for all nodes. For finer-grained control, grammar states can also be forked and rolled back to walk through the tree manually.
 
 <p align="center">
-    <img src="/img/xgrammar2/image6.png" width="70%">
+    <img src="/img/xgrammar2/image3.png" width="70%">
     <figcaption style="color: #6b7280; text-align: center;">Figure 6: Overlapping Pattern for Constrained Decoding and Speculative Decoding</figcaption>
 </p>
 
