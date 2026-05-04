@@ -16,7 +16,7 @@ To address these challenges, we are excited to introduce **XGrammar-2**: a major
 
 <p align="center">
     <img src="/img/xgrammar2/image1.png" width="70%">
-    <figcaption style="color: #6b7280; text-align: center;">Figure 1: XGramma-2 achieves 100% schema accuracy and delivers higher end-to-end accuracy on tool-calling tasks.</figcaption>
+    <figcaption style="color: #6b7280; text-align: center;">Figure 1: XGrammar-2 achieves 100% schema accuracy and delivers higher end-to-end accuracy on tool-calling tasks.</figcaption>
 </p>
 
 
