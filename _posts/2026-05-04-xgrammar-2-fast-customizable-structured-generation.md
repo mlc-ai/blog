@@ -16,13 +16,13 @@ To address these challenges, we are excited to introduce **XGrammar-2**: a major
 
 <p align="center">
     <img src="/img/xgrammar2/image1.png" width="70%">
-    <figcaption>Figure 1: XGramma-2 achieves 100% schema accuracy and delivers higher end-to-end accuracy on tool-calling tasks.</figcaption>
+    <figcaption style="color: #6b7280; text-align: center;">Figure 1: XGramma-2 achieves 100% schema accuracy and delivers higher end-to-end accuracy on tool-calling tasks.</figcaption>
 </p>
 
 
 <p align="center">
     <img src="/img/xgrammar2/image2.png" width="70%">
-    <figcaption>Figure 2: XGrammar-2 delivers up to 80x efficiency gain compared to XGrammar, and achieves near-zero overhead in LLM serving scenarios.</figcaption>
+    <figcaption style="color: #6b7280; text-align: center;">Figure 2: XGrammar-2 delivers up to 80x efficiency gain compared to XGrammar, and achieves near-zero overhead in LLM serving scenarios.</figcaption>
 </p>
 
 
@@ -32,7 +32,7 @@ XGrammar uses constrained decoding to ensure LLM outputs conform 100% to a given
 
 <p align="center">
     <img src="/img/xgrammar2/image3.png" width="70%">
-    <figcaption>Figure 3: Constrained Decoding: Generating Output from a JSON Schema</figcaption>
+    <figcaption style="color: #6b7280; text-align: center;">Figure 3: Constrained Decoding: Generating Output from a JSON Schema</figcaption>
 </p>
 
 
@@ -42,7 +42,7 @@ XGrammar is best used to enforce format constraints, not to change the semantics
 
 <p align="center">
     <img src="/img/xgrammar2/image4.png" width="70%">
-    <figcaption>Figure 4: Workflow of the Structural Tag</figcaption>
+    <figcaption style="color: #6b7280; text-align: center;">Figure 4: Workflow of the Structural Tag</figcaption>
 </p>
 
 
@@ -144,7 +144,7 @@ Structural tags let you define a custom output structure for your agent applicat
 
 <p align="center">
     <img src="/img/xgrammar2/image5.png" width="70%">
-    <figcaption>Figure 5: Multimodal Agent Powered by Structural Tags for Precise Output</figcaption>
+    <figcaption style="color: #6b7280; text-align: center;">Figure 5: Multimodal Agent Powered by Structural Tags for Precise Output</figcaption>
 </p>
 
 
@@ -168,7 +168,7 @@ For speculative decoding, XGrammar-2 provides [`traverse_draft_tree`](https://xg
 
 <p align="center">
     <img src="/img/xgrammar2/image6.png" width="70%">
-    <figcaption>Figure 6: Overlapping Pattern for Constrained Decoding and Speculative Decoding</figcaption>
+    <figcaption style="color: #6b7280; text-align: center;">Figure 6: Overlapping Pattern for Constrained Decoding and Speculative Decoding</figcaption>
 </p>
 
 
