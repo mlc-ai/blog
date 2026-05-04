@@ -142,7 +142,7 @@ response = client.chat.completions.create(
 )
 ```
 
-For example, we used Molmo-2 model to build a multimodal video agent that detects objects in videos and renders annotated outputs. By specifying the desired format with structural tags, including each object’s time range, location, and name, we obtain precise model outputs that can be mapped directly onto the video in downstream processing.
+For example, we built a multimodal video agent with Molmo-2 model that detects objects in videos and renders annotated outputs. By specifying the desired format with structural tags, including each object’s time range, location, and name, we obtain precise model outputs that can be mapped directly onto the video in downstream processing.
 
 <p align="center">
     <img src="/img/xgrammar2/image5.png" width="70%">
