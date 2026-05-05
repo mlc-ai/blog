@@ -115,7 +115,7 @@ XGrammar ships with **built-in Structural Tags** for common models such as DeepS
 Structural Tag is also exposed as an **OpenAI-compatible response format** by serving engines, so you can customize your own output structure for your agent application:
 
 ```py
-# Assume the client is connected to a hosted vLLM, SGLang, or TensorRT-LLM server.
+# Assume the client is connected to a hosted SGLang, vLLM, or TensorRT-LLM server.
 response = client.chat.completions.create(
     model="deepseek-ai/DeepSeek-V4",
     messages=[...],
@@ -219,4 +219,4 @@ Going forward, we plan to collaborate with partners to bring XGrammar to even mo
 
 ## Acknowledgments
 
-We are grateful to xAI, Databricks, DeepSeek Infra, Google Vertex AI, RadixArk, SGLang, TensorRT-LLM, and vLLM teams, as well as other collaborators, for their support and collaboration. We also thank, alphabetically, Ke Bao, Ben Browning, Russell Bryant, Bingqing Chen, Jeffrey Chen, Lequn Chen, Cade Daniel, Flora Feng, Michael Goin, Hanchen Li, Jialin Ouyang, Aaron Pham, Alex Trotta, Xinyuan Tong, Lion Ushiromiya, Qingyuan Wang, Xingbo Wang, Yi Wang, Ying Wang, Kan Wu, Liangsheng Yin, Chenyang Yu, Lianmin Zheng, Qi Zheng, Enwei Zhu, and Ligeng Zhu, for their engineering support, integration work, discussions, review, and feedback. We would like to thank the TensorRT-LLM team for their collaboration in speculative decoding support with CUDA graph.
+We are grateful to xAI, Bosch, Databricks, DeepSeek Infra, Google Vertex AI, RadixArk, SGLang, TensorRT-LLM, and vLLM teams, as well as other collaborators, for their support and collaboration. We also thank, alphabetically, Ke Bao, Ben Browning, Russell Bryant, Bingqing Chen, Jeffrey Chen, Lequn Chen, Cade Daniel, Flora Feng, Michael Goin, Hanchen Li, Jialin Ouyang, Aaron Pham, Xinyuan Tong, Alex Trotta, Lion Ushiromiya, Qingyuan Wang, Xingbo Wang, Yi Wang, Ying Wang, Kan Wu, Liangsheng Yin, Chenyang Yu, Lianmin Zheng, Qi Zheng, Enwei Zhu, and Ligeng Zhu, for their engineering support, integration work, discussions, review, and feedback. We would like to thank the TensorRT-LLM team for their collaboration in speculative decoding support with CUDA graph.
