@@ -45,8 +45,6 @@ XGrammar is best used to enforce format constraints, not to change the semantics
     <figcaption style="color: #6b7280; text-align: center;">Figure 4: Workflow of the Structural Tag</figcaption>
 </p>
 
-
-
 Agent applications are pushing LLMs to follow increasingly complex formats. One representative example is the [**OpenAI Harmony Format**](https://developers.openai.com/cookbook/articles/openai-harmony), which splits output into multiple channels, including reasoning, tool calling, and final response, each with its own format. Each open-source model also define their own tool calling formats. Supporting all of these requires significant effort from serving engines and downstream applications, and may still fail to match the official specification.
 
 XGrammar-2 introduces **Structural Tag**, a JSON-based DSL that provides a unified, lightweight, and extensible way to describe the diverse structures agents need, from OpenAI Harmony format to open-source model tool calling protocols and many other custom formats.
@@ -173,8 +171,7 @@ For speculative decoding, XGrammar-2 provides [`traverse_draft_tree`](https://xg
     <figcaption style="color: #6b7280; text-align: center;">Figure 6: Overlapping Pattern for Constrained Decoding and Speculative Decoding</figcaption>
 </p>
 
-
-This also enables constrained decoding to overlap with speculative decoding. While the target model verifies the draft tree on the GPU, XGrammar walks the same tree on the CPU and generates masks in parallel, reducing overhead further. We collaborated with serving engine teams to integrate this pattern into speculative decoding pipelines. For more information, check out [the blog](https://nvidia.github.io/TensorRT-LLM/blogs/tech_blog/blog12_Combining_Guided_Decoding_and_Speculative_Decoding.html#integration-to-tensorrt-llm-python-runtime) with the TensorRT-LLM team.
+This also enables constrained decoding to overlap with speculative decoding. While the target model verifies the draft tree on the GPU, XGrammar walks the same tree on the CPU and generates masks in parallel, reducing overhead further. We collaborated with serving engine teams to integrate this pattern into speculative decoding pipelines.
 
 Combined with other system-level optimizations, XGrammar-2's performance remains scalable even with very large structures.
 
@@ -207,7 +204,7 @@ We have introduced XGrammar-2, a release that brings a series of new abstraction
 
 XGrammar-2 has been adopted by leading frontier AI labs in their latest models and by leading AI companies in their products. For a list of collaborators, please check out the [collaborator list](https://github.com/mlc-ai/xgrammar#collaborators).
 
-XGrammar-2 has been integrated into mainstream LLM serving engines, including [SGLang](https://github.com/sgl-project/sglang), [vLLM](https://github.com/vllm-project/vllm), [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM), and [MLC-LLM](https://github.com/mlc-ai/mlc-llm). XGrammar enables these engines to support strict mode tool calling for popular models such as DeepSeek V4 and Qwen 3.6, which can be used directly through API calls. These models also support requests that use the Structural Tag in the `response_format`  field of the request to generate outputs in custom formats.
+XGrammar-2 has been integrated into mainstream LLM serving engines, including [SGLang](https://github.com/sgl-project/sglang), [vLLM](https://github.com/vllm-project/vllm), [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM), and [MLC-LLM](https://github.com/mlc-ai/mlc-llm). XGrammar enables these engines to support strict mode tool calling for popular models such as DeepSeek V4 and Qwen 3.6, which can be used directly through API calls. These models also support requests that use the Structural Tag in the `response_format` field of the request to generate outputs in custom formats.
 
 Going forward, we plan to collaborate with partners to bring XGrammar to even more environments. We are committed to providing a solid foundation for agent harnesses and laying the groundwork for a diverse ecosystem of agent applications. To get started or learn more, please check out the following resources:
 
@@ -219,4 +216,6 @@ Going forward, we plan to collaborate with partners to bring XGrammar to even mo
 
 ## Acknowledgments
 
-We are grateful to xAI, Bosch, Databricks, DeepSeek Infra, Google Vertex AI, RadixArk, SGLang, TensorRT-LLM, and vLLM teams, as well as other collaborators, for their support and collaboration. We also thank, alphabetically, Ke Bao, Ben Browning, Russell Bryant, Bingqing Chen, Jeffrey Chen, Lequn Chen, Cade Daniel, Flora Feng, Michael Goin, Hanchen Li, Jialin Ouyang, Aaron Pham, Xinyuan Tong, Alex Trotta, Lion Ushiromiya, Qingyuan Wang, Xingbo Wang, Yi Wang, Ying Wang, Kan Wu, Liangsheng Yin, Chenyang Yu, Lianmin Zheng, Qi Zheng, Enwei Zhu, and Ligeng Zhu, for their engineering support, integration work, discussions, review, and feedback. We would like to thank the TensorRT-LLM team for their collaboration in speculative decoding support with CUDA graph.
+We are grateful to xAI, Bosch, Databricks, DeepSeek Infra, Google Vertex AI, RadixArk, SGLang, TensorRT-LLM, and vLLM teams, as well as other collaborators, for their support and collaboration. We also thank, alphabetically, Ke Bao, Ben Browning, Russell Bryant, Bingqing Chen, Jeffrey Chen, Lequn Chen, Cade Daniel, Flora Feng, Michael Goin, Hanchen Li, Jialin Ouyang, Aaron Pham, Xinyuan Tong, Alex Trotta, Lion Ushiromiya, Qingyuan Wang, Xingbo Wang, Yi Wang, Ying Wang, Kan Wu, Liangsheng Yin, Chenyang Yu, Lianmin Zheng, Qi Zheng, Enwei Zhu, and Ligeng Zhu, for their engineering support, integration work, discussions, review, and feedback.
+
+The traverse draft tree idea was first proposed by the SGLang team and has been integrated into SGLang. We additionally thank the TensorRT-LLM team for the CUDA graph integration and their [blog post on combining guided decoding and speculative decoding](https://nvidia.github.io/TensorRT-LLM/blogs/tech_blog/blog12_Combining_Guided_Decoding_and_Speculative_Decoding.html#integration-to-tensorrt-llm-python-runtime).
