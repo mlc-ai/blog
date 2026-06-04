@@ -154,8 +154,8 @@ And it isn't only for agents: because you can read the whole system end-to-end, 
 
 ```bash
 git clone https://github.com/mlc-ai/pith-train && cd pith-train && uv sync
-bash examples/build_tokenized_corpus/launch.sh dclm-qwen3
-bash examples/pretrain_language_model/launch.sh qwen3-30b-a3b
+bash examples/tokenize_corpus/launch.sh dclm-qwen3
+bash examples/pretrain_lm/launch.sh qwen3-30b-a3b
 ```
 
 - **GitHub:** [github.com/mlc-ai/pith-train](https://github.com/mlc-ai/pith-train)
