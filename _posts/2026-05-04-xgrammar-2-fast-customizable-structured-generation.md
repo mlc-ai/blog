@@ -202,7 +202,7 @@ Overall, XGrammar-2 improves both schema reliability and tool-calling accuracy w
 
 We have introduced XGrammar-2, a release that brings a series of new abstractions and optimizations designed to provide comprehensive support for agent applications.
 
-XGrammar-2 has been adopted by leading frontier AI labs in their latest models and by leading AI companies in their products. For a list of collaborators, please check out the [collaborator list](https://github.com/mlc-ai/xgrammar#collaborators).
+XGrammar-2 has been adopted by xAI, Databricks, DeepSeek, and other leading AI companies in their latest models and products. For a list of collaborators, please check out the [collaborator list](https://github.com/mlc-ai/xgrammar#collaborators).
 
 XGrammar-2 has been integrated into mainstream LLM serving engines, including [SGLang](https://github.com/sgl-project/sglang), [vLLM](https://github.com/vllm-project/vllm), [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM), and [MLC-LLM](https://github.com/mlc-ai/mlc-llm). XGrammar enables these engines to support strict mode tool calling for popular models such as DeepSeek V4 and Qwen 3.6, which can be used directly through API calls. These models also support requests that use the Structural Tag in the `response_format` field of the request to generate outputs in custom formats.
 
