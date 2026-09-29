@@ -7,10 +7,19 @@ notitle: true
 ---
 
 <style>
+.container > h1 {
+  font-size: clamp(1.75rem, 3vw, 2rem);
+  margin-top: 1rem;
+}
+
 .content p:not(.post-meta) {
   margin-bottom: 1.75rem;
 }
 </style>
+
+<p align="center">
+    <img src="/img/tirx-harness/overview.png" alt="TIRx Harness architecture: the agent workflow connects to a knowledge base, compiler analyses, the TIRx foundation, and a benchmark server, with evolution traces and optimized kernels feeding self-improvement." width="1000" style="max-width: 100%; height: auto;">
+</p>
 
 **TL;DR:** We built TIRx Harness, a compiler harness combining a minimal stable compiler foundation, a knowledge base, tools, and a benchmark server to help agents develop correct, fast GPU kernels. On evaluated workloads, Kimi Delta Attention (KDA) kernels achieve geometric-mean speedups of 2.94× over FlashKDA (forward) and 6.84× over Flash Linear Attention (FLA) (backward).
 
@@ -21,10 +30,6 @@ These were not simply search problems that could be solved by asking the agent t
 We view these pieces together as a compiler harness: the agent-facing environment around a compiler foundation, including domain-specific analyses and diagnostics, an IR-specific knowledge corpus, and benchmarking and evaluation tooling. As agentic programming shifts more of the work from writing code to shaping the environment in which agents operate, we expect this layer to become increasingly important. This framing is inspired by several concurrent efforts in AI-oriented system design. Among them, [CAKE](https://arxiv.org/abs/2608.12629) makes compiler–agent co-design explicit, while [OpenAI’s Jalapeño](https://x.com/cdleary/article/2094878051238887834) reflects a related full-stack principle: designing the programming target itself to be clear and predictable enough for AI to optimize effectively.
 
 TIRx Harness is one instance of this idea for GPU kernel development. For us, that starts with a central question: how can we design a compiler foundation that is minimal, stable, and extensible for agentic programming? Around this foundation, TIRx Harness combines a knowledge base, correctness and performance tools, and a benchmark server, giving agents a more reliable environment for kernel optimization. Across the evaluated KDA, MiniMax Sparse Attention (MSA), Multi-head Latent Attention (MLA), and Video Sparse Attention (VSA) families, reported family-level geometric-mean speedups range from 1.33× to 6.84×; KDA forward and backward reach 2.94× over FlashKDA and 6.84× over FLA, respectively.
-
-<p align="center">
-    <img src="/img/tirx-harness/overview.png" alt="TIRx Harness architecture: the agent workflow connects to a knowledge base, compiler analyses, the TIRx foundation, and a benchmark server, with evolution traces and optimized kernels feeding self-improvement." width="624" style="max-width: 100%; height: auto;">
-</p>
 
 ## Building TIRx Harness around reliable iteration
 
@@ -85,7 +90,7 @@ Together, these traces show three ways the harness changes the optimization loop
 The evaluation asks whether the capabilities above translate into fast kernels. We evaluate KDA, MSA, MLA, and VSA. All experiments reported here were run on NVIDIA Blackwell GPUs using [Humanize 2’s flame chase workflow](https://humanfia.ai/), with web access disabled during optimization. The baseline implementations use the versions recorded in the September 25–26, 2026 curated sweep. Each family is compared against its own optimized reference implementation using GPU kernel time rather than end-to-end application latency.
 
 <p align="center">
-    <img src="/img/tirx-harness/benchmark-results.png" alt="Agent-evolved kernel results on NVIDIA Blackwell GPUs: geometric-mean speedups of 2.94× for KDA forward, 6.84× for KDA backward, 2.59× for MSA prefill, 3.99× for MSA decode, 1.33× for KDA decode, 1.71× for MLA, and 1.68× for VSA, with min–max ranges." width="624" style="max-width: 100%; height: auto;">
+    <img src="/img/tirx-harness/benchmark-results.png" alt="Agent-evolved kernel results on NVIDIA Blackwell GPUs: geometric-mean speedups of 2.94× for KDA forward, 6.84× for KDA backward, 2.59× for MSA prefill, 3.99× for MSA decode, 1.33× for KDA decode, 1.71× for MLA, and 1.68× for VSA, with min–max ranges." width="1000" style="max-width: 100%; height: auto;">
 </p>
 
 Across these workloads, agents using TIRx Harness produced kernels that are competitive with—and often faster than—the reference implementations. Reported family-level geometric-mean speedups range from 1.33× to 6.84×. The figure shows the min–max range across evaluated configurations together with each family’s geometric mean.
