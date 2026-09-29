@@ -35,7 +35,7 @@ notitle: true
 }
 </style>
 
-**TL;DR:** We built TIRx Harness, a compiler harness combining a minimal stable compiler foundation, a knowledge base, tools, and a benchmark server to help agents develop correct, fast GPU kernels. On evaluated workloads, Kimi Delta Attention (KDA) kernels achieve geometric-mean speedups of 2.94× over FlashKDA (forward) and 6.84× over Flash Linear Attention (FLA) (backward).
+**TL;DR:** We built [TIRx Harness](https://github.com/mlc-ai/TIRx-harness), a compiler harness combining a minimal stable compiler foundation, a knowledge base, tools, and a benchmark server to help agents develop correct, fast GPU kernels. On evaluated workloads, Kimi Delta Attention (KDA) kernels achieve geometric-mean speedups of 2.94× over FlashKDA (forward) and 6.84× over Flash Linear Attention (FLA) (backward).
 
 <p align="center">
     <img src="/img/tirx-harness/overview.png" alt="TIRx Harness architecture: the agent workflow connects to a knowledge base, compiler analyses, the TIRx foundation, and a benchmark server, with evolution traces and optimized kernels feeding self-improvement." width="750" style="max-width: 100%; height: auto;">
