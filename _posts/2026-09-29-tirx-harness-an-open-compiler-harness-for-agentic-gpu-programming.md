@@ -6,7 +6,7 @@ author: MLC Community
 notitle: true
 ---
 
-**TL;DR:** We built TIRx Harness, a compiler harness combining a minimal stable compiler foundation, a knowledge base, tools, and a benchmark server to help agents develop correct, fast GPU kernels. [On evaluated workloads, Kimi Delta Attention (KDA) kernels achieve geometric-mean speedups of 2.94× over FlashKDA (forward) and 6.84× over Flash Linear Attention (FLA) (backward).](https://github.com/mlc-ai/TIRx-kernels/blob/main/tirx_kernels/curated/README.md)
+**TL;DR:** We built TIRx Harness, a compiler harness combining a minimal stable compiler foundation, a knowledge base, tools, and a benchmark server to help agents develop correct, fast GPU kernels. On evaluated workloads, Kimi Delta Attention (KDA) kernels achieve geometric-mean speedups of 2.94× over FlashKDA (forward) and 6.84× over Flash Linear Attention (FLA) (backward).
 
 Developing high-performance GPU kernels is an iterative engineering process: exploring implementations, drawing on hardware knowledge and existing code, and refining the result through debugging and measurement. Coding agents can already automate meaningful parts of this process, but in our experiments on workloads such as KDA, much of their effort went into work around the optimization itself: predicting how kernel code would be lowered to hardware behavior, diagnosing failures that could be timing-dependent or measurements distorted by concurrent GPU activity, and finding an implementation or optimization strategy relevant to the specific task. As a result, token efficiency drops sharply: the agent spends its budget resolving uncertainty around the optimization rather than exploring the optimization itself, so otherwise viable optimizations may never be reached within a practical search budget.
 
@@ -84,7 +84,7 @@ The evaluation asks whether the capabilities above translate into fast kernels. 
 
 Across these workloads, agents using TIRx Harness produced kernels that are competitive with—and often faster than—the reference implementations. Reported family-level geometric-mean speedups range from 1.33× to 6.84×. The figure shows the min–max range across evaluated configurations together with each family’s geometric mean.
 
-The agentic programming landscape is evolving quickly, and benchmark results can change on the scale of days as agents, workflows, compilers, and reference implementations improve. Our goal is therefore not to establish a permanent ranking of approaches, but to demonstrate what TIRx Harness can enable. Because the reference differs across families, the speedups should be interpreted within each family rather than as a cross-family ranking. Full benchmark configurations, baselines, measurements, and evidence are available [here](https://github.com/mlc-ai/TIRx-kernels/blob/main/tirx_kernels/curated/README.md).
+The agentic programming landscape is evolving quickly, and benchmark results can change on the scale of days as agents, workflows, compilers, and reference implementations improve. Our goal is therefore not to establish a permanent ranking of approaches, but to demonstrate what TIRx Harness can enable. Because the reference differs across families, the speedups should be interpreted within each family rather than as a cross-family ranking. The kernels are available [here](https://github.com/mlc-ai/tirx-kernels).
 
 ## Closing the loop
 
