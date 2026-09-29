@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "TIRx Harness: An Open Compiler Harness for Agentic GPU Programming"
-date: 2026-09-29 15:00:00 -0400
+date: 2026-09-29 14:30:00 -0400
 author: MLC Community
 notitle: true
 ---
