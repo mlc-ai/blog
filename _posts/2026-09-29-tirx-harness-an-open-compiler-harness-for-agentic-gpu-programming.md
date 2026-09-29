@@ -15,6 +15,24 @@ notitle: true
 .content p:not(.post-meta) {
   margin-bottom: 1.75rem;
 }
+.harness-figure {
+  margin: 1.5rem auto 2rem;
+  max-width: 850px;
+}
+
+.harness-figure iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+
+.harness-figure figcaption {
+  margin-top: 0.75rem;
+  color: #56616d;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
 </style>
 
 **TL;DR:** We built TIRx Harness, a compiler harness combining a minimal stable compiler foundation, a knowledge base, tools, and a benchmark server to help agents develop correct, fast GPU kernels. On evaluated workloads, Kimi Delta Attention (KDA) kernels achieve geometric-mean speedups of 2.94× over FlashKDA (forward) and 6.84× over Flash Linear Attention (FLA) (backward).
@@ -43,11 +61,21 @@ We address these sources of uncertainty in two ways. First, we keep TIRx close t
 
 Second, TIRx is intentionally minimal. It introduces as little independent semantics as possible beyond the hardware interface, keeping the IR and compilation path small and stable. With such a thin abstraction layer, the PTX ISA serves as the primary source of truth for instruction semantics. This also makes the system easier to extend: exposing a new PTX capability usually requires only a lightweight addition to the programming surface, rather than a new high-level abstraction or a larger compiler stack. We still retain basic structure such as loops and conditionals so the rest of the harness can analyze the program.
 
+<figure class="harness-figure" id="tirx-foundation-figure">
+  <iframe src="/img/tirx-harness/diagrams/tirx-lite-layers.html" title="From TIRx-lite source to generated code" height="430" loading="lazy"></iframe>
+  <figcaption>A thin programming surface connects kernel operations to generated code. Select a source line to inspect its mapping.</figcaption>
+</figure>
+
 ### Tools: Provide detailed feedback beyond benchmarking
 
 Even with a simpler programming foundation, failures can still be hard to diagnose. A kernel may pass many runs and then fail because of an intermittent synchronization bug or data race, leaving the agent with little more than a pass/fail signal. This motivated a broader principle for the harness: tools should provide useful feedback about program behavior, not just test outcomes.
 
 We built synchronization and data-race analyses to inspect concurrency behavior directly. When GPU execution is unavailable, numerical simulation provides another source of feedback by simulating numerical behavior without a GPU. For performance diagnosis, we integrate existing profiling tools including NCU and IKET. Together, these tools give agents more information to decide what to investigate and change next.
+
+<figure class="harness-figure" id="analysis-tools-figure">
+  <iframe src="/img/tirx-harness/diagrams/analysis-overview.html" title="Domain-specific compiler analysis for an agent" height="420" loading="lazy"></iframe>
+  <figcaption>Compiler analyses return numerical, synchronization, and data-race diagnostics. Select a component to explore its feedback.</figcaption>
+</figure>
 
 ### Knowledge base: reuse known ideas, discover new ones
 
@@ -57,11 +85,21 @@ To avoid relearning these ideas in every run, a natural approach is to summarize
 
 The kernel zoo is the core of this knowledge base. With more than 60 TIRx kernels, it gives agents concrete starting points and reusable optimization patterns. But the zoo only captures ideas that have already appeared in existing kernels. PTX documentation complements it by exposing hardware capabilities that can open new optimization directions. The zoo helps reuse known ideas; the ISA helps discover new ones.
 
+<figure class="harness-figure" id="knowledge-base-figure">
+  <iframe src="/img/tirx-harness/diagrams/knowledge-base.html" title="A knowledge base for an agent" height="410" loading="lazy"></iframe>
+  <figcaption>The kernel zoo supplies reusable implementations; hardware and ISA documentation expose new possibilities. Select a knowledge source to explore.</figcaption>
+</figure>
+
 ### Benchmark server: make measurements comparable
 
 Correctness tests, timings, and profiles decide whether a candidate is accepted and which optimization the agent tries next, so a misleading measurement affects many attempts rather than one. Two goals for the harness made such measurements harder to keep reliable when the agent launches the GPU work directly from its own environment. The first is scale: we want many agents running concurrently, but once they share a GPU, a timing change may reflect another agent's activity rather than the candidate's own improvement or regression, and the agent can no longer attribute a performance change to its edit. The second is platform coverage: we want to target hardware beyond datacenter GPUs, including edge devices such as Thor, but these platforms are not convenient hosts for a coding agent, so tying the agent to the machine it optimizes for would limit the hardware it can reach.
 
 Both point to the same design: separate evaluation from the agent. TIRx Harness therefore uses a remote evaluation architecture built around KCoral, our benchmark server (blog coming soon). KCoral owns the GPUs, and whenever the agent needs one, whether to test correctness, benchmark a kernel, or collect a profile, it sends a request to KCoral instead of launching work locally. KCoral schedules all requests centrally so that the execution of one never affects another, and returns the measurements and diagnostic artifacts when the request completes. The agent gets a controlled, trusted environment for every measurement, and the harness gains new targets by attaching them to KCoral rather than by making every agent host run on them.
+
+<figure class="harness-figure" id="benchmark-server-figure">
+  <iframe src="/img/tirx-harness/diagrams/kcoral.html" title="KCoral components and deployment" height="430" loading="lazy"></iframe>
+  <figcaption>KCoral separates agent development from GPU execution and centrally schedules measurements. Select a component to explore its role.</figcaption>
+</figure>
 
 ## What TIRx Harness enables
 
