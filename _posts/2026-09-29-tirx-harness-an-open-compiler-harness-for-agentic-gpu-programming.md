@@ -113,4 +113,4 @@ We thank the NVIDIA CAKE team, Kernel Design Agent (KDA) team and SOL-ExecBench 
 
 ## Getting started
 
-To try TIRx Harness, start with the [documentation](https://tirxharness.mlc.ai/docs/), which covers installation, running kernel optimization tasks, and using the harness's analysis and remote execution tools. Our book, [Agentic GPU Programming for MLSys](https://mlc.ai/agentic-gpu-programming-for-mlsys/) introduces the main elements of agentic gpu programming and compiler harness.
+To try TIRx Harness, start with the [GitHub repository](https://github.com/mlc-ai/TIRx-harness), which covers installation, running kernel optimization tasks, and using the harness's analysis and remote execution tools. Our book, [Agentic GPU Programming for MLSys](https://mlc.ai/agentic-gpu-programming-for-mlsys/) introduces the main elements of agentic gpu programming and compiler harness.
