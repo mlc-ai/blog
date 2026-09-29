@@ -6,6 +6,12 @@ author: MLC Community
 notitle: true
 ---
 
+<style>
+.content p:not(.post-meta) {
+  margin-bottom: 1.75rem;
+}
+</style>
+
 **TL;DR:** We built TIRx Harness, a compiler harness combining a minimal stable compiler foundation, a knowledge base, tools, and a benchmark server to help agents develop correct, fast GPU kernels. On evaluated workloads, Kimi Delta Attention (KDA) kernels achieve geometric-mean speedups of 2.94× over FlashKDA (forward) and 6.84× over Flash Linear Attention (FLA) (backward).
 
 Developing high-performance GPU kernels is an iterative engineering process: exploring implementations, drawing on hardware knowledge and existing code, and refining the result through debugging and measurement. Coding agents can already automate meaningful parts of this process, but in our experiments on workloads such as KDA, much of their effort went into work around the optimization itself: predicting how kernel code would be lowered to hardware behavior, diagnosing failures that could be timing-dependent or measurements distorted by concurrent GPU activity, and finding an implementation or optimization strategy relevant to the specific task. As a result, token efficiency drops sharply: the agent spends its budget resolving uncertainty around the optimization rather than exploring the optimization itself, so otherwise viable optimizations may never be reached within a practical search budget.
