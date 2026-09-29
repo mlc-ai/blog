@@ -76,10 +76,10 @@ Together, these traces show three ways the harness changes the optimization loop
 
 ## What agents achieved with the harness
 
-The evaluation asks whether the capabilities above translate into fast kernels. We evaluate KDA, MSA, MLA, and VSA. All experiments reported here were run on NVIDIA GB200 using [Humanize 2’s flame chase workflow](https://humanfia.ai/), with web access disabled during optimization. The baseline implementations use the versions recorded in the September 25–26, 2026 curated sweep. Each family is compared against its own optimized reference implementation using GPU kernel time rather than end-to-end application latency.
+The evaluation asks whether the capabilities above translate into fast kernels. We evaluate KDA, MSA, MLA, and VSA. All experiments reported here were run on NVIDIA Blackwell GPUs using [Humanize 2’s flame chase workflow](https://humanfia.ai/), with web access disabled during optimization. The baseline implementations use the versions recorded in the September 25–26, 2026 curated sweep. Each family is compared against its own optimized reference implementation using GPU kernel time rather than end-to-end application latency.
 
 <p align="center">
-    <img src="/img/tirx-harness/benchmark-results.png" alt="Agent-evolved kernel results on NVIDIA GB200: geometric-mean speedups of 2.94× for KDA forward, 6.84× for KDA backward, 2.59× for MSA prefill, 3.99× for MSA decode, 1.33× for KDA decode, 1.71× for MLA, and 1.68× for VSA, with min–max ranges." width="624" style="max-width: 100%; height: auto;">
+    <img src="/img/tirx-harness/benchmark-results.png" alt="Agent-evolved kernel results on NVIDIA Blackwell GPUs: geometric-mean speedups of 2.94× for KDA forward, 6.84× for KDA backward, 2.59× for MSA prefill, 3.99× for MSA decode, 1.33× for KDA decode, 1.71× for MLA, and 1.68× for VSA, with min–max ranges." width="624" style="max-width: 100%; height: auto;">
 </p>
 
 Across these workloads, agents using TIRx Harness produced kernels that are competitive with—and often faster than—the reference implementations. Reported family-level geometric-mean speedups range from 1.33× to 6.84×. The figure shows the min–max range across evaluated configurations together with each family’s geometric mean.
