@@ -98,8 +98,8 @@ We see three directions for the next stage of TIRx Harness. First, we want to ev
 
 ## Acknowledgments
 
-We thank the CAKE team, Kernel Design Agent (KDA) team and Kernel Factory team for helpful discussions and feedback throughout this work.
+We thank the NVIDIA CAKE team, Kernel Design Agent (KDA) team and SOL-ExecBench team for helpful discussions and feedback throughout this work.
 
 ## Getting started
 
-To try TIRx Harness, start with the [documentation](https://tirxharness.mlc.ai/docs/), which covers installation, running kernel optimization tasks, and using the harness's analysis and remote execution tools. Our book, [Agentic GPU Programming for MLSys](https://mlc.ai/agentic-gpu-programming-for-mlsys/), explains the design behind the harness and walks through an optimization workflow, showing how agents use analysis tools, existing kernels, and benchmark feedback to improve their implementations.
+To try TIRx Harness, start with the [documentation](https://tirxharness.mlc.ai/docs/), which covers installation, running kernel optimization tasks, and using the harness's analysis and remote execution tools. Our book, [Agentic GPU Programming for MLSys](https://mlc.ai/agentic-gpu-programming-for-mlsys/) introduces the main elements of agentic gpu programming and compiler harness.
