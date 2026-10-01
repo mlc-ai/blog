@@ -147,7 +147,7 @@ We see three directions for the next stage of TIRx Harness. First, we want to ev
 
 ## Acknowledgments
 
-We thank the NVIDIA CAKE team, Kernel Design Agent (KDA) team and SOL-ExecBench team for helpful discussions and feedback throughout this work.
+We thank the NVIDIA CAKE team, Kernel Design Agent (KDA) team and SOL-ExecBench team for helpful discussions and feedback throughout this post.
 
 ## Getting started
 
