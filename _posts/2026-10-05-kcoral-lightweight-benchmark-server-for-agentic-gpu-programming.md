@@ -183,7 +183,7 @@ Both evaluations exclude agent generation time. To model the full workflow, we a
 
 ## Start Using KCoral
 
-Install KCoral from pip (check out the [installation guide](https://github.com/mlc-ai/kcoral/blob/main/docs/getting-started/installation.md) for more methods):
+Install KCoral from pip (check out the [installation guide](https://kcoral.mlc.ai/docs/latest/getting-started/installation.html) for more methods):
 
 ```bash
 pip install kcoral
