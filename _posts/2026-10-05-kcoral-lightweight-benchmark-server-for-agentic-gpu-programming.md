@@ -6,7 +6,7 @@ author: MLC Community
 notitle: true
 ---
 
-Machine learning systems are becoming increasingly important with the rapid development of artificial intelligence (AI), and graphics processing unit (GPU) kernels are central to these systems. AI agents can automate GPU kernel development by repeatedly generating code, running it, checking correctness and performance, and refining it. Recent efforts such as [CAKE](https://arxiv.org/abs/2608.12629) and [Kernel Design Agents (KDA)](https://github.com/NVlabs/kda) have demonstrated the growing capability of agents for GPU kernel development.
+Machine learning systems are becoming increasingly important with the rapid development of AI, and GPU kernels are central to these systems. AI agents can automate GPU kernel development by repeatedly generating code, running it, checking correctness and performance, and refining it. Recent efforts such as [CAKE](https://arxiv.org/abs/2608.12629) and [Kernel Design Agents (KDA)](https://github.com/NVlabs/kda) have demonstrated the growing capability of agents for GPU kernel development.
 
 With the rapid growth of kernel agent workloads, a new challenge arises: efficiently managing and sharing GPU resources. Agents need GPUs only during the evaluation part of the loop, so assigning a GPU to every agent can waste capacity. Sharing GPUs improves utilization but requires coordination to avoid interference between evaluations. As workloads scale, GPU resources may grow from a single GPU to multiple GPUs and nodes, requiring efficient management and scheduling. This is especially important in **kernel agent experiments** and **reinforcement learning for kernel agents**, where many agents or rollouts may run concurrently.
 
@@ -29,7 +29,7 @@ In the local agentic kernel development loop, an agent generates a kernel, evalu
 
 We designed the KCoral protocol to support remote kernel development. A local client sends a request that follows the protocol to a server that owns the GPUs, and the server returns the results. The protocol clearly describes the kernel, evaluation, or debugging workload, so it provides a unified interface across different devices and GPUs.
 
-The protocol is designed as an atomic program over the Hypertext Transfer Protocol (HTTP). It contains a sequence of operations that upload code and data, run code, or return results. The server returns the specified results or an execution error, together with the logs. The protocol has four basic operations:
+The protocol is designed as an atomic program over HTTP. It contains a sequence of operations that upload code and data, run code, or return results. The server returns the specified results or an execution error, together with the logs. The protocol has four basic operations:
 
 | **Operation** | **Description** |
 | --- | --- |
@@ -84,7 +84,7 @@ The KCoral engine supports both single-GPU and multi-GPU kernels. When submittin
 
 ## CPU-GPU Decoupling: Freeing GPUs During Compilation
 
-KCoral can separate central processing unit (CPU) compilation from GPU execution.
+KCoral can separate CPU compilation from GPU execution.
 
 Kernel evaluation does not need the GPU throughout. In particular, the compilation step could be very slow and does not need a GPU at all. If a request holds the GPU for its entire duration, the GPU sits idle in the middle and is wasted. KCoral provides two mechanisms to prevent compilation from occupying GPU resources: releasing the GPU in the same program, or launching two programs, one for compilation and another for execution.
 
@@ -156,7 +156,7 @@ See [Builtin CLI Tools](https://kcoral.mlc.ai/docs/latest/client-guide/builtin-c
 
 We evaluate KCoral along three dimensions: **fidelity** of kernel timing, **throughput** as more agents share a GPU, and **robustness** when candidate programs fail. All evaluations use a single NVIDIA B200.
 
-**Fidelity: preserving performance feedback.** Kernel optimization agents need reliable timings to guide optimization. Across 500 workload configurations from 82 kernel families in [TIRx-kernels](https://github.com/mlc-ai/TIRx-kernels), we compare KCoral with direct local timing using the same GPU, inputs, and timing settings, including level-two (L2) cache flushing. We report `100 × |remote − local| / local`. Measurements cover kernel execution only, excluding compilation, input preparation, and request latency.
+**Fidelity: preserving performance feedback.** Kernel optimization agents need reliable timings to guide optimization. Across 500 workload configurations from 82 kernel families in [TIRx-kernels](https://github.com/mlc-ai/TIRx-kernels), we compare KCoral with direct local timing using the same GPU, inputs, and timing settings, including L2 cache flushing. We report `100 × |remote − local| / local`. Measurements cover kernel execution only, excluding compilation, input preparation, and request latency.
 
 | **Difference from local timing** | **Result** |
 | --- | --- |
@@ -218,11 +218,11 @@ For the complete guide to using KCoral, please check out:
 
 ## Integrations
 
-KCoral is built to integrate with the agent kernel harness and kernel agent reinforcement learning (RL) environments.
+KCoral is built to integrate with the agent kernel harness and kernel agent RL environments.
 
 [TIRx-harness](https://blog.mlc.ai/2026/09/29/tirx-harness-an-open-compiler-harness-for-agentic-gpu-programming) is a kernel agent compiler and harness. TIRx-harness uses KCoral as its default backend for kernel evaluation, supporting its large-scale kernel evolution experiments.
 
-[Kernel Design Agents (KDA)](https://github.com/NVlabs/kda/tree/wishlist) will also integrate KCoral to enable remote compilation and GPU sharing across many agents.
+[Kernel Design Agents (KDA)](https://github.com/NVlabs/kda) will also integrate KCoral to enable remote compilation and GPU sharing across many agents.
 
 ## Acknowledgement
 
