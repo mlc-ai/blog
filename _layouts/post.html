@@ -1,7 +1,11 @@
 ---
 layout: default
 ---
+{% if page.short_title %}
+<h1>{{ page.short_title }} <em class="post-subtitle">{{ page.title | remove_first: page.short_title | strip }}</em></h1>
+{% else %}
 <h1>{{ page.title }} </h1>
+{% endif %}
 
 <div class="container">
 <div class="content">
