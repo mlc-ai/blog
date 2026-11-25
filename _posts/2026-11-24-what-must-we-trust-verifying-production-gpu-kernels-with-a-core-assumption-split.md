@@ -522,10 +522,20 @@ With this order, the four notions are defined as follows.
 
 4. **Asynchronous instructions.** A TMA copy or an MMA adds an issue event to its thread, and its reads, writes and completion as separate events that later extensions may add. An execution is complete only when every issued operation has finished.
 
-**Can a reader poll a flag forever?**
-{: #relaxed-flag-poll}
+Our assumption **EXT-FAIR** bridges this model of extensions with hardware. We believe that whenever an execution can grow by a counted event, such as a copy completing or a poll succeeding, the hardware eventually adds one. This belief comes from the forward-progress guarantees of the CUDA programming guide. To carry the termination result over to hardware, we must also trust that whenever the model admits a counted step from an unfinished hardware execution, the hardware can actually make progress. [Section 2.2](#22-can-allowing-too-many-executions-hide-a-deadlock) explains why this matters. Safety holds independently of fairness.
 
-Our core already admits the load-buffering outcome from Case 2 in which both relaxed loads read `1`. Now suppose the reader needs to see `1` to get out of a loop. A shared flag starts at `0`. One lane sets it, and a lane in another warp of the same CTA polls it. Nobody else writes the flag. [Load-buffering proof](https://github.com/mlc-ai/tx-verify/blob/94a1f589e/Tests/Progress/WeakMemory.lean#L322-L331)<span class="txverify-note-anchor"><span class="txverify-note" role="note">This example grew out of a discussion about what progress means for relaxed lock-free algorithms. <a href="https://x.com/difficultyang/status/2125424878203310406">Discussion on X</a></span></span>
+<a id="relaxed-flag-poll"></a>
+
+#### Polling: the unbounded loops real kernels need
+{: .txverify-subheading}
+
+![A failed try_wait is not counted, so a reader can retry at a barrier for free. A relaxed load of a flag counts every time, so the reader can read 0 more than any bound N; under the assumption of at most N reads, a reader that never sees 1 is stuck, not finished.][image15]
+
+We stated progress and termination to match our intuition about what they mean: a stuck kernel is one that can do nothing more that counts, and a terminating kernel is one whose executions stay within some bound. Do these definitions hold up against real kernels? Termination asks for one bound on the counted events of every execution. Yet real kernels contain one kind of loop whose trip count has no bound: a thread polls until another thread, or an asynchronous copy, gives it something to see. The poll may be an `mbarrier.try_wait`, or a plain relaxed load of a flag. How do we handle such loops?
+
+**`mbarrier.try_wait`: a failed poll is not counted.** Testing whether a phase has completed is the instruction's only job. When the test fails, it changes neither memory nor the barrier; it only sets a predicate to false. The core also checks how that predicate is used: anything other than branching straight back to retry is an error (ERR-POLL-SHAPE). A failed `try_wait` can therefore only be a retry, so the core does not count it, and spinning on it is not progress.
+
+**Relaxed loads: whether a load is a poll depends on its context.** A relaxed load puts a value in a register, and the program may do anything with that value. The core cannot tell from the instruction alone whether a load is a poll, so it counts every relaxed load. Take the simplest relaxed poll. A shared flag starts at `0`. One lane sets it, and a lane in another warp of the same CTA polls it. Nobody else writes the flag.<span class="txverify-note-anchor"><span class="txverify-note" role="note">We thank Edward Yang for a discussion about what progress means for relaxed lock-free algorithms, from which this example and the CTA starvation example below grew. <a href="https://x.com/difficultyang/status/2125424878203310406">Discussion on X</a></span></span>
 
 <div class="highlighter-rouge txverify-ptx"><div class="highlight"><pre class="highlight"><code class="language-ptx"><span class="ptx-comment">// Writer (one lane)</span>
 <span class="ptx-label">writer:</span>
@@ -540,11 +550,45 @@ Our core already admits the load-buffering outcome from Case 2 in which both rel
     <span class="ptx-op">exit</span>;
 </code></pre></div></div>
 
-Start just *before* the writer runs. Give us any proposed bound `N` on the number of loads in this launch. The scheduler could let the reader poll `N + 1` times, run the writer, then let the reader see `1` on its very next load and exit. Both threads finished, yet this run already exceeds the bound. Every `ld.relaxed` counts toward our termination theorem, including the ones that read `0`. Even immediate visibility after the write cannot give us one bound for all runs. [Termination in the core](https://github.com/mlc-ai/tx-verify/blob/94a1f589e/Core/Assembly/Correctness.lean#L531-L535)
+Give us any proposed bound `N` on the number of loads in this launch. The scheduler could let the reader poll `N + 1` times, run the writer, then let the reader see `1` on its very next load and exit. Both threads finished, yet this run already exceeds the bound. Even immediate visibility after the write cannot give us one bound for all runs, so the core alone cannot prove that this kernel terminates.
 
-Now consider the reader *after* the writer has exited. Could it keep reading `0` forever? Every trip around `poll` adds another counted event. A scheduler can therefore keep the count growing simply by letting the reader retry. To conclude that the branch eventually falls through, we also need to know when a reader that keeps polling is guaranteed to see the write.
+So how can we still prove that it terminates? **Instead of handling it in the core, we use our assumption weapon here:** **for every launch there is an `N` such that the load executes at most `N` times in each thread; an execution with more is not admitted.** A reviewer has to judge whether the hardware honors it. The bound does not come from the PTX model. It is trust in the scheduler and in the write becoming visible. The assumption does not assume the conclusion. If the writer never stores `1`, then after `N` reads of `0` the reader has no admitted next step, the execution is stuck and incomplete, and the progress check fails. A real deadlock still breaks the proof.
 
-Our assumption **EXT-FAIR** bridges this model of extensions with hardware. We believe that whenever an execution can grow by a counted event, such as a copy completing or a poll succeeding, the hardware eventually adds one. This belief comes from the forward-progress guarantees of the CUDA programming guide. To carry the termination result over to hardware, we must also trust that whenever the model admits a counted step from an unfinished hardware execution, the hardware can actually make progress. [Section 2.2](#22-can-allowing-too-many-executions-hide-a-deadlock) explains why this matters. Safety holds independently of fairness.
+**All in all, can't the core handle this loop better, instead of leaving each kernel to assume a bound? It should.** A rule in the core is reviewed once, and Lean checks its premises at every use. That centralizes the trust, as Edward Yang put it, and it is why we always favor a [better core](#future-directions). For these experiments, though, we have not yet worked out what model of relaxed polling is right, so for now we leave it out of the core. Even so, we still answer the question this post began with: **what is the least we must trust to believe a kernel is correct, and can we write it down explicitly?** For this loop, the answer is one bound on one load, stated where a reviewer can read it.
+
+#### CTA scheduling: what if a CTA never gets a seat?
+{: .txverify-subheading}
+
+![In our model all CTAs are resident, so the writer always has a seat. On a GPU that is full of waiting readers, the writer may never get one.][image16]
+
+Today the core treats every CTA of a launch as resident on the GPU from the start. A CTA may run late, by any finite delay, but no CTA ever has to wait for other CTAs to *finish* before it can be scheduled, even when nothing causally links them. Under EXT-FAIR, a CTA that could run is never left out forever.
+
+Real GPUs do not work this way. An SM holds only as many CTAs as its registers, shared memory, thread slots and Tensor Memory allow, and a CTA keeps its seat until it exits. Suppose a launch has more CTAs than the GPU can hold at once, every CTA but the last waits on a flag in global memory, and the last CTA sets it.
+
+<div class="highlighter-rouge txverify-ptx"><div class="highlight"><pre class="highlight"><code class="language-ptx"><span class="ptx-comment">// Every CTA but the last (one lane)</span>
+<span class="ptx-label">poll:</span>
+    <span class="ptx-op">ld.relaxed.gpu.global.u32</span> <span class="ptx-reg">%value</span>, [flag];
+    <span class="ptx-op">setp.eq.u32</span> <span class="ptx-reg">%waiting</span>, <span class="ptx-reg">%value</span>, <span class="ptx-num">0</span>;
+    @<span class="ptx-reg">%waiting</span> <span class="ptx-op">bra</span> poll;
+    <span class="ptx-op">exit</span>;
+
+<span class="ptx-comment">// The last CTA (one lane)</span>
+    <span class="ptx-op">st.relaxed.gpu.global.u32</span> [flag], <span class="ptx-num">1</span>;
+    <span class="ptx-op">exit</span>;
+</code></pre></div></div>
+
+On hardware this kernel can hang, and our model cannot see it. If the waiting CTAs take every seat, the last CTA never starts, but in the model every CTA is resident from the start, so the last one can always run. If the reader's loads carry the polling assumption above, the proof goes through even though the kernel hangs. A reviewer of that assumption must therefore also accept that the writer and the reader are on the GPU at the same time.
+
+To catch the hang, we would have to model residency:
+
+- **Capacity.** How many CTAs each SM can hold at once. This depends on the registers, shared memory and threads each CTA uses, and on a hardware limit on CTAs per SM.
+- **Clusters.** A cluster is placed as a whole, so the GPU must have room for all of its CTAs at once.
+- **Admission.** A CTA starts only when some SM has room for it. The order in which CTAs are dispatched is not documented, so the model would have to allow any order.
+- **No preemption.** A CTA keeps its seat until all its threads exit. A waiting CTA never gives up its seat to one that has not started.
+- **Fairness.** Fairness applies only to resident CTAs: a resident thread that can make progress eventually does.
+- **Other work.** Other kernels running on the GPU take seats too, so the model must know, or assume, how many seats this launch gets.
+
+Starvation would then be a stuck execution, and the progress check would reject it. But we do not know exactly how the GPU decides any of this, so such a model would itself be an assumption that someone has to review. We currently do not try to model residency.
 
 ### What must a reviewer read?
 
@@ -711,28 +755,7 @@ The GEMM theorem lists exact reals, `clusterMbar`, and `pollAgree` for its own s
 
 ![GEMM and FlashAttention-4 each have their own assumptions above a shared core. A more precise PTX model could replace that core.][image13]
 
-**A better core.** What would it take to verify the [flag loop](#relaxed-flag-poll) above? For that kernel, we could state two assumptions. Each runnable warp eventually gets a turn, and once the writer has stored `1`, a reader that keeps polling the same word at CTA scope eventually sees the update. Under those conditions, the writer reaches its store and the reader eventually loads `1`. Its `setp.eq` then clears `%waiting`, the branch falls through, and the reader exits. That gives us a theorem about eventual exit even if the number of retries varies without bound across runs.
-
-Why not teach the shared core to recognize that loop as a wait? Suppose we stopped counting the loads that send the reader back to `poll`. Once the writer has exited, the reader is the only thread left. If the model lets it read `1` and exit, there is a counted step available. A reader that keeps seeing `0` forever would now be *unfair* under EXT-FAIR. By changing which events count, we would be asking reviewers to trust that the GPU eventually delivers that observation wherever we apply the rule. We know which flag, writer, reader, and scope matter in this example. How far can we generalize before the same rule lets a proof overlook a real hardware deadlock? That is what we would want to settle before putting the rule in the core. [Fairness in the core](https://github.com/mlc-ai/tx-verify/blob/94a1f589e/Core/Assembly/Progress.lean#L46-L69)
-
-<details><summary>What about a relaxed lock-free counter?</summary>
-
-<p>Several threads in one CTA each try to increment a shared counter once. If two threads both try to change 7 to 8, the first can succeed and the second can get 8 back. Follow <code>%old</code> through the retry. The second thread now tries to change 8 to 9.</p>
-
-<div class="highlighter-rouge txverify-ptx"><div class="highlight"><pre class="highlight"><code class="language-ptx">    <span class="ptx-op">ld.relaxed.cta.shared.u32</span> <span class="ptx-reg">%old</span>, [counter];
-<span class="ptx-label">retry:</span>
-    <span class="ptx-op">mov.b32</span> <span class="ptx-reg">%expected</span>, <span class="ptx-reg">%old</span>;
-    <span class="ptx-op">add.u32</span> <span class="ptx-reg">%next</span>, <span class="ptx-reg">%expected</span>, <span class="ptx-num">1</span>;
-    <span class="ptx-op">atom.relaxed.cta.shared.cas.b32</span> <span class="ptx-reg">%old</span>, [counter], <span class="ptx-reg">%expected</span>, <span class="ptx-reg">%next</span>;
-    <span class="ptx-op">setp.ne.u32</span> <span class="ptx-reg">%lost</span>, <span class="ptx-reg">%old</span>, <span class="ptx-reg">%expected</span>;
-    @<span class="ptx-reg">%lost</span> <span class="ptx-op">bra</span> retry;
-    <span class="ptx-op">exit</span>;
-</code></pre></div></div>
-
-<p>Here a failed attempt can be evidence that another thread succeeded. A lock-freedom proof would have to show that while threads keep trying, some increment finishes, even if one particular thread keeps losing the race. Simply declaring every trip around a retry loop to be an uncounted poll would miss the role of the CAS result in that argument.</p>
-</details>
-
-Building a better PTX core and developing the core/assumption split are orthogonal and complementary efforts. A better core answers “What can all kernels rely on, and under what conditions?” The split answers “Given the core we have today, what else must we trust for this particular kernel?” We would much rather review one well-justified visibility rule in the core and let Lean check its premises at every use than ask ten kernel authors to make the same judgment independently. Until we have that rule, the split lets us verify kernels under explicit assumptions. Once we have it, every kernel that meets its premises can use it. Even a complete formalization of PTX would leave a judgment to make wherever a kernel relies on behavior the specification leaves open.
+**A better core.** The core/assumption split is itself a proof framework. For this evaluation, we built a core that holds only the sufficient conditions the kernels need, stated as close to the manual as we could. **It is still far from a standard, precise, and complete formalization of PTX in Lean.** A better formalization of PTX could replace our core, and the kernel proofs could be rebased onto it. It could also take over what we now leave to assumptions or leave out entirely, such as [relaxed polling and CTA residency](#relaxed-flag-poll), and centralize that trust. A more precise model of PTX needs fewer interpretations, and kernels proved on it need fewer assumptions.
 
 **Cheaper proofs.** We used Claude Opus 5.5 and Sol 6.2 at medium effort to develop the production kernel proofs. The three largest proofs range from about 137,000 to 213,000 lines. Part of the length comes from Lean itself, which lets the same argument be written in many different ways.<sup><a href="#txverify-alpoge-note" aria-label="Read note 11">11</a></sup><span class="txverify-note-anchor"><span id="txverify-alpoge-note" class="txverify-note" role="note"><sup>11</sup> Levent Alpöge worked with Tristan Buckmaster on blow-up for the unforced Navier–Stokes equations. Of his Lean code for the Riemann hypothesis he wrote, “The Lean is full of garbage obviously, but compiles.” We could say much the same about parts of our own proofs. <a href="https://x.com/__alpoge__/status/2124987173439209561">Alpöge’s post</a> · <a href="https://github.com/tristanbuckmaster/navier-stokes">Navier–Stokes paper and code</a></span></span> Part of the remedy is the shared lemma library, which holds the proof framework that kernels have in common. FlashAttention-4 has four and a half times the GEMM's instructions, and its proof is about 1.4 times as long, in part because it reused the protocol library built for the GEMM.
 
@@ -892,6 +915,10 @@ document.addEventListener('DOMContentLoaded', () => {
 [image13]: /img/txverify/13-upgradeable-core.svg
 
 [image14]: /img/txverify/11-floating-point-reference.svg
+
+[image15]: /img/txverify/15-polling.png
+
+[image16]: /img/txverify/16-residency.png
 
 <style>
 #article-toc { position: fixed; z-index: 5; top: 5rem; left: max(16px, calc((100% - 1680px) / 2)); width: min(210px, calc((100% - 770px) / 2 - 38px)); font-family: var(--txverify-sans); font-size: 14px; line-height: 1.4; }
