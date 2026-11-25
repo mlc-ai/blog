@@ -522,8 +522,10 @@ With this order, the four notions are defined as follows.
 
 4. **Asynchronous instructions.** A TMA copy or an MMA adds an issue event to its thread, and its reads, writes and completion as separate events that later extensions may add. An execution is complete only when every issued operation has finished.
 
-Our core already admits the load-buffering outcome from Case 2 in which both relaxed loads read `1`. What if a thread needs to see `1` to get out of a loop? A shared flag starts at `0`. One lane sets it, and a lane in another warp of the same CTA polls it. Nobody else writes the flag. [Load-buffering proof](https://github.com/mlc-ai/tx-verify/blob/94a1f589e/Tests/Progress/WeakMemory.lean#L322-L331) · [Discussion on X](https://x.com/difficultyang/status/2125424878203310406)
+**Can a reader poll a flag forever?**
 {: #relaxed-flag-poll}
+
+Our core already admits the load-buffering outcome from Case 2 in which both relaxed loads read `1`. Now suppose the reader needs to see `1` to get out of a loop. A shared flag starts at `0`. One lane sets it, and a lane in another warp of the same CTA polls it. Nobody else writes the flag. [Load-buffering proof](https://github.com/mlc-ai/tx-verify/blob/94a1f589e/Tests/Progress/WeakMemory.lean#L322-L331)<span class="txverify-note-anchor"><span class="txverify-note" role="note">This example grew out of a discussion about what progress means for relaxed lock-free algorithms. <a href="https://x.com/difficultyang/status/2125424878203310406">Discussion on X</a></span></span>
 
 <div class="highlighter-rouge txverify-ptx"><div class="highlight"><pre class="highlight"><code class="language-ptx"><span class="ptx-comment">// Writer (one lane)</span>
 <span class="ptx-label">writer:</span>
